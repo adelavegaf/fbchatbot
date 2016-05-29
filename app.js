@@ -7,8 +7,19 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var webhook = require('./routes/webhook');
 
 var app = express();
+
+// Secure traffic only
+app.all('*', function (req, res, next) {
+    console.log('req start: ', req.secure, req.hostname, req.url, app.get('port'));
+    if (req.secure) {
+        return next();
+    };
+
+    res.redirect('https://' + req.hostname + ':' + app.get('secPort') + req.url);
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -24,6 +35,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/users', users);
+app.use('/webhook', webhook);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
