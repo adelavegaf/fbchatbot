@@ -10,7 +10,7 @@ webhookRouter.use(bodyParser.json());
 webhookRouter.token = "EAAMAoeY3baQBABpJQ3s631YdZAEVF3nagkVeSIqsD8X1EaKQumdgsZBTCynLcToFkDpbZAzBhFaW7h5ixPucndqAB3Owdix2g1EHsNz3SokKL7HazOSZChEgsVBvXnmGZAMjlKDvnrwS0oQXMpdghRiEw3cAOrkGoom83BDW3ZAAZDZD";
 
 webhookRouter.sendTextMessage = function (sender, text) {
-    let messageData = {
+    var messageData = {
         text: text
     };
     request({
@@ -40,10 +40,10 @@ webhookRouter.route('/')
         }
     })
     .post(function (req, res, next) {
-        let messaging_events = req.body.entry[0].messaging;
-        for (let i = 0; i < messaging_events.length; i++) {
-            let event = req.body.entry[0].messaging[i];
-            let sender = event.sender.id;
+        var messaging_events = req.body.entry[0].messaging;
+        for (var i = 0; i < messaging_events.length; i++) {
+            var event = req.body.entry[0].messaging[i];
+            var sender = event.sender.id;
             if (event.message && event.message.text) {
                 let text = event.message.text;
                 webhookRouter.sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200));
