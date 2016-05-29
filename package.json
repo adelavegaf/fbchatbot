@@ -15,7 +15,7 @@
     "fb",
     "mafia"
   ],
-  "author" "Antonio de la Vega",
+  "author" : "Antonio de la Vega",
   "bugs": {
     "url": "https://github.com/adelavegaf/fbchatbot/issues"
   },
