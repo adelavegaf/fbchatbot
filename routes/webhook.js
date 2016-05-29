@@ -3,12 +3,12 @@
 var request = require('request');
 var express = require('express');
 var bodyParser = require('body-parser');
-
+var sensible = require('./sensible');
 var webhookRouter = express.Router();
 
 webhookRouter.use(bodyParser.json());
 
-webhookRouter.token = "EAAMAoeY3baQBABpJQ3s631YdZAEVF3nagkVeSIqsD8X1EaKQumdgsZBTCynLcToFkDpbZAzBhFaW7h5ixPucndqAB3Owdix2g1EHsNz3SokKL7HazOSZChEgsVBvXnmGZAMjlKDvnrwS0oQXMpdghRiEw3cAOrkGoom83BDW3ZAAZDZD";
+webhookRouter.token = sensible.token;
 
 webhookRouter.sendTextMessage = function (sender, text) {
     var messageData = {
@@ -34,7 +34,7 @@ webhookRouter.sendTextMessage = function (sender, text) {
 
 webhookRouter.route('/')
     .get(function (req, res, next) {
-        if (req.query['hub.verify_token'] === 'this_is_it') {
+        if (req.query['hub.verify_token'] === sensible.verify_token) {
             res.send(req.query['hub.challenge']);
         } else {
             res.send('Error, wrong  validation token');
