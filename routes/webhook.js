@@ -5,6 +5,30 @@ var webhookRouter = express.Router();
 
 webhookRouter.use(bodyParser.json());
 
+webhookRouter.token = "EAAMAoeY3baQBABpJQ3s631YdZAEVF3nagkVeSIqsD8X1EaKQumdgsZBTCynLcToFkDpbZAzBhFaW7h5ixPucndqAB3Owdix2g1EHsNz3SokKL7HazOSZChEgsVBvXnmGZAMjlKDvnrwS0oQXMpdghRiEw3cAOrkGoom83BDW3ZAAZDZD";
+
+webhookRouter.sendTextMessage = function (sender, text) {
+    let messageData = {
+        text: text
+    };
+    request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: {
+            access_token: webhookRouter.token
+        },
+        method: 'POST',
+        json: {
+            recipient: {
+                id: sender
+            },
+            message: messageData
+        }
+    }, function (error, response, body) {
+        if (error) console.log('Error sending message: ', error);
+        else if (response.body.error) console.log('Error: ', response.body.error);
+    });
+};
+
 webhookRouter.route('/')
     .get(function (req, res, next) {
         if (req.query['hub.verify_token'] === 'this_is_it') {
@@ -20,34 +44,10 @@ webhookRouter.route('/')
             let sender = event.sender.id;
             if (event.message && event.message.text) {
                 let text = event.message.text;
-                sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200));
+                webhookRouter.sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200));
             }
         }
         res.sendStatus(200);
     });
-
-const token = "EAAMAoeY3baQBABpJQ3s631YdZAEVF3nagkVeSIqsD8X1EaKQumdgsZBTCynLcToFkDpbZAzBhFaW7h5ixPucndqAB3Owdix2g1EHsNz3SokKL7HazOSZChEgsVBvXnmGZAMjlKDvnrwS0oQXMpdghRiEw3cAOrkGoom83BDW3ZAAZDZD";
-
-function sendTextMessage(sender, text) {
-    let messageData = {
-        text: text
-    };
-    request({
-        url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {
-            access_token: token
-        },
-        method: 'POST',
-        json: {
-            recipient: {
-                id: sender
-            },
-            message: messageData
-        }
-    }, function (error, response, body) {
-        if (error) console.log('Error sending message: ', error);
-        else if (response.body.error) console.log('Error: ', response.body.error);
-    });
-}
 
 module.exports = webhookRouter;
