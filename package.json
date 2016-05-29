@@ -1,0 +1,24 @@
+{
+  "name": "mafia-bot",
+  "version": "1.0.0",
+  "description": "Creates and manages sessions for the mafia game using fb chat.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adelavegaf/fbchatbot.git"
+  },
+  "keywords": [
+    "chatbot",
+    "fb",
+    "mafia"
+  ],
+  "author": "Antonio de la Vega",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adelavegaf/fbchatbot/issues"
+  },
+  "homepage": "https://github.com/adelavegaf/fbchatbot#readme"
+}
