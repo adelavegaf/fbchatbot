@@ -10,10 +10,14 @@ var user = {
     name: 'fake name'
 };
 
+// Contains all of the active users.
+var activeUsers = {};
 // Contains all the users that are currently waiting to start a game.
-var pending = [];
+var userQueue = [];
 // Conatins all the active games (group of users) that are currently playing.
-var sessions = [];
+var sessions = {};
+//
+var sessionId = 0;
 
 var sendTextMessage = function (sender, text) {
     var messageData = {
@@ -44,41 +48,79 @@ var broadcastMessage = function (users, text) {
 };
 
 var createSession = function () {
-    // WARNING: Shallow copy, if pending contains objects, all info in session will be lost.
-    sessions.push(pending.splice());
-    broadcastMessage(pending, "Game is now starting...");
-    pending = [];
+    // WARNING: Shallow copy, if userQueue contains objects, all info in session will be lost.
+    broadcastMessage(userQueue, `Game ${sessionId} is now starting...`);
+    var session = userQueue.splice();
+    sessions[sessionId++] = session;
+    userQueue = [];
 };
 
 var join = function (sender) {
-    pending.push(sender);
-    broadcastMessage(pending, `A player has joined ${pending.length}/7`);
-    if (pending.length === 7) {
+    sendTextMessage(sender, 'Joining a game session...');
+    userQueue.push(sender);
+    activeUsers[sender] = sessionId;
+    broadcastMessage(userQueue, `A player has joined ${userQueue.length}/7`);
+    if (userQueue.length === 7) {
         createSession();
     }
 };
+
+var leave = function (sender) {
+
+};
+
+var hasActiveGame = function (sender) {
+    return false;
+    //return !(typeof activeUsers[sender] === undefined);
+};
+
 // CONSIDER EDGE CASES, i.e. User sending multiple .joins.
+// Consider using a generic template. Refactor using error displaying function.
 var parseMessage = function (sender, text) {
-    switch (text) {
-        case '.create':
-            sendTextMessage(sender, 'Under development.');
-            break;
-        case '.join':
-            sendTextMessage(sender, 'Joining a game session...');
-            join(sender);
-            break;
-        default:
-            break;
+    if (hasActiveGame(sender)) {
+        switch (text) {
+            case '.create':
+            case '.join':
+                sendTextMessage(sender, "You can't do this now!");
+                break;
+            case '.exit':
+                sendTextMessage(sender, 'You have left the game');
+                leave(sender);
+                break;
+            default:
+                // send message to other players according to game logic.
+                broadcastMessage(sessions[activeUsers[sender]], text);
+                break;
+        }
+    } else {
+        switch (text) {
+            case '.create':
+                sendTextMessage(sender, 'Under development. Try .join instead');
+                break;
+            case '.join':
+                join(sender);
+                break;
+            case '.exit':
+                sendTextMessage(sender, 'You are not on a game!');
+                // fall through
+            default:
+                sendTextMessage(sender, 'Type .join to start a game');
+                break;
+        }
     }
 };
 
 var server = {
-    pending: pending,
+    activeUsers: activeUsers,
+    userQueue: userQueue,
     sessions: sessions,
+    sessionId: sessionId,
     sendTextMessage: sendTextMessage,
     broadcastMessage: broadcastMessage,
     createSession: createSession,
     join: join,
+    leave: leave,
+    hasActiveGame: hasActiveGame,
     parseMessage: parseMessage
 };
 
