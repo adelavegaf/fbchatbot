@@ -65,7 +65,7 @@ var parseMessage = function (sender, text) {
     }
 };
 
-var parsePayload = function (sender, postback) {
+var parsePayload = function (sender, payload) {
     switch (payload) {
         case 'join':
             join(sender);
