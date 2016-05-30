@@ -1,7 +1,7 @@
 'use strict';
 
-var sensible = require('../security/sensible');
 var request = require('request');
+var Message = require('./messages');
 
 var user = {
     id: '',
@@ -19,31 +19,13 @@ var sessions = {};
 //
 var sessionId = 0;
 
-var sendTextMessage = function (sender, text) {
-    var messageData = {
-        text: text
-    };
-    request({
-        url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {
-            access_token: sensible.token
-        },
-        method: 'POST',
-        json: {
-            recipient: {
-                id: sender
-            },
-            message: messageData
-        }
-    }, function (error, response, body) {
-        if (error) console.log('Error sending message: ', error);
-        else if (response.body.error) console.log('Error: ', response.body.error);
-    });
+var sendGenericMessage = function (sender, text) {
+
 };
 
 var broadcastMessage = function (users, text) {
     users.map(function (sender) {
-        sendTextMessage(sender, text);
+        Message.sendText(sender, text);
     });
 };
 
@@ -56,7 +38,7 @@ var createSession = function () {
 };
 
 var join = function (sender) {
-    sendTextMessage(sender, 'Joining a game session...');
+    Message.sendText(sender, 'Joining a game session...');
     userQueue.push(sender);
     activeUsers[sender] = sessionId;
     broadcastMessage(userQueue, `A player has joined ${userQueue.length}/7`);
@@ -66,8 +48,8 @@ var join = function (sender) {
 };
 
 var exit = function (sender) {
-    delete activeUsers[sender];
-    sendTextMessage(sender, 'You have left the game');
+    delete activeUsers.sender;
+    Message.sendText(sender, 'You have left the game');
 };
 
 var hasActiveSession = function (sender) {
@@ -81,7 +63,7 @@ var parseMessage = function (sender, text) {
         switch (text) {
             case '.create':
             case '.join':
-                sendTextMessage(sender, "You can't do this now!");
+                Message.sendText(sender, "You can't do this now!");
                 break;
             case '.exit':
                 exit(sender);
@@ -92,20 +74,7 @@ var parseMessage = function (sender, text) {
                 break;
         }
     } else {
-        switch (text) {
-            case '.create':
-                sendTextMessage(sender, 'Under development. Try .join instead');
-                break;
-            case '.join':
-                join(sender);
-                break;
-            case '.exit':
-                sendTextMessage(sender, 'You are not on a game!');
-                // fall through
-            default:
-                sendTextMessage(sender, 'Type .join to start a game');
-                break;
-        }
+        Message.sendStartGame(sender);
     }
 };
 
@@ -114,11 +83,10 @@ var server = {
     userQueue: userQueue,
     sessions: sessions,
     sessionId: sessionId,
-    sendTextMessage: sendTextMessage,
     broadcastMessage: broadcastMessage,
     createSession: createSession,
+    join: join,
     exit: exit,
-    leave: leave,
     hasActiveSession: hasActiveSession,
     parseMessage: parseMessage
 };
