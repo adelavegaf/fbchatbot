@@ -22,14 +22,13 @@ webhookRouter.route('/')
         for (var i = 0; i < messaging_events.length; i++) {
             var event = req.body.entry[0].messaging[i];
             var sender = event.sender.id;
-            if (event.message && event.message.text) {
+            if (event.postback.payload === 'join') {
+                console.log(event.postback.payload);
+                server.join(sender);
+            } else if (event.message && event.message.text) {
                 var text = event.message.text;
                 server.parseMessage(sender, text);
                 //webhookRouter.sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200));
-            }
-            if (event.postback) {
-                console.log(event.postback);
-                server.join(sender);
             }
         }
         res.sendStatus(200);
