@@ -1,9 +1,9 @@
+'use strict';
+
 var request = require('request');
 var sensible = require('../security/sensible');
 
-var Message = {};
-
-Message.sendText = function (sender, text) {
+var sendText = function (sender, text) {
     var messageData = {
         text: text
     };
@@ -28,7 +28,7 @@ Message.sendText = function (sender, text) {
     });
 };
 
-Message.sendStartGame = function (sender) {
+var sendStartGame = function (sender) {
     var messageData = {
         "attachment": {
             "type": "template",
@@ -65,10 +65,16 @@ Message.sendStartGame = function (sender) {
     });
 };
 
-Message.broadcastText = function (users, text) {
+var broadcastText = function (users, text) {
     users.map(function (sender) {
-        Message.sendText(sender, text);
+        sendText(sender, text);
     });
+};
+
+var Message = {
+    sendText: sendText,
+    sendStartGame: sendStartGame,
+    broadcastText: broadcastText
 };
 
 module.exports = Message;
