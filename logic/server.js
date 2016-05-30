@@ -22,7 +22,7 @@ var sendTextMessage = function (sender, text) {
     request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
         qs: {
-            access_token: webhookRouter.token
+            access_token: sensible.token
         },
         method: 'POST',
         json: {
@@ -45,14 +45,14 @@ var broadcastMessage = function (users, text) {
 
 var createSession = function () {
     // WARNING: Shallow copy, if pending contains objects, all info in session will be lost.
-    sessions.push(pending.split());
-    broadcastMessage(pending, "Game is now starting...");
+    sessions.push(pending.splice());
+    //broadcastMessage(pending, "Game is now starting...");
     pending = [];
 };
 
 var join = function (sender) {
     pending.push(sender);
-    broadcastMessage(pending, `A player has joined ${pending.length}/7`);
+    //broadcastMessage(pending, `A player has joined ${pending.length}/7`);
     if (pending.length === 7) {
         createSession();
     }
@@ -73,6 +73,8 @@ var parseMessage = function (sender, text) {
 };
 
 var server = {
+    pending: pending,
+    sessions: sessions,
     sendTextMessage: sendTextMessage,
     broadcastMessage: broadcastMessage,
     createSession: createSession,

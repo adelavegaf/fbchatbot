@@ -4,6 +4,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var sensible = require('../security/sensible');
 var server = require('../logic/server');
+
 var webhookRouter = express.Router();
 
 webhookRouter.use(bodyParser.json());
