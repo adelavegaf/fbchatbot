@@ -33,7 +33,7 @@ var join = function (sender) {
 var exit = function (sender) {
     var userId = String(sender);
     console.log('user id: ' + userId);
-    var sessionId = String(activeUsers[property]);
+    var sessionId = String(activeUsers[userId]);
     console.log('session id: ' + sessionId);
     var session = sessions[sessionId];
     console.log('initial session: ' + session);
