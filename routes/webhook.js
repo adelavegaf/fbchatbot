@@ -9,8 +9,6 @@ var webhookRouter = express.Router();
 
 webhookRouter.use(bodyParser.json());
 
-webhookRouter.token = sensible.token;
-
 webhookRouter.route('/')
     .get(function (req, res, next) {
         if (req.query['hub.verify_token'] === sensible.verify_token) {

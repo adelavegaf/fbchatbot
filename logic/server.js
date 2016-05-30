@@ -1,13 +1,6 @@
 'use strict';
 
-var Message = require('./messages');
-
-var user = {
-    id: '',
-    state: 'alive or dead',
-    role: 'mafia / town',
-    name: 'fake name'
-};
+var messages = require('./messages');
 
 // Contains all of the active users.
 var activeUsers = {};
@@ -20,17 +13,17 @@ var sessionId = 0;
 
 var createSession = function () {
     // WARNING: Shallow copy, if userQueue contains objects, all info in session will be lost.
-    Message.broadcastText(userQueue, `Game ${sessionId} is now starting...`);
+    messages.broadcastText(userQueue, `Game ${sessionId} is now starting...`);
     var session = userQueue.splice();
     sessions[sessionId++] = session;
     userQueue = [];
 };
 
 var join = function (sender) {
-    Message.sendText(sender, 'Joining a game session...');
+    messages.sendText(sender, 'Joining a game session...');
     userQueue.push(sender);
     activeUsers[sender] = sessionId;
-    Message.broadcastText(userQueue, `A player has joined ${userQueue.length}/7`);
+    messages.broadcastText(userQueue, `A player has joined ${userQueue.length}/7`);
     if (userQueue.length === 7) {
         createSession();
     }
@@ -38,7 +31,7 @@ var join = function (sender) {
 
 var exit = function (sender) {
     delete activeUsers.sender;
-    Message.sendText(sender, 'You have left the game');
+    messages.sendText(sender, 'You have left the game');
 };
 
 var hasActiveSession = function (sender) {
@@ -52,20 +45,20 @@ var parseMessage = function (sender, text) {
         switch (text) {
             case '.create':
             case '.join':
-                Message.sendText(sender, "You can't do this now!");
+                messages.sendText(sender, "You can't do this now!");
                 break;
             case '.exit':
                 exit(sender);
                 break;
             default:
-                // send message to other players according to game logic.
-                Message.broadcastText(sessions[activeUsers[sender]], text);
+                // send messages to other players according to game logic.
+                // messages.broadcastText(sessions[activeUsers[sender]], text);
                 break;
         }
     } else {
-        //Message.sendStartGame(sender);
+        //messages.sendStartGame(sender);
         console.log('before');
-        Message.sendText(sender, 'back at ya');
+        messages.sendText(sender, 'back at ya');
         console.log('after');
     }
 };
