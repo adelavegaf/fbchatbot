@@ -32,6 +32,7 @@ var join = function (sender) {
 var exit = function (sender) {
     delete activeUsers.sender;
     messages.sendText(sender, 'You have left the game');
+    console.log(activeUsers.sender);
 };
 
 var hasActiveSession = function (sender) {
@@ -57,9 +58,7 @@ var parseMessage = function (sender, text) {
         }
     } else {
         //messages.sendStartGame(sender);
-        console.log('before');
         messages.sendText(sender, 'back at ya');
-        console.log('after');
     }
 };
 
