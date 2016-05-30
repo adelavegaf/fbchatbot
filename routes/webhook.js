@@ -29,11 +29,6 @@ webhookRouter.route('/')
                 server.parseMessage(sender, text);
                 //webhookRouter.sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200));
             }
-            if (event.postback) {
-                var text = JSON.stringify(event.postback);
-                console.log('Postback received.');
-                continue;
-            }
         }
         res.sendStatus(200);
     });
