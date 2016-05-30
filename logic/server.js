@@ -71,9 +71,8 @@ var parseMessage = function (sender, text) {
             help(sender);
             break;
         default:
-            // send messages to other players according to game logic.
             if (!hasActiveSession(sender)) messages.sendStartGame(sender);
-            // messages.broadcastText(sessions[activeUsers[sender]], text);
+            else messages.broadcastText(sessions[activeUsers[sender]], text);
             break;
     }
 };
