@@ -45,10 +45,6 @@ var hasActiveSession = function (sender) {
 var parseMessage = function (sender, text) {
     if (hasActiveSession(sender)) {
         switch (text) {
-            case '.create':
-            case '.join':
-                messages.sendText(sender, "You can't do this now!");
-                break;
             case '.exit':
                 exit(sender);
                 break;
