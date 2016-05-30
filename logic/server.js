@@ -71,7 +71,7 @@ var parseMessage = function (sender, text) {
             break;
         default:
             if (!hasActiveSession(sender)) messages.sendStartGame(sender);
-            else messages.broadcastLimited(sessions[activeUsers[sender]], text);
+            else messages.broadcastLimited(sender, sessions[activeUsers[sender]], text);
             break;
     }
 };
