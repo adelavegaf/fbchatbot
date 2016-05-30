@@ -32,11 +32,10 @@ var join = function (sender) {
 var exit = function (sender) {
     delete activeUsers.sender;
     messages.sendText(sender, 'You have left the game');
-    console.log(activeUsers.sender);
 };
 
 var hasActiveSession = function (sender) {
-    return !(typeof activeUsers[sender] === undefined);
+    return typeof activeUsers.sender !== undefined;
 };
 
 // CONSIDER EDGE CASES, i.e. User sending multiple .joins.
