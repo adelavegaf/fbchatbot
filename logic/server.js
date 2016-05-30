@@ -15,6 +15,7 @@ var createSession = function () {
     // WARNING: Shallow copy, if userQueue contains objects, all info in session will be lost.
     messages.broadcastText(userQueue, `Game ${sessionId} is now starting...`);
     var session = userQueue.splice();
+    console.log('new session: ' + JSON.stringify(session));
     sessions[sessionId++] = session;
     userQueue = [];
 };
@@ -30,8 +31,12 @@ var join = function (sender) {
 };
 
 var exit = function (sender) {
-    var property = String(sender);
-    delete activeUsers[property];
+    var userId = String(sender);
+    var sessionId = String(activeUsers[property]);
+    var session = sessions[sessionId];
+    session.splice(session.indexOf(userId));
+    console.log('modified session:' + JSON.stringify(session));
+    delete activeUsers[userId];
     messages.sendText(sender, 'You have left the game');
 };
 
