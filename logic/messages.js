@@ -89,7 +89,7 @@ var broadcastText = function (users, text) {
 
 var messages = {
     sendText: sendText,
-    //sendStartGame: sendStartGame,
+    sendStartGame: sendStartGame,
     broadcastText: broadcastText
 };
 
