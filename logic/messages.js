@@ -85,18 +85,18 @@ var sendExitGame = function (userId) {
     sendMessage(userId, messageData);
 };
 /**
- * Send day begininning structured message to a particular user with userId.
+ * Send day notification structured message to a particular user with userId.
  */
 var sendDayTime = function (userId) {
     var messageData = {
         "attachment": {
             "type": "template",
             "payload": {
-                "elements": [
+                "elements": [{
                     "template_type": "generic",
                     "title": "Day Time",
                     "subtitle": "1.5min to talk"
-                ]
+                }]
             }
         }
     };
