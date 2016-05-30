@@ -92,6 +92,7 @@ var messages = {
     sendText: sendText,
     sendStartGame: sendStartGame,
     sendExitGame: sendExitGame,
+    sendHelp: sendHelp,
     broadcastText: broadcastText
 };
 
