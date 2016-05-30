@@ -27,7 +27,8 @@ webhookRouter.route('/')
                 server.parseMessage(sender, text);
                 //webhookRouter.sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200));
             }
-            if (event.postback === 'join') {
+            if (event.postback) {
+                console.log(event.postback);
                 server.join(sender);
             }
         }
