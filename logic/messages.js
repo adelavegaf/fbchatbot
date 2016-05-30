@@ -33,14 +33,12 @@ var sendStartGame = function (sender) {
         "attachment": {
             "type": "template",
             "payload": {
-                "template_type": "generic",
-                "elements": [{
-                    "title": "Mafia Bot Game",
-                    "subtitle": "chat game",
-                    "buttons": [{
-                        "type": "postback",
-                        "title": "Join Game",
-                    }]
+                "template_type": "button",
+                "text": "Mafia Chat Game",
+                "buttons": [{
+                    "type": "postback",
+                    "title": "Join Game",
+                    "payload": "join"
                 }]
             }
         }
