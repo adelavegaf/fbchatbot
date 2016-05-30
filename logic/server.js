@@ -1,91 +1,111 @@
 'use strict';
 
 var messages = require('./messages');
+var mafia = require('./mafia');
 
 // Contains all of the active users.
 var activeUsers = {};
 // Contains all the users that are currently waiting to start a game.
 var userQueue = [];
-// Conatins all the active games (group of users) that are currently playing.
+// Contains all the active games (group of users) that are currently playing.
 var sessions = {};
 //
 var sessionId = 0;
 
-var createSession = function () {
-    // WARNING: Shallow copy, if userQueue contains objects, all info in session will be lost.
-    messages.broadcastText(userQueue, `Game ${sessionId} is now starting...`);
-    var session = userQueue.splice(0);
-    console.log('new session: ' + session);
-    sessions[sessionId++] = session;
+var findUser = function (session, userId) {
+    var users = session.users;
+    for (var i = 0; i < users.length; i++) {
+        if (users[i].id === userId) {
+            return i;
+        }
+    }
+    return -1;
 };
 
-// WARNING: Concurrency issues with createSession and join. Beware.
-var join = function (sender) {
-    if (hasActiveSession(sender)) {
-        messages.sendText(sender, "You are already on a game!");
+var beginSession = function () {
+    // WARNING: Shallow copy, if userQueue contains objects, all info in session will be lost.
+    messages.broadcastText(userQueue, `Game ${sessionId} is now starting...`);
+    console.log('new session: ' + sessions[sessionId]);
+    userQueue = [];
+    sessionId++;
+    // call mafia.js
+};
+
+// WARNING: Concurrency issues with beginSession and join. Beware.
+// REFACTOR: Change 10 (magic number) to an appropiate variable from Mafia.js
+var joinSession = function (userId) {
+    if (hasActiveSession(userId)) {
+        messages.sendText(userId, "You are already on a game!");
         return;
     }
     if (userQueue.length === 0) {
-        sessions[sessionId] = userQueue;
+        sessions[sessionId] = {
+            sessionId: sessionId,
+            state: 'connecting',
+            dayCount: 10,
+            users: userQueue
+        };
     }
-    userQueue.push(sender);
-    activeUsers[sender] = sessionId;
+    userQueue.push({
+        id: userId
+    });
+    activeUsers[userId] = sessionId;
     messages.broadcastText(userQueue, `A player has joined ${userQueue.length}/7`);
     if (userQueue.length === 7) {
-        createSession();
+        beginSession();
     }
 };
 
-var exit = function (sender) {
-    if (!hasActiveSession(sender)) {
-        messages.sendText(sender, "You are not on a game!");
+var exit = function (userId) {
+    if (!hasActiveSession(userId)) {
+        messages.sendText(userId, "You are not on a game!");
         return;
     }
-    var userId = String(sender);
+    var userId = String(userId);
     var sessionId = String(activeUsers[userId]);
     var session = sessions[sessionId];
-    session.splice(session.indexOf(userId), 1);
+    session.users.splice(findUser(session, userId), 1);
     delete activeUsers[userId];
-    messages.sendText(sender, 'You have left the game');
-    messages.broadcastText(session, `A player has left the game ${session.length}/7`);
+    messages.sendText(userId, 'You have left the game');
+    messages.broadcastText(session.users, `A player has left the game ${session.length}/7`);
 };
 
-var help = function (sender) {
-    messages.sendHelp(sender);
+var help = function (userId) {
+    messages.sendHelp(userId);
 };
 
-var hasActiveSession = function (sender) {
-    var property = String(sender);
+var hasActiveSession = function (userId) {
+    var property = String(userId);
     return typeof activeUsers[property] !== 'undefined';
 };
 
 // CONSIDER EDGE CASES, i.e. User sending multiple .joins.
 // Consider using a generic template. Refactor using error displaying function.
-var parseMessage = function (sender, text) {
+var parseMessage = function (userId, text) {
     switch (text) {
         case '.exit':
-            messages.sendExitGame(sender);
+            messages.sendExitGame(userId);
             break;
         case '.help':
-            help(sender);
+            help(userId);
             break;
         default:
-            if (!hasActiveSession(sender)) messages.sendStartGame(sender);
-            else messages.broadcastLimited(sender, sessions[activeUsers[sender]], text);
+            if (!hasActiveSession(userId)) messages.sendStartGame(userId);
+            else console.log('else');
             break;
     }
 };
 
-var parsePayload = function (sender, payload) {
+var parsePayload = function (userId, payload) {
     switch (payload) {
         case 'join':
-            join(sender);
+            joinSession(userId);
             break;
         case 'exit':
-            exit(sender);
+            exit(userId);
             break;
         case 'help':
-            help(sender);
+            help(userId);
             break;
     }
 };
@@ -95,8 +115,9 @@ var server = {
     userQueue: userQueue,
     sessions: sessions,
     sessionId: sessionId,
-    createSession: createSession,
-    join: join,
+    findUser: findUser,
+    beginSession: beginSession,
+    joinSession: joinSession,
     exit: exit,
     help: help,
     hasActiveSession: hasActiveSession,

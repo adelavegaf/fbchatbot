@@ -1,67 +1,65 @@
 'use strict';
 
+var messages = require('./messages');
+
 var names = ['Peyton', 'Sam', 'Alex', 'Morgan', 'Taylor', 'Carter', 'Jessie'];
 
 // WARNING: Change timeouts to real values.
 
-
-var nightTime = function (game) {
-    console.log('night time');
-    game.state = 'Night';
-    game.dayCount -= 1;
+var nightTime = function (session) {
+    //messages.broadcastText(session.users, 'Night time');
+    session.state = 'Night';
+    session.dayCount -= 1;
     setTimeout(function () {
-        gameStates(game);
+        gameStates(session);
     }, 3000);
 };
 
-var votingTime = function (game) {
-    console.log('voting time');
-    game.state = 'Voting';
+var votingTime = function (session) {
+    //messages.broadcastText(session.users, 'Voting time');
+    session.state = 'Voting';
     setTimeout(function () {
-        nightTime(game);
+        nightTime(session);
     }, 3000);
 };
 
-var dayTime = function (game) {
-    console.log('day time');
-    game.state = 'Day';
+var dayTime = function (session) {
+    //messages.broadcastText(session.users, 'Day time');
+    session.state = 'Day';
     setTimeout(function () {
-        votingTime(game);
+        votingTime(session);
     }, 9000);
 };
 
-var gameStates = function (game) {
-    if (game.dayCount === 0) {
+var finishGame = function (session) {
+    session.state = 'finished';
+};
+
+var gameStates = function (session) {
+    if (session.dayCount === 0) {
+        finishGame(session);
         return;
     }
-    dayTime(game);
+    dayTime(session);
 };
 
 var getRandomInt = function (min, max) {
     return min + Math.floor(Math.random() * (max - min + 1));
 };
 
-var assignRoles = function (users, roles) {
+var assignRoles = function (users) {
+    var roles = ['Mafioso', 'Detective', 'Doctor', 'Vigilante', 'Barman', 'Mafioso', 'Mafioso'];
     for (var i = 0; i < users.length; i++) {
         users[i].name = names[i];
-        users[i].role = roles.splice(getRandomInt(0, roles.length), 1);
+        users[i].role = roles.splice(getRandomInt(0, roles.length - 1), 1)[0];
+        console.log(roles);
+        users[i].state = 'alive';
     }
 };
 
-var game = function (users) {
-
-    var roles = ['Mafioso', 'Detective', 'Doctor', 'Vigilante', 'Barman', 'Mafioso', 'Mafioso'];
-
-    var game = {
-        state: '',
-        dayCount: 10
-    };
-
-    assignRoles(users, roles);
-
-    gameStates(game);
-
-    return game;
+var startGame = function (session) {
+    assignRoles(session.users);
+    gameStates(session);
 };
 
 var mafia = {
@@ -72,7 +70,7 @@ var mafia = {
     nightTime: nightTime,
     getRandomInt: getRandomInt,
     assignRoles: assignRoles,
-    game: game
+    startGame: startGame
 };
 
 module.export = mafia;
