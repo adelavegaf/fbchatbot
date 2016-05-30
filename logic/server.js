@@ -37,7 +37,7 @@ var exit = function (sender) {
 
 var hasActiveSession = function (sender) {
     var property = String(sender);
-    console.log(property + " " + sender);
+    console.log(activeUsers[property]);
     return typeof activeUsers[property] !== undefined;
 };
 
