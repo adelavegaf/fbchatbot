@@ -30,12 +30,15 @@ var join = function (sender) {
 };
 
 var exit = function (sender) {
-    delete activeUsers.sender;
+    var property = String(sender);
+    delete activeUsers[property];
     messages.sendText(sender, 'You have left the game');
 };
 
 var hasActiveSession = function (sender) {
-    return typeof activeUsers.sender !== undefined;
+    var property = String(sender);
+    console.log(property + " " + sender);
+    return typeof activeUsers[property] !== undefined;
 };
 
 // CONSIDER EDGE CASES, i.e. User sending multiple .joins.
