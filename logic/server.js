@@ -58,8 +58,7 @@ var parseMessage = function (sender, text) {
                 break;
         }
     } else {
-        //messages.sendStartGame(sender);
-        messages.sendText(sender, 'back at ya');
+        messages.sendStartGame(sender);
     }
 };
 
