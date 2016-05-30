@@ -65,27 +65,26 @@ var join = function (sender) {
     }
 };
 
-var leave = function (sender) {
-
+var exit = function (sender) {
+    delete activeUsers[sender];
+    sendTextMessage(sender, 'You have left the game');
 };
 
-var hasActiveGame = function (sender) {
-    return false;
-    //return !(typeof activeUsers[sender] === undefined);
+var hasActiveSession = function (sender) {
+    return !(typeof activeUsers[sender] === undefined);
 };
 
 // CONSIDER EDGE CASES, i.e. User sending multiple .joins.
 // Consider using a generic template. Refactor using error displaying function.
 var parseMessage = function (sender, text) {
-    if (hasActiveGame(sender)) {
+    if (hasActiveSession(sender)) {
         switch (text) {
             case '.create':
             case '.join':
                 sendTextMessage(sender, "You can't do this now!");
                 break;
             case '.exit':
-                sendTextMessage(sender, 'You have left the game');
-                leave(sender);
+                exit(sender);
                 break;
             default:
                 // send message to other players according to game logic.
@@ -118,9 +117,9 @@ var server = {
     sendTextMessage: sendTextMessage,
     broadcastMessage: broadcastMessage,
     createSession: createSession,
-    join: join,
+    exit: exit,
     leave: leave,
-    hasActiveGame: hasActiveGame,
+    hasActiveSession: hasActiveSession,
     parseMessage: parseMessage
 };
 
