@@ -41,7 +41,7 @@ var exit = function (sender) {
     console.log('session id: ' + sessionId);
     var session = sessions[sessionId];
     console.log('initial session: ' + session);
-    session.splice(session.indexOf(userId));
+    session.splice(session.indexOf(userId), 1);
     console.log('modified session: ' + session);
     delete activeUsers[userId];
     messages.sendText(sender, 'You have left the game');
