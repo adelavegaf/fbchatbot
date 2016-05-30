@@ -1,6 +1,5 @@
 'use strict';
 
-var request = require('request');
 var Message = require('./messages');
 
 var user = {
@@ -65,7 +64,9 @@ var parseMessage = function (sender, text) {
         }
     } else {
         //Message.sendStartGame(sender);
+        console.log('before');
         Message.sendText(sender, 'back at ya');
+        console.log('after');
     }
 };
 

@@ -34,7 +34,6 @@ Message.sendStartGame = function (sender) {
             "type": "template",
             "payload": {
                 "template_type": "generic",
-                //image_url:
                 "elements": [{
                     "title": "Mafia Chat Bot",
                     "buttons": [{
