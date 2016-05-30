@@ -19,19 +19,9 @@ var sessions = {};
 //
 var sessionId = 0;
 
-var sendGenericMessage = function (sender, text) {
-
-};
-
-var broadcastMessage = function (users, text) {
-    users.map(function (sender) {
-        Message.sendText(sender, text);
-    });
-};
-
 var createSession = function () {
     // WARNING: Shallow copy, if userQueue contains objects, all info in session will be lost.
-    broadcastMessage(userQueue, `Game ${sessionId} is now starting...`);
+    Message.broadcastText(userQueue, `Game ${sessionId} is now starting...`);
     var session = userQueue.splice();
     sessions[sessionId++] = session;
     userQueue = [];
@@ -41,7 +31,7 @@ var join = function (sender) {
     Message.sendText(sender, 'Joining a game session...');
     userQueue.push(sender);
     activeUsers[sender] = sessionId;
-    broadcastMessage(userQueue, `A player has joined ${userQueue.length}/7`);
+    Message.broadcastText(userQueue, `A player has joined ${userQueue.length}/7`);
     if (userQueue.length === 7) {
         createSession();
     }
@@ -70,7 +60,7 @@ var parseMessage = function (sender, text) {
                 break;
             default:
                 // send message to other players according to game logic.
-                broadcastMessage(sessions[activeUsers[sender]], text);
+                Message.broadcastText(sessions[activeUsers[sender]], text);
                 break;
         }
     } else {
@@ -83,7 +73,6 @@ var server = {
     userQueue: userQueue,
     sessions: sessions,
     sessionId: sessionId,
-    broadcastMessage: broadcastMessage,
     createSession: createSession,
     join: join,
     exit: exit,

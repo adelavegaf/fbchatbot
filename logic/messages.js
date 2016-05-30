@@ -63,4 +63,10 @@ Message.sendStartGame = function (sender) {
     })
 };
 
+Message.broadcastText = function (users, text) {
+    users.map(function (sender) {
+        Message.sendText(sender, text);
+    });
+};
+
 module.exports = Message;
