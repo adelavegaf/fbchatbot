@@ -37,8 +37,7 @@ var exit = function (sender) {
 
 var hasActiveSession = function (sender) {
     var property = String(sender);
-    console.log(activeUsers[property]);
-    return typeof activeUsers[property] !== undefined;
+    return typeof activeUsers[property] !== 'undefined';
 };
 
 // CONSIDER EDGE CASES, i.e. User sending multiple .joins.
