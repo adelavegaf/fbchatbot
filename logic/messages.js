@@ -87,13 +87,21 @@ var broadcastText = function (users, text) {
     });
 };
 
+var broadcastLimited = function (user, users, text) {
+    for (var i = 0; i < users.length; i++) {
+        if (users[i] === user) continue;
+        sendText(users[i], text);
+    }
+};
+
 var messages = {
     sendMessage: sendMessage,
     sendText: sendText,
     sendStartGame: sendStartGame,
     sendExitGame: sendExitGame,
     sendHelp: sendHelp,
-    broadcastText: broadcastText
+    broadcastText: broadcastText,
+    broadcastLimited: broadcastLimited
 };
 
 module.exports = messages;

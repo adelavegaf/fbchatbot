@@ -14,10 +14,9 @@ var sessionId = 0;
 var createSession = function () {
     // WARNING: Shallow copy, if userQueue contains objects, all info in session will be lost.
     messages.broadcastText(userQueue, `Game ${sessionId} is now starting...`);
-    var session = userQueue.splice();
+    var session = userQueue.splice(0);
     console.log('new session: ' + session);
     sessions[sessionId++] = session;
-    userQueue = [];
 };
 
 // WARNING: Concurrency issues with createSession and join. Beware.
@@ -72,7 +71,7 @@ var parseMessage = function (sender, text) {
             break;
         default:
             if (!hasActiveSession(sender)) messages.sendStartGame(sender);
-            else messages.broadcastText(sessions[activeUsers[sender]], text);
+            else messages.broadcastLimited(sessions[activeUsers[sender]], text);
             break;
     }
 };
