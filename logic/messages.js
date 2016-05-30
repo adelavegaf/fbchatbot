@@ -20,8 +20,11 @@ Message.sendText = function (sender, text) {
             message: messageData
         }
     }, function (error, response, body) {
-        if (error) console.log('Error sending message: ', error);
-        else if (response.body.error) console.log('Error: ', response.body.error);
+        if (error) {
+            console.log('Error sending message: ', error);
+        } else if (response.body.error) {
+            console.log('Error: ', response.body.error);
+        }
     });
 };
 
@@ -37,11 +40,11 @@ Message.sendStartGame = function (sender) {
                     "buttons": [{
                         "type": "postback",
                         "title": "Find game"
-                    }],
+                    }]
                 }]
             }
         }
-    }
+    };
     request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
         qs: {
@@ -52,7 +55,7 @@ Message.sendStartGame = function (sender) {
             recipient: {
                 id: sender
             },
-            message: messageData,
+            message: messageData
         }
     }, function (error, response, body) {
         if (error) {
@@ -60,7 +63,7 @@ Message.sendStartGame = function (sender) {
         } else if (response.body.error) {
             console.log('Error: ', response.body.error)
         }
-    })
+    });
 };
 
 Message.broadcastText = function (users, text) {
