@@ -1,36 +1,14 @@
 'use strict';
 
-var request = require('request');
 var express = require('express');
 var bodyParser = require('body-parser');
-var sensible = require('./sensible');
+var sensible = require('../security/sensible');
+var server = require('../logic/server');
 var webhookRouter = express.Router();
 
 webhookRouter.use(bodyParser.json());
 
 webhookRouter.token = sensible.token;
-
-webhookRouter.sendTextMessage = function (sender, text) {
-    var messageData = {
-        text: text
-    };
-    request({
-        url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {
-            access_token: webhookRouter.token
-        },
-        method: 'POST',
-        json: {
-            recipient: {
-                id: sender
-            },
-            message: messageData
-        }
-    }, function (error, response, body) {
-        if (error) console.log('Error sending message: ', error);
-        else if (response.body.error) console.log('Error: ', response.body.error);
-    });
-};
 
 webhookRouter.route('/')
     .get(function (req, res, next) {
@@ -47,7 +25,8 @@ webhookRouter.route('/')
             var sender = event.sender.id;
             if (event.message && event.message.text) {
                 var text = event.message.text;
-                webhookRouter.sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200));
+                server.parseMessage(sender, text);
+                //webhookRouter.sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200));
             }
         }
         res.sendStatus(200);
