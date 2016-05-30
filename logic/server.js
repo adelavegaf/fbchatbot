@@ -22,10 +22,13 @@ var createSession = function () {
 
 // WARNING: Concurrency issues with createSession and join. Beware.
 var join = function (sender) {
+    if (hasActiveSession(sender)) {
+        messages.sendText(sender, "You are already on a game!");
+        return;
+    }
     if (userQueue.length === 0) {
         sessions[sessionId] = userQueue;
     }
-    messages.sendText(sender, 'Joining a game session...');
     userQueue.push(sender);
     activeUsers[sender] = sessionId;
     messages.broadcastText(userQueue, `A player has joined ${userQueue.length}/7`);
@@ -35,16 +38,17 @@ var join = function (sender) {
 };
 
 var exit = function (sender) {
+    if (!hasActiveSession(sender)) {
+        messages.sendText(sender, "You are not on a game!");
+        return;
+    }
     var userId = String(sender);
-    console.log('user id: ' + userId);
     var sessionId = String(activeUsers[userId]);
-    console.log('session id: ' + sessionId);
     var session = sessions[sessionId];
-    console.log('initial session: ' + session);
     session.splice(session.indexOf(userId), 1);
-    console.log('modified session: ' + session);
     delete activeUsers[userId];
     messages.sendText(sender, 'You have left the game');
+    messages.broadcastText(session, `A player has left the game ${session.length}/7`);
 };
 
 var help = function (sender) {
@@ -59,21 +63,18 @@ var hasActiveSession = function (sender) {
 // CONSIDER EDGE CASES, i.e. User sending multiple .joins.
 // Consider using a generic template. Refactor using error displaying function.
 var parseMessage = function (sender, text) {
-    if (hasActiveSession(sender)) {
-        switch (text) {
-            case '.exit':
-                messages.sendExitGame(sender);
-                break;
-            case '.help':
-                help(sender);
-                break;
-            default:
-                // send messages to other players according to game logic.
-                // messages.broadcastText(sessions[activeUsers[sender]], text);
-                break;
-        }
-    } else {
-        messages.sendStartGame(sender);
+    switch (text) {
+        case '.exit':
+            messages.sendExitGame(sender);
+            break;
+        case '.help':
+            help(sender);
+            break;
+        default:
+            // send messages to other players according to game logic.
+            if (!hasActiveSession(sender)) messages.sendStartGame(sender);
+            // messages.broadcastText(sessions[activeUsers[sender]], text);
+            break;
     }
 };
 
