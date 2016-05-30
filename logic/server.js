@@ -35,6 +35,10 @@ var exit = function (sender) {
     messages.sendText(sender, 'You have left the game');
 };
 
+var help = function (sender) {
+    messages.sendHelp(sender);
+};
+
 var hasActiveSession = function (sender) {
     var property = String(sender);
     return typeof activeUsers[property] !== 'undefined';
@@ -46,7 +50,10 @@ var parseMessage = function (sender, text) {
     if (hasActiveSession(sender)) {
         switch (text) {
             case '.exit':
-                exit(sender);
+                messages.sendExitGame(sender);
+                break;
+            case '.help':
+                help(sender);
                 break;
             default:
                 // send messages to other players according to game logic.
@@ -58,6 +65,20 @@ var parseMessage = function (sender, text) {
     }
 };
 
+var parsePayload = function (sender, postback) {
+    switch (payload) {
+        case 'join':
+            join(sender);
+            break;
+        case 'exit':
+            exit(sender);
+            break;
+        case 'help':
+            help(sender);
+            break;
+    }
+};
+
 var server = {
     activeUsers: activeUsers,
     userQueue: userQueue,
@@ -66,8 +87,10 @@ var server = {
     createSession: createSession,
     join: join,
     exit: exit,
+    help: help,
     hasActiveSession: hasActiveSession,
-    parseMessage: parseMessage
+    parseMessage: parseMessage,
+    parsePayload: parsePayload
 };
 
 module.exports = server;

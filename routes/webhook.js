@@ -23,8 +23,8 @@ webhookRouter.route('/')
             var event = req.body.entry[0].messaging[i];
             var sender = event.sender.id;
             if (event.postback) {
-                console.log(event.postback.payload);
-                server.join(sender);
+                var payload = event.postback.payload;
+                server.parsePayload(sender, payload);
             } else if (event.message && event.message.text) {
                 var text = event.message.text;
                 server.parseMessage(sender, text);
