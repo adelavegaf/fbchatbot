@@ -20,7 +20,11 @@ var createSession = function () {
     userQueue = [];
 };
 
+// WARNING: Concurrency issues with createSession and join. Beware.
 var join = function (sender) {
+    if (userQueue.length === 0) {
+        sessions[sessionId] = userQueue;
+    }
     messages.sendText(sender, 'Joining a game session...');
     userQueue.push(sender);
     activeUsers[sender] = sessionId;
