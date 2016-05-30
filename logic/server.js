@@ -46,13 +46,13 @@ var broadcastMessage = function (users, text) {
 var createSession = function () {
     // WARNING: Shallow copy, if pending contains objects, all info in session will be lost.
     sessions.push(pending.splice());
-    //broadcastMessage(pending, "Game is now starting...");
+    broadcastMessage(pending, "Game is now starting...");
     pending = [];
 };
 
 var join = function (sender) {
     pending.push(sender);
-    //broadcastMessage(pending, `A player has joined ${pending.length}/7`);
+    broadcastMessage(pending, `A player has joined ${pending.length}/7`);
     if (pending.length === 7) {
         createSession();
     }
