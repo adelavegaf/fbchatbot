@@ -18,7 +18,7 @@ var aliveUsers = function (users) {
 
 var nightTime = function (session) {
     session.state = 'Night';
-    alive = aliveUsers(session.users);
+    var alive = aliveUsers(session.users);
     messages.broadcastNightAction(session.sessionId, session.dayCount, alive);
     console.log('night');
     session.dayCount -= 1;
