@@ -143,7 +143,7 @@ var sendDayTime = function (userId) {
  * Send vote structured message to a particular user with userId.
  * elements: information to be able to vote on each alive user.
  */
-var sendVotingTime = function (userId, elements) {
+var sendUserForm = function (userId, elements) {
     var messageData = {
         "attachment": {
             "type": "template",
@@ -223,7 +223,7 @@ var broadcastVoting = function (sessionId, dayCount, users) {
     }
     var elements = buildUserForm(sessionId, dayCount, users, options);
     for (var i = 0; i < users.length; i++) {
-        sendVotingTime(users[i].id, elements);
+        sendUserForm(users[i].id, elements);
     }
 };
 
@@ -275,7 +275,7 @@ var broadcastNightAction = function (sessionId, dayCount, users) {
             identifier: identifier
         };
         var elements = buildUserForm(sessionId, dayCount, users, options);
-        sendNightAction(users[i].id, elements);
+        sendUserForm(users[i].id, elements);
     }
 };
 
@@ -286,7 +286,7 @@ var messages = {
     sendExitGame: sendExitGame,
     sendRoleInfo: sendRoleInfo,
     sendDayTime: sendDayTime,
-    sendVotingTime: sendVotingTime,
+    sendUserForm: sendUserForm,
     sendHelp: sendHelp,
     buildUserForm: buildUserForm,
     broadcastText: broadcastText,
