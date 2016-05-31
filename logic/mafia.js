@@ -4,7 +4,7 @@ var messages = require('./messages');
 
 var names = ['Peyton', 'Sam', 'Alex', 'Morgan', 'Taylor', 'Carter', 'Jessie'];
 
-// WARNING: Change timeouts to real values.
+// WARNING: Change timeouts to real values. REFACTOR BY CREATING VARIABLES.
 
 var nightTime = function (session) {
     session.state = 'Night';
@@ -25,7 +25,6 @@ var votingTime = function (session) {
         }
     }
     messages.broadcastVoting(session.sessionId, session.dayCount, alive);
-    console.log('voting');
     setTimeout(function () {
         nightTime(session);
     }, 3000);
@@ -34,7 +33,6 @@ var votingTime = function (session) {
 var dayTime = function (session) {
     session.state = 'Day';
     messages.broadcastDay(session.users);
-    console.log('day');
     setTimeout(function () {
         votingTime(session);
     }, 9000);
@@ -66,11 +64,9 @@ var assignRoles = function (users) {
 };
 
 var startGame = function (session) {
-    console.log('starting new game.');
     assignRoles(session.users);
-    console.log('roles assigned');
+    messages.broadcastRoles(session.users);
     gameStates(session);
-    console.log('game states initiated');
 };
 
 var mafia = {

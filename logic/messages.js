@@ -84,6 +84,43 @@ var sendExitGame = function (userId) {
     };
     sendMessage(userId, messageData);
 };
+
+var sendRoleInfo = function (userId, role) {
+    var roleInfo;
+    switch (role) {
+        case 'Doctor':
+            roleInfo = 'Prevent someone from dying each night.';
+            break;
+        case 'Mafia':
+            roleInfo = 'Choose who to kill each night.';
+            break;
+        case 'Vigilante':
+            roleInfo = 'Kill someone each night.';
+            break;
+        case 'Detective':
+            roleInfo = "Learn another person's role each night.";
+            break;
+        case 'Barman':
+            roleInfo = "Block another person's ability each night.";
+            break;
+        default:
+            roleInfo = "No special role. Sorry!";
+            break;
+    }
+    var messageData = {
+        "attachment": {
+            "type": "template",
+            "payload": {
+                "template_type": "generic",
+                "elements": [{
+                    "title": role,
+                    "subtitle": roleInfo
+                }]
+            }
+        }
+    };
+    sendMessage(userId, messageData);
+};
 /**
  * Send day notification structured message to a particular user with userId.
  */
@@ -156,8 +193,8 @@ var broadcastVoting = function (sessionId, dayCount, users) {
         if (newElement) {
             buttons = [];
             elements.push({
-                "title": "Voting Time 30s",
-                "subtitle": "swipe for more",
+                "title": "Voting Time",
+                "subtitle": "30s. Vote to lynch",
                 "buttons": buttons
             });
         }
@@ -180,18 +217,26 @@ var broadcastDay = function (users) {
     }
 };
 
+var broadcastRoles = function (users) {
+    for (var i = 0; i < users.length; i++) {
+        sendRoleInfo(users[i].id, users[i].role);
+    }
+};
+
 var messages = {
     sendMessage: sendMessage,
     sendText: sendText,
     sendStartGame: sendStartGame,
     sendExitGame: sendExitGame,
+    sendRoleInfo: sendRoleInfo,
     sendDayTime: sendDayTime,
     sendVotingTime: sendVotingTime,
     sendHelp: sendHelp,
     broadcastText: broadcastText,
     broadcastLimited: broadcastLimited,
     broadcastVoting: broadcastVoting,
-    broadcastDay: broadcastDay
+    broadcastDay: broadcastDay,
+    broadcastRoles: broadcastRoles
 };
 
 module.exports = messages;
