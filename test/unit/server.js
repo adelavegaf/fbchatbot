@@ -20,4 +20,8 @@ describe('Server operations', function () {
         expect(server.userQueue.length).to.equal(0);
         done();
     });
+
+    it('should do something', function (done) {
+        server.parseMessage(123, 'mymessage');
+    });
 });
