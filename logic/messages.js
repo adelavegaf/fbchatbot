@@ -91,7 +91,7 @@ var sendRoleInfo = function (userId, role) {
         case 'Doctor':
             roleInfo = 'Prevent someone from dying each night.';
             break;
-        case 'Mafia':
+        case 'Mafioso':
             roleInfo = 'Choose who to kill each night.';
             break;
         case 'Vigilante':
