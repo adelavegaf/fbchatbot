@@ -21,7 +21,7 @@ var votingTime = function (session) {
     var alive = [];
     for (var i = 0; i < session.users.length; i++) {
         if (session.users[i].state === 'alive') {
-            alive.push(users[i]);
+            alive.push(session.users[i]);
         }
     }
     messages.broadcastVoting(session.sessionId, session.dayCount, alive);
@@ -61,7 +61,6 @@ var assignRoles = function (users) {
     for (var i = 0; i < users.length; i++) {
         users[i].name = names[i];
         users[i].role = roles.splice(getRandomInt(0, roles.length - 1), 1)[0];
-        console.log(roles);
         users[i].state = 'alive';
     }
 };
@@ -72,7 +71,6 @@ var startGame = function (session) {
     console.log('roles assigned');
     gameStates(session);
     console.log('game states initiated');
-    return;
 };
 
 var mafia = {

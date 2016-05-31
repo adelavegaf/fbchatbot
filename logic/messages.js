@@ -92,8 +92,8 @@ var sendDayTime = function (userId) {
         "attachment": {
             "type": "template",
             "payload": {
+                "template_type": "generic",
                 "elements": [{
-                    "template_type": "generic",
                     "title": "Day Time",
                     "subtitle": "1.5min to talk"
                 }]
@@ -111,6 +111,7 @@ var sendVotingTime = function (userId, elements) {
         "attachment": {
             "type": "template",
             "payload": {
+                "template_type": "generic",
                 "elements": elements
             }
         }
