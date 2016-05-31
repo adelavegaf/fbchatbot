@@ -9,6 +9,7 @@ var names = ['Peyton', 'Sam', 'Alex', 'Morgan', 'Taylor', 'Carter', 'Jessie'];
 var nightTime = function (session) {
     session.state = 'Night';
     //messages.broadcastText(session.users, 'Night time');
+    console.log('night');
     session.dayCount -= 1;
     setTimeout(function () {
         gameStates(session);
@@ -24,6 +25,7 @@ var votingTime = function (session) {
         }
     }
     messages.broadcastVoting(session.sessionId, session.dayCount, alive);
+    console.log('voting');
     setTimeout(function () {
         nightTime(session);
     }, 3000);
@@ -32,6 +34,7 @@ var votingTime = function (session) {
 var dayTime = function (session) {
     session.state = 'Day';
     messages.broadcastDay(session.users);
+    console.log('day');
     setTimeout(function () {
         votingTime(session);
     }, 9000);
