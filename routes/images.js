@@ -19,7 +19,7 @@ imageRouter.route('/:name')
         };
         var fileName = req.params.name;
         res.sendFile(fileName, options, function (err) {
-            if (err) throw err;
+            if (err) console.log("Error: ", err);
         });
     });
 
