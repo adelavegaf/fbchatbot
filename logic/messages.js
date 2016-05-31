@@ -164,7 +164,7 @@ var broadcastVoting = function (sessionId, dayCount, users) {
         buttons.push({
             "type": "postback",
             "title": users[i].name,
-            "payload": "vote;" + users[i].name + ";" + sessionId + ";" + dayCount;
+            "payload": "vote;" + users[i].name + ";" + sessionId + ";" + dayCount
         });
         newElement = buttons.length === 3;
     }
