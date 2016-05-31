@@ -72,17 +72,19 @@ var startGame = function (session) {
     console.log('roles assigned');
     gameStates(session);
     console.log('game states initiated');
+    return;
 };
 
 var mafia = {
     names: names,
-    gameStates: gameStates,
-    dayTime: dayTime,
-    votingTime: votingTime,
     nightTime: nightTime,
+    votingTime: votingTime,
+    dayTime: dayTime,
+    finishGame: finishGame,
+    gameStates: gameStates,
     getRandomInt: getRandomInt,
     assignRoles: assignRoles,
     startGame: startGame
 };
 
-module.export = mafia;
+module.exports = mafia;
