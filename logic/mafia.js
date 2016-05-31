@@ -67,8 +67,11 @@ var assignRoles = function (users) {
 };
 
 var startGame = function (session) {
+    console.log('starting new game.');
     assignRoles(session.users);
+    console.log('roles assigned');
     gameStates(session);
+    console.log('game states initiated');
 };
 
 var mafia = {
