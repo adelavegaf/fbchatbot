@@ -6,9 +6,20 @@ var names = ['Peyton', 'Sam', 'Alex', 'Morgan', 'Taylor', 'Carter', 'Jessie'];
 
 // WARNING: Change timeouts to real values. REFACTOR BY CREATING VARIABLES.
 
+var aliveUsers = function (users) {
+    var alive = [];
+    for (var i = 0; i < users.length; i++) {
+        if (users[i].state === 'alive') {
+            alive.push(users[i]);
+        }
+    }
+    return alive;
+};
+
 var nightTime = function (session) {
     session.state = 'Night';
-    //messages.broadcastText(session.users, 'Night time');
+    alive = aliveUsers(session.users);
+    messages.broadcastNightAction(session.sessionId, session.dayCount, alive);
     console.log('night');
     session.dayCount -= 1;
     setTimeout(function () {
@@ -18,12 +29,7 @@ var nightTime = function (session) {
 
 var votingTime = function (session) {
     session.state = 'Voting';
-    var alive = [];
-    for (var i = 0; i < session.users.length; i++) {
-        if (session.users[i].state === 'alive') {
-            alive.push(session.users[i]);
-        }
-    }
+    var alive = aliveUsers(session.users);
     messages.broadcastVoting(session.sessionId, session.dayCount, alive);
     setTimeout(function () {
         nightTime(session);
@@ -71,6 +77,7 @@ var startGame = function (session) {
 
 var mafia = {
     names: names,
+    aliveUsers: aliveUsers,
     nightTime: nightTime,
     votingTime: votingTime,
     dayTime: dayTime,

@@ -163,6 +163,35 @@ var sendHelp = function (userId) {
     var text = 'Commands:\n .help : shows you the list of available commands.\n .exit : prompts you to leave current game.';
     sendText(userId, text);
 };
+
+/**
+ * Generates the elements needed to send a structured message
+ * that displays the name of all the users that are alive
+ * as buttons.
+ */
+var buildUserForm = function (sessionId, dayCount, users, options) {
+    var elements = [];
+    var newElement = true;
+    var buttons;
+    for (var i = 0; i < users.length; i++) {
+        if (newElement) {
+            buttons = [];
+            elements.push({
+                "title": options.title,
+                "subtitle": options.subtitle,
+                "buttons": buttons
+            });
+        }
+        buttons.push({
+            "type": "postback",
+            "title": users[i].name,
+            "payload": options.identifier + ";" + users[i].name + ";" + sessionId + ";" + dayCount
+        });
+        newElement = buttons.length === 3;
+    }
+    return elements;
+};
+
 /**
  * Sends the text to all of the elements in user. 
  */
@@ -181,31 +210,18 @@ var broadcastLimited = function (userId, users, text) {
         sendText(users[i].id, text);
     }
 };
+
 /**
  * Send voting structured message to all elements in users.
  * The payload will contain info about sessionId and dayCount.
  */
 var broadcastVoting = function (sessionId, dayCount, users) {
-    var elements = [];
-    var newElement = true;
-    var buttons;
-    for (var i = 0; i < users.length; i++) {
-        if (newElement) {
-            buttons = [];
-            elements.push({
-                "title": "Voting Time",
-                "subtitle": "30s. Vote to lynch",
-                "buttons": buttons
-            });
-        }
-        buttons.push({
-            "type": "postback",
-            "title": users[i].name,
-            "payload": "vote;" + users[i].name + ";" + sessionId + ";" + dayCount
-        });
-        newElement = buttons.length === 3;
+    var options = {
+        title: "Voting time",
+        subtitle: "30s to vote to lynch",
+        identifier: "vote"
     }
-
+    var elements = buildUserForm(sessionId, dayCount, users, options);
     for (var i = 0; i < users.length; i++) {
         sendVotingTime(users[i].id, elements);
     }
@@ -223,6 +239,46 @@ var broadcastRoles = function (users) {
     }
 };
 
+var broadcastNightAction = function (sessionId, dayCount, users) {
+    var title = 'Night time';
+    for (var i = 0; i < users.length; i++) {
+        var subtitle, identifier;
+        switch (users[i].role) {
+            case 'Doctor':
+                subtitle = 'Choose who you want to save tonight.';
+                identifier = 'heal';
+                break;
+            case 'Mafioso':
+                subtitle = 'Choose who you want to kill tonight.';
+                identifier = 'mkill';
+                break;
+            case 'Vigilante':
+                subtitle = 'Choose who you want to kill tonight.';
+                identifier = 'vkill';
+                break;
+            case 'Detective':
+                subtitle = "Choose who you want to investigate tonight.";
+                identifier = 'investigate';
+                break;
+            case 'Barman':
+                subtitle = "Choose who you want to block tonight.";
+                identifier = 'block';
+                break;
+            default:
+                subtitle = "No special action for you.";
+                identifier = 'ignore';
+                break;
+        }
+        var options = {
+            title: title,
+            subtitle: subtitle,
+            identifier: identifier
+        };
+        var elements = buildUserForm(sessionId, dayCount, users, options);
+        sendNightAction(users[i].id, elements);
+    }
+};
+
 var messages = {
     sendMessage: sendMessage,
     sendText: sendText,
@@ -232,11 +288,13 @@ var messages = {
     sendDayTime: sendDayTime,
     sendVotingTime: sendVotingTime,
     sendHelp: sendHelp,
+    buildUserForm: buildUserForm,
     broadcastText: broadcastText,
     broadcastLimited: broadcastLimited,
     broadcastVoting: broadcastVoting,
     broadcastDay: broadcastDay,
-    broadcastRoles: broadcastRoles
+    broadcastRoles: broadcastRoles,
+    broadcastNightAction: broadcastNightAction
 };
 
 module.exports = messages;
