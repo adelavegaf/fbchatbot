@@ -185,7 +185,7 @@ var buildUserForm = function (sessionId, dayCount, users, options) {
         buttons.push({
             "type": "postback",
             "title": users[i].name,
-            "payload": options.identifier + ";" + users[i].name + ";" + sessionId + ";" + dayCount
+            "payload": options.identifier + ";" + users[i].id + ";" + sessionId + ";" + dayCount
         });
         newElement = buttons.length === 3;
     }
