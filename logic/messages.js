@@ -156,7 +156,6 @@ var broadcastVoting = function (sessionId, dayCount, users) {
         if (newElement) {
             buttons = [];
             elements.push({
-                "template_type": "generic",
                 "title": "Voting Time 30s",
                 "subtitle": "swipe for more",
                 "buttons": buttons
