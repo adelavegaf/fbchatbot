@@ -11,7 +11,7 @@ imageRouter.use(bodyParser.json());
 imageRouter.route('/:name')
     .get(function (req, res, next) {
         var options = {
-            root: path.resolve('..', 'images'),
+            root: __dirname + '/../images/',
             dotfiles: 'deny',
             headers: {
                 'x-sent': true
