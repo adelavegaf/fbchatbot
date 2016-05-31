@@ -144,10 +144,40 @@ var broadcastLimited = function (userId, users, text) {
     }
 };
 /**
- * Send voting structured message to alive users.
+ * Send voting structured message to all elements in users.
+ * The payload will contain info about sessionId and dayCount.
  */
-var broadcastVoting = function (users, game) {
+var broadcastVoting = function (sessionId, dayCount, users) {
+    var elements = [];
+    var newElement = true;
+    var buttons;
+    for (var i = 0; i < users.length; i++) {
+        if (newElement) {
+            buttons = [];
+            elements.push({
+                "template_type": "generic",
+                "title": "Voting Time 30s",
+                "subtitle": "swipe for more",
+                "buttons": buttons
+            });
+        }
+        buttons.push({
+            "type": "postback",
+            "title": users[i].name,
+            "payload": "vote;" + users[i].name + ";" + sessionId + ";" + dayCount;
+        });
+        newElement = buttons.length === 3;
+    }
 
+    for (var i = 0; i < users.length; i++) {
+        sendVotingTime(users[i].id, elements);
+    }
+};
+
+var broadcastDay = function (users) {
+    for (var i = 0; i < users.length; i++) {
+        sendDayTime(users[i].id);
+    }
 };
 
 var messages = {
@@ -160,7 +190,8 @@ var messages = {
     sendHelp: sendHelp,
     broadcastText: broadcastText,
     broadcastLimited: broadcastLimited,
-    broadcastVoting: broadcastVoting
+    broadcastVoting: broadcastVoting,
+    broadcastDay: broadcastDay
 };
 
 module.exports = messages;

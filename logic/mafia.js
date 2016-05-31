@@ -7,8 +7,8 @@ var names = ['Peyton', 'Sam', 'Alex', 'Morgan', 'Taylor', 'Carter', 'Jessie'];
 // WARNING: Change timeouts to real values.
 
 var nightTime = function (session) {
-    //messages.broadcastText(session.users, 'Night time');
     session.state = 'Night';
+    //messages.broadcastText(session.users, 'Night time');
     session.dayCount -= 1;
     setTimeout(function () {
         gameStates(session);
@@ -16,16 +16,22 @@ var nightTime = function (session) {
 };
 
 var votingTime = function (session) {
-    //messages.broadcastText(session.users, 'Voting time');
     session.state = 'Voting';
+    var alive = [];
+    for (var i = 0; i < session.users.length; i++) {
+        if (session.users[i].state === 'alive') {
+            alive.push(users[i]);
+        }
+    }
+    messages.broadcastVoting(session.sessionId, session.dayCount, alive);
     setTimeout(function () {
         nightTime(session);
     }, 3000);
 };
 
 var dayTime = function (session) {
-    //messages.broadcastText(session.users, 'Day time');
     session.state = 'Day';
+    messages.broadcastDay(session.users);
     setTimeout(function () {
         votingTime(session);
     }, 9000);

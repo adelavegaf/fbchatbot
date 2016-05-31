@@ -3,6 +3,8 @@
 var messages = require('./messages');
 var mafia = require('./mafia');
 
+// Minimum number of players to start a game. Recommended to be minimum 7.
+var minNumPlayers = 2;
 // Contains all of the active users.
 var activeUsers = {};
 // Contains all the users that are currently waiting to start a game.
@@ -27,8 +29,8 @@ var beginSession = function () {
     messages.broadcastText(userQueue, `Game ${sessionId} is now starting...`);
     console.log('new session: ' + sessions[sessionId]);
     userQueue = [];
+    mafia.startGame(sessions[sessionId]);
     sessionId++;
-    // call mafia.js
 };
 
 // WARNING: Concurrency issues with beginSession and join. Beware.
@@ -50,8 +52,8 @@ var joinSession = function (userId) {
         id: userId
     });
     activeUsers[userId] = sessionId;
-    messages.broadcastText(userQueue, `A player has joined ${userQueue.length}/7`);
-    if (userQueue.length === 7) {
+    messages.broadcastText(userQueue, `A player has joined ${userQueue.length}/${minNumPlayers}`);
+    if (userQueue.length === minNumPlayers) {
         beginSession();
     }
 };
@@ -67,7 +69,7 @@ var exit = function (userId) {
     session.users.splice(findUser(session, userId), 1);
     delete activeUsers[userId];
     messages.sendText(userId, 'You have left the game');
-    messages.broadcastText(session.users, `A player has left the game ${session.length}/7`);
+    messages.broadcastText(session.users, `A player has left the game ${session.users.length}/${minNumPlayers}`);
 };
 
 var help = function (userId) {
