@@ -132,7 +132,8 @@ var sendDayTime = function (userId) {
                 "template_type": "generic",
                 "elements": [{
                     "title": "Day Time",
-                    "subtitle": "1.5min to talk"
+                    "subtitle": "1.5min to talk",
+                    "image_url": "https://mafiabotgame.herokuapp.com/images/day-min.png"
                 }]
             }
         }
