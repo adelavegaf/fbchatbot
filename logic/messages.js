@@ -161,6 +161,7 @@ var buildUserForm = function (sessionId, dayCount, users, options) {
             elements.push({
                 "title": options.title,
                 "subtitle": options.subtitle,
+                "image_url": options.image_url,
                 "buttons": buttons
             });
         }
@@ -231,7 +232,8 @@ var broadcastNightAction = function (sessionId, dayCount, users) {
         var options = {
             title: title,
             subtitle: role.nightinfo,
-            identifier: users[i].role
+            identifier: users[i].role,
+            "image_url": "https://mafiabotgame.herokuapp.com/images/night-min.png"
         };
         var elements = buildUserForm(sessionId, dayCount, users, options);
         sendUserForm(users[i].id, elements);
