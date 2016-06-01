@@ -135,6 +135,7 @@ var callGameAction = function (userId, optionArray) {
 
 var parsePayload = function (userId, payload) {
     var optionArray = payload.split(" ");
+    console.log(optionArray);
     switch (optionArray[0]) {
         case 'join':
             joinSession(userId);
@@ -146,7 +147,9 @@ var parsePayload = function (userId, payload) {
             help(userId);
             break;
         default:
-            gameAction(userId, optionArray);
+            console.log("Reached gameAction");
+            callGameAction(userId, optionArray);
+            console.log("Completed gameAction");
             break;
     }
 };
