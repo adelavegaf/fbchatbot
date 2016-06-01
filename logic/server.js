@@ -106,6 +106,8 @@ var parseMessage = function (userId, text) {
 var verifyActionStamp = function (userId, sessionId, dayCount) {
     var curSessionId = activeUsers[userId];
     var curSession = sessions[curSessionId];
+    console.log("Sess ids: " + sessionId + " " + curSessionId);
+    console.log("DayCounts: " + curSession.dayCount + " " + dayCount);
     return sessionId === curSessionId && curSession.dayCount === dayCount;
 };
 
