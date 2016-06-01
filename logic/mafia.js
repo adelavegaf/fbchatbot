@@ -104,7 +104,7 @@ var afterNightPhase = function (session) {
 
 var checkNightPhase = function (session, userId) {
     if (session.state !== 'night') {
-        messages.sendText('It is no longer the night phase');
+        messages.sendText(userId, 'It is no longer the night phase');
         return false;
     }
     return true;
