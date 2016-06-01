@@ -86,7 +86,7 @@ var vote = function (session, userId, toWhom) {
     console.log("Get Target User");
     targetUser.vote += 1;
     console.log("Added vote to target User");
-    var quorum = calculateQuorum(aliveUsers(session.users));
+    var quorum = calculateQuorum(session.users);
     console.log("Quorum calculated");
     if (targetUser.vote >= quorum) {
         session.votedUser = targetUser;
