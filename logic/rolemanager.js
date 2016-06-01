@@ -1,6 +1,5 @@
 'use strict';
 
-var messages = require('./messages');
 /**
  * Roles are sorted in order of skill precedence, i.e. block must be executed before any other skill.
  * This influences on how the night actions execute. Each role's id in the array corresponds to each skill's preedence.
@@ -106,6 +105,7 @@ var roles = {
 };
 
 var nightAction = function (session, properties) {
+    var messages = require('./messages');
     var role = roles[properties.action];
     var id = role.id;
     var actions = session.nightActions;
