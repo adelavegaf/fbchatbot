@@ -16,7 +16,7 @@ var roles = {
             if (properties.from.state === 'blocked') {
                 sendText(properties.from.id, `You were roleblocked by the bartender.`);
             } else {
-                sendText(properties.from.id, `$You roleblocked {to.name}`);
+                sendText(properties.from.id, `$You roleblocked ${properties.to.name}`);
             }
         }
     },
@@ -45,7 +45,7 @@ var roles = {
                 sendText(properties.from.id, `${properties.to.name} was saved by the doctor.`);
                 sendText(properties.to.id, `The mafia targeted you but you were saved by the doctor.`);
             } else {
-                to.state = 'dead';
+                properties.to.state = 'dead';
                 broadcastText(users, `${properties.to.name} has been killed by the mafia. His role was ${properties.to.role}`);
             }
         }
