@@ -34,7 +34,7 @@ var beginSession = function () {
 };
 
 // WARNING: Concurrency issues with beginSession and join. Beware.
-// REFACTOR: Change 10 (magic number) to an appropiate variable from Mafia.js
+// REFACTOR: Change 11 (magic number) to an appropiate variable from Mafia.js
 var joinSession = function (userId) {
     if (hasActiveSession(userId)) {
         messages.sendText(userId, "You are already on a game!");
@@ -44,7 +44,7 @@ var joinSession = function (userId) {
         sessions[sessionId] = {
             sessionId: sessionId,
             state: 'connecting',
-            dayCount: 10,
+            dayCount: 11,
             users: userQueue
         };
     }
@@ -98,8 +98,44 @@ var parseMessage = function (userId, text) {
     }
 };
 
+/**
+ * Since postback buttons stay in the conversation indefinitely,
+ * we must verify the button was pressed in the current session,
+ * and in the corresponding turn.
+ */
+var verifyActionStamp(userId, sessionId, dayCount) {
+    var curSessionId = activeUsers[userId];
+    var curSession = sessions[curSessionId];
+    return sessionId === curSessionId && curSession.dayCount === dayCount;
+};
+
+var callGameAction = function (userId, optionArray) {
+    var properties = {
+        action: optionArray[0],
+        from: userId,
+        to: optionArray[1],
+        sessionId: optionArray[2],
+        dayCount: optionArray[3]
+    };
+
+    if (!hasActiveSession(userId)) {
+        messages.sendText(userId, 'You are not in a game.');
+        return;
+    }
+
+    if (!verifyActionStamp(userId, properties.sessionId, properties.dayCount)) {
+        messages.sendText(userId, 'You are not allowed to cast this action now.');
+        return;
+    }
+
+    var session = sessions[activeUsers[userId]];
+
+    mafia.gameAction(session, properties);
+};
+
 var parsePayload = function (userId, payload) {
-    switch (payload) {
+    var optionArray = payload.split(" ");
+    switch (optionArray[0]) {
         case 'join':
             joinSession(userId);
             break;
@@ -108,6 +144,9 @@ var parsePayload = function (userId, payload) {
             break;
         case 'help':
             help(userId);
+            break;
+        default:
+            gameAction(userId, optionArray);
             break;
     }
 };
@@ -124,6 +163,8 @@ var server = {
     help: help,
     hasActiveSession: hasActiveSession,
     parseMessage: parseMessage,
+    verifyActionStamp: verifyActionStamp,
+    callGameAction: callGameAction,
     parsePayload: parsePayload
 };
 

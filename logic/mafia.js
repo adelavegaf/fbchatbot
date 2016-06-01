@@ -1,9 +1,14 @@
 'use strict';
 
 var messages = require('./messages');
+var rolemanager = require('./rolemanager');
 
 var names = ['Peyton', 'Sam', 'Alex', 'Morgan', 'Taylor', 'Carter', 'Jessie'];
 
+
+var dayDuration = 9000;
+var votingDuration = 3000;
+var nightDuration = 3000;
 // WARNING: Change timeouts to real values. REFACTOR BY CREATING VARIABLES.
 
 var aliveUsers = function (users) {
@@ -16,32 +21,136 @@ var aliveUsers = function (users) {
     return alive;
 };
 
+var getUserFromId = function (session, userId) {
+    var users = session.users;
+    for (var i = 0; i < users.length; i++) {
+        if (userId === users[i].id) {
+            return users[i];
+        }
+    }
+    return null;
+};
+
+var hasAlreadyVoted = function (session, userId) {
+    var property = String(userId);
+    return typeof session.voteTally[userId] !== 'undefined'
+};
+
+var beforeVotePhase = function (session) {
+    var users = session.users;
+    for (var i = 0; i < users; i++) {
+        users[i].vote = 0;
+    }
+    session.voteTally = {};
+    session.votedUser = {};
+};
+
+var calculateQuorum = function (users) {
+    var aliveUsers = aliveUsers(session.users);
+    var numUsers = aliveUsers.length;
+    var min = numUsers / 2;
+    var quorum = (numUsers % 2 == 0) ? min : min + 1;
+    return quorum;
+}
+
+var afterVotePhase = function (session) {
+    if (typeof session.votedUser.name !== 'undefined') {
+        messages.broadcastText(session.users, user.votedUser.name + " has been lynched");
+        return;
+    }
+    messages.broadcastText(session.users, "No one was lynched");
+};
+
+var vote = function (session, userId, toWhom) {
+    if (userId === toWhom) {
+        messages.sendText(userId, "You can't vote for yourself");
+        return;
+    }
+    if (hasAlreadyVoted(userId)) {
+        messages.sendText(userId, "You can't vote twice!");
+        return;
+    }
+    if (session.state !== 'voting') {
+        messages.sendText(userId, "It's no longer the voting phase");
+    }
+    session.voteTally[userId] = true;
+
+    var currentUser = getUserFromId(session, userId);
+    var targetUser = getUserFromId(session, toWhom);
+    targetUser.vote += 1;
+    var quorum = calculateQuorum(aliveUsers(session.users));
+
+    if (targetUser.vote >= quorum) {
+        votedUser = targetUser;
+        targetUser.state = 'dead';
+    }
+
+    messages.broadcastText(session.users, `${currentUser.name} has voted for ${targetUser.name}`);
+};
+
+var beforeNightPhase = function (session) {
+    session.nightActions = [];
+};
+
+var afterNightPhase = function (session) {
+    var actions = session.nightActions;
+    for (var i = 0; i < actions.length; i++) {
+        if (typeof actions[i] !== 'undefined') {
+            actions[i]();
+        }
+    }
+};
+
+var checkNightPhase = function (session, userId) {
+    if (session.state !== 'night') {
+        messages.sendText('It is no longer the night phase');
+        return false;
+    }
+    return true;
+};
+
+var gameAction = function (session, properties) {
+    switch (properties.action) {
+        case 'vote':
+            vote(session, properties.from, properties.to);
+            break;
+        default: // A special skill used in the night phase.
+            if (checkNightPhase(session, properties.from)) {
+                rolemanager.nightAction(session, properties);
+            }
+            break;
+    }
+};
+
 var nightTime = function (session) {
-    session.state = 'Night';
+    beforeNightPhase();
+    session.state = 'night';
     var alive = aliveUsers(session.users);
     messages.broadcastNightAction(session.sessionId, session.dayCount, alive);
-    console.log('night');
-    session.dayCount -= 1;
     setTimeout(function () {
+        afterNightPhase();
         gameStates(session);
-    }, 3000);
+    }, nightDuration);
 };
 
 var votingTime = function (session) {
-    session.state = 'Voting';
+    beforeVotePhase();
+    session.state = 'voting';
     var alive = aliveUsers(session.users);
     messages.broadcastVoting(session.sessionId, session.dayCount, alive);
     setTimeout(function () {
+        afterVotePhase();
         nightTime(session);
-    }, 3000);
+    }, votingDuration);
 };
 
 var dayTime = function (session) {
-    session.state = 'Day';
+    session.dayCount -= 1;
+    session.state = 'day';
     messages.broadcastDay(session.users);
     setTimeout(function () {
         votingTime(session);
-    }, 9000);
+    }, dayDuration);
 };
 
 var finishGame = function (session) {
@@ -61,11 +170,12 @@ var getRandomInt = function (min, max) {
 };
 
 var assignRoles = function (users) {
-    var roles = ['Mafioso', 'Detective', 'Doctor', 'Vigilante', 'Barman', 'Mafioso', 'Mafioso'];
+    var roles = rolemanager.getRoleNames();
     for (var i = 0; i < users.length; i++) {
         users[i].name = names[i];
         users[i].role = roles.splice(getRandomInt(0, roles.length - 1), 1)[0];
         users[i].state = 'alive';
+        users[i].vote = 0;
     }
 };
 
@@ -77,7 +187,19 @@ var startGame = function (session) {
 
 var mafia = {
     names: names,
+    dayDuration: dayDuration,
+    nightDuration: nightDuration,
+    votingDuration: votingDuration,
     aliveUsers: aliveUsers,
+    getUserFromId: getUserFromId,
+    hasAlreadyVoted: hasAlreadyVoted,
+    beforeVotePhase: beforeVotePhase,
+    calculateQuorum: calculateQuorum,
+    afterVotePhase: afterVotePhase,
+    vote: vote,
+    beforeNightPhase: beforeNightPhase,
+    checkNightPhase: checkNightPhase,
+    gameAction: gameAction,
     nightTime: nightTime,
     votingTime: votingTime,
     dayTime: dayTime,

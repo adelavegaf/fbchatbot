@@ -2,6 +2,7 @@
 
 var request = require('request');
 var sensible = require('../security/sensible');
+var rolemanager = require('./rolemanager');
 
 /**
  * Sends a message, with specifications in messageData, to a user with userId.
@@ -86,27 +87,8 @@ var sendExitGame = function (userId) {
 };
 
 var sendRoleInfo = function (userId, role) {
-    var roleInfo;
-    switch (role) {
-        case 'Doctor':
-            roleInfo = 'Prevent someone from dying each night.';
-            break;
-        case 'Mafioso':
-            roleInfo = 'Choose who to kill each night.';
-            break;
-        case 'Vigilante':
-            roleInfo = 'Kill someone each night.';
-            break;
-        case 'Detective':
-            roleInfo = "Learn another person's role each night.";
-            break;
-        case 'Barman':
-            roleInfo = "Block another person's ability each night.";
-            break;
-        default:
-            roleInfo = "No special role. Sorry!";
-            break;
-    }
+    var role = rolemanager.getRole(role);
+
     var messageData = {
         "attachment": {
             "type": "template",
@@ -114,7 +96,7 @@ var sendRoleInfo = function (userId, role) {
                 "template_type": "generic",
                 "elements": [{
                     "title": role,
-                    "subtitle": roleInfo
+                    "subtitle": role.description
                 }]
             }
         }
@@ -146,7 +128,7 @@ var sendDayTime = function (userId) {
  */
 var sendUserForm = function (userId, elements) {
     var messageData = {
-        "attachment": {
+        "attachment ": {
             "type": "template",
             "payload": {
                 "template_type": "generic",
@@ -244,36 +226,11 @@ var broadcastNightAction = function (sessionId, dayCount, users) {
     var title = 'Night time';
     for (var i = 0; i < users.length; i++) {
         var subtitle, identifier;
-        switch (users[i].role) {
-            case 'Doctor':
-                subtitle = 'Choose who you want to save tonight.';
-                identifier = 'heal';
-                break;
-            case 'Mafioso':
-                subtitle = 'Choose who you want to kill tonight.';
-                identifier = 'mkill';
-                break;
-            case 'Vigilante':
-                subtitle = 'Choose who you want to kill tonight.';
-                identifier = 'vkill';
-                break;
-            case 'Detective':
-                subtitle = "Choose who you want to investigate tonight.";
-                identifier = 'investigate';
-                break;
-            case 'Barman':
-                subtitle = "Choose who you want to block tonight.";
-                identifier = 'block';
-                break;
-            default:
-                subtitle = "No special action for you.";
-                identifier = 'ignore';
-                break;
-        }
+        var role = rolemanager.getRole(users[i].role);
         var options = {
             title: title,
-            subtitle: subtitle,
-            identifier: identifier
+            subtitle: role.nightinfo,
+            identifier: users[i].role
         };
         var elements = buildUserForm(sessionId, dayCount, users, options);
         sendUserForm(users[i].id, elements);
