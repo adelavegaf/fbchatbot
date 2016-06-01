@@ -67,7 +67,8 @@ var vote = function (session, userId, toWhom) {
         return;
     }
     console.log("First Equality Passed");
-    if (hasAlreadyVoted(userId)) {
+
+    if (hasAlreadyVoted(session, userId)) {
         messages.sendText(userId, "You can't vote twice!");
         return;
     }
