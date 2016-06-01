@@ -127,7 +127,7 @@ var sendDayTime = function (userId) {
  */
 var sendUserForm = function (userId, elements) {
     var messageData = {
-        "attachment ": {
+        "attachment": {
             "type": "template",
             "payload": {
                 "template_type": "generic",
@@ -203,7 +203,9 @@ var broadcastVoting = function (sessionId, dayCount, users) {
         subtitle: "30s to vote to lynch",
         identifier: "vote"
     }
+
     var elements = buildUserForm(sessionId, dayCount, users, options);
+
     for (var i = 0; i < users.length; i++) {
         sendUserForm(users[i].id, elements);
     }
