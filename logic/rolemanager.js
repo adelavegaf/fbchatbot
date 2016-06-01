@@ -16,7 +16,8 @@ var roles = {
                 if (properties.from.state === 'blocked') {
                     messages.sendText(properties.from.id, `You were roleblocked by the bartender.`);
                 } else {
-                    messages.sendText(properties.from.id, `$You roleblocked ${properties.to.name}`);
+                    properties.to.state = 'blocked';
+                    messages.sendText(properties.from.id, `You roleblocked ${properties.to.name}`);
                 }
             }
         }
