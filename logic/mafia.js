@@ -46,7 +46,7 @@ var beforeVotePhase = function (session) {
 };
 
 var calculateQuorum = function (users) {
-    var alive = aliveUsers(session.users);
+    var alive = aliveUsers(users);
     var numUsers = alive.length;
     var min = numUsers / 2;
     var quorum = (numUsers % 2 == 0) ? min : min + 1;
