@@ -129,7 +129,7 @@ var callGameAction = function (userId, optionArray) {
     }
 
     var session = sessions[activeUsers[userId]];
-
+    console.log("Session before calling mafia.gameAction: " + session);
     mafia.gameAction(session, properties);
 };
 

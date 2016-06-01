@@ -11,7 +11,7 @@ var roles = {
         'id': 0,
         'alliance': 'town',
         'description': "Block another person's ability each night.",
-        'nightinfo': 'Choose who you want to block tonight.',
+        'nightinfo': 'Choose who you want to block.',
         'action': function (users, properties) {
             if (from.state === 'blocked') {
                 sendText(from.id, `You were roleblocked by the bartender.`);
@@ -24,7 +24,7 @@ var roles = {
         'id': 1,
         'alliance': 'town',
         'description': 'Prevent someone from dying each night.',
-        'nightinfo': 'Choose who you want to save tonight.',
+        'nightinfo': 'Choose who you want to save.',
         'action': function (users, properties) {
             if (from.state === 'blocked') {
                 sendText(from.id, `You were roleblocked by the bartender.`);
@@ -54,7 +54,7 @@ var roles = {
         'id': 3,
         'alliance': 'town',
         'description': "Learn another person's role each night.",
-        'nightinfo': 'Choose who you want to investigate tonight.',
+        'nightinfo': 'Choose who you want to investigate.',
         'action': function (users, properties) {
             if (from.state === 'blocked') {
                 sendText(from.id, `You were roleblocked by the bartender.`);
@@ -67,7 +67,7 @@ var roles = {
         'id': 4,
         'alliance': 'town',
         'description': 'Kill someone each night in the name of justice.',
-        'nightinfo': 'Choose who you want to kill tonight.',
+        'nightinfo': 'Choose who you want to kill.',
         'action': function (users, properties) {
             if (properties.from.state === 'blocked') {
                 sendText(properties.from.id, `You were roleblocked by the bartender.`);
@@ -84,7 +84,7 @@ var roles = {
         'id': 5,
         'alliance': 'mafia',
         'description': 'Advise Boss who to kill each night.',
-        'nightinfo': 'You can speak to the boss. Advise him who to kill',
+        'nightinfo': 'You can speak to the mafia.',
         'action': function (users, properties) {
             if (properties.from.state === 'blocked') {
                 sendText(properties.from.id, `You were roleblocked by the bartender.`);

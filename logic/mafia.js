@@ -110,6 +110,8 @@ var checkNightPhase = function (session, userId) {
 };
 
 var gameAction = function (session, properties) {
+    console.log("Reached game action inside Mafia");
+    console.log("properties before calling switch: " + properties);
     switch (properties.action) {
         case 'vote':
             vote(session, properties.from, properties.to);
