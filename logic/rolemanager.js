@@ -95,9 +95,13 @@ var roles = {
 
 var nightAction = function (session, properties) {
     var role = roles[properties.action];
+    console.log('acquired role ' + role);
     var id = role.id;
+    console.log('got role id ' + id);
     var actions = session.nightActions;
+    console.log('got actions: ' + actions);
     actions[id] = role.action(session.users, properties);
+    console.log('got action ' + actios[id]);
 };
 
 var getRoleNames = function () {
