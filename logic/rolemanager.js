@@ -13,10 +13,10 @@ var roles = {
         'description': "Block another person's ability each night.",
         'nightinfo': 'Choose who you want to block.',
         'action': function (users, properties) {
-            if (from.state === 'blocked') {
-                sendText(from.id, `You were roleblocked by the bartender.`);
+            if (properties.from.state === 'blocked') {
+                sendText(properties.from.id, `You were roleblocked by the bartender.`);
             } else {
-                sendText(from.id, `$You roleblocked {to.name}`);
+                sendText(properties.from.id, `$You roleblocked {to.name}`);
             }
         }
     },
@@ -26,10 +26,10 @@ var roles = {
         'description': 'Prevent someone from dying each night.',
         'nightinfo': 'Choose who you want to save.',
         'action': function (users, properties) {
-            if (from.state === 'blocked') {
-                sendText(from.id, `You were roleblocked by the bartender.`);
+            if (properties.from.state === 'blocked') {
+                sendText(properties.from.id, `You were roleblocked by the bartender.`);
             } else {
-                to.state = 'healed';
+                properties.to.state = 'healed';
             }
         }
     },
@@ -39,14 +39,14 @@ var roles = {
         'description': 'Choose who to kill each night.',
         'nightinfo': 'Choose who to kill',
         'action': function (users, properties) {
-            if (from.state === 'blocked') {
-                sendText(from.id, `You were roleblocked by the bartender.`);
-            } else if (to.state === 'healed') {
-                sendText(from.id, `${to.name} was saved by the doctor.`);
-                sendText(to.id, `The mafia targeted you but you were saved by the doctor.`);
+            if (properties.from.state === 'blocked') {
+                sendText(properties.from.id, `You were roleblocked by the bartender.`);
+            } else if (properties.to.state === 'healed') {
+                sendText(properties.from.id, `${properties.to.name} was saved by the doctor.`);
+                sendText(properties.to.id, `The mafia targeted you but you were saved by the doctor.`);
             } else {
                 to.state = 'dead';
-                broadcastText(users, `${to.name} has been killed by the mafia. His role was ${to.role}`);
+                broadcastText(users, `${properties.to.name} has been killed by the mafia. His role was ${properties.to.role}`);
             }
         }
     },
@@ -56,10 +56,10 @@ var roles = {
         'description': "Learn another person's role each night.",
         'nightinfo': 'Choose who you want to investigate.',
         'action': function (users, properties) {
-            if (from.state === 'blocked') {
-                sendText(from.id, `You were roleblocked by the bartender.`);
+            if (properties.from.state === 'blocked') {
+                sendText(properties.from.id, `You were roleblocked by the bartender.`);
             } else {
-                sendText(from.id, `Investigation Result: ${to.name}'s role is ${to.role}`);
+                sendText(properties.from.id, `Investigation Result: ${properties.to.name}'s role is ${properties.to.role}`);
             }
         }
     },
