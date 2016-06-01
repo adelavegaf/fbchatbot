@@ -94,12 +94,14 @@ var beforeNightPhase = function (session) {
 };
 
 var afterNightPhase = function (session) {
+    console.log('begin: after night phase');
     var actions = session.nightActions;
     for (var i = 0; i < actions.length; i++) {
         if (typeof actions[i] !== 'undefined') {
             actions[i]();
         }
     }
+    console.log('end: after night phase');
 };
 
 var checkNightPhase = function (session, userId) {
@@ -116,9 +118,12 @@ var gameAction = function (session, properties) {
             vote(session, properties.from, properties.to);
             break;
         default: // A special skill used in the night phase.
-            console.log('default switch');
+            console.log('be4 check night phase');
             if (checkNightPhase(session, properties.from)) {
+                console.log('after: check night phase');
+                console.log('begin: nightaction call');
                 rolemanager.nightAction(session, properties);
+                console.log('after: nightaction call');
             }
             break;
     }
