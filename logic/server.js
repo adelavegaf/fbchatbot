@@ -110,18 +110,14 @@ var verifyActionStamp = function (userId, sessionId, dayCount) {
 };
 
 var callGameAction = function (userId, optionArray) {
+    var sessionId = activeUsers[userId];
 
-    console.log("Be4 Sess Id");
-    var sessionId = parseInt(optionArray[2], 10);
-    console.log("Be4 daycount");
-    var dayCount = parseInt(optionArray[3], 10);
-    console.log("be4 properties");
     var properties = {
         action: optionArray[0],
         from: userId,
         to: optionArray[1],
         sessionId: sessionId,
-        dayCount: dayCount
+        dayCount: parseInt(optionArray[3], 10)
     };
 
     if (!hasActiveSession(userId)) {
@@ -133,7 +129,7 @@ var callGameAction = function (userId, optionArray) {
         messages.sendText(userId, 'You are not allowed to cast this action now.');
         return;
     }
-    console.log("Reached gameAction");
+    var session = sessions[sessionId];
     mafia.gameAction(session, properties);
 };
 
