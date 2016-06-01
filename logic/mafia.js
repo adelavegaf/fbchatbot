@@ -110,13 +110,13 @@ var checkNightPhase = function (session, userId) {
 };
 
 var gameAction = function (session, properties) {
-    console.log("Reached game action inside Mafia");
-    console.log("properties before calling switch: " + JSON.stringify(properties));
     switch (properties.action) {
         case 'vote':
+            console.log('voting switch');
             vote(session, properties.from, properties.to);
             break;
         default: // A special skill used in the night phase.
+            console.log('default switch');
             if (checkNightPhase(session, properties.from)) {
                 rolemanager.nightAction(session, properties);
             }
