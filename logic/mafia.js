@@ -101,6 +101,12 @@ var afterNightPhase = function (session) {
             actions[i]();
         }
     }
+    var users = session.users;
+    for (i = 0; i < users.length; i++) {
+        if (users[i].state !== 'dead') {
+            users[i].state = 'alive';
+        }
+    }
     console.log('end: after night phase');
 };
 
