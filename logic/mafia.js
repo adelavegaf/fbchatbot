@@ -38,7 +38,7 @@ var hasAlreadyVoted = function (session, userId) {
 
 var beforeVotePhase = function (session) {
     var users = session.users;
-    for (var i = 0; i < users; i++) {
+    for (var i = 0; i < users.length; i++) {
         users[i].vote = 0;
     }
     session.voteTally = {};
@@ -46,12 +46,12 @@ var beforeVotePhase = function (session) {
 };
 
 var calculateQuorum = function (users) {
-    var aliveUsers = aliveUsers(session.users);
-    var numUsers = aliveUsers.length;
+    var alive = aliveUsers(session.users);
+    var numUsers = alive.length;
     var min = numUsers / 2;
     var quorum = (numUsers % 2 == 0) ? min : min + 1;
     return quorum;
-}
+};
 
 var afterVotePhase = function (session) {
     if (typeof session.votedUser.name !== 'undefined') {
@@ -81,7 +81,7 @@ var vote = function (session, userId, toWhom) {
     var quorum = calculateQuorum(aliveUsers(session.users));
 
     if (targetUser.vote >= quorum) {
-        votedUser = targetUser;
+        session.votedUser = targetUser;
         targetUser.state = 'dead';
     }
 
