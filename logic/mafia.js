@@ -66,33 +66,26 @@ var vote = function (session, userId, toWhom) {
         messages.sendText(userId, "You can't vote for yourself");
         return;
     }
-    console.log("First Equality Passed");
 
     if (hasAlreadyVoted(session, userId)) {
         messages.sendText(userId, "You can't vote twice!");
         return;
     }
-    console.log("Second Equality Passed");
     if (session.state !== 'voting') {
         messages.sendText(userId, "It's no longer the voting phase");
     }
-    console.log("Third Equality Passed");
 
     session.voteTally[userId] = true;
-    console.log("Tally Passed");
     var currentUser = getUserFromId(session, userId);
-    console.log("Got Current User");
     var targetUser = getUserFromId(session, toWhom);
-    console.log("Get Target User");
     targetUser.vote += 1;
-    console.log("Added vote to target User");
+
     var quorum = calculateQuorum(session.users);
-    console.log("Quorum calculated");
+
     if (targetUser.vote >= quorum) {
         session.votedUser = targetUser;
         targetUser.state = 'dead';
     }
-    console.log("If superated");
     messages.broadcastText(session.users, `${currentUser.name} has voted for ${targetUser.name}`);
 };
 
@@ -120,7 +113,6 @@ var checkNightPhase = function (session, userId) {
 var gameAction = function (session, properties) {
     switch (properties.action) {
         case 'vote':
-            console.log('voting switch');
             vote(session, properties.from, properties.to);
             break;
         default: // A special skill used in the night phase.
