@@ -106,7 +106,7 @@ var parseMessage = function (userId, text) {
 var verifyActionStamp = function (userId, sessionId, dayCount) {
     var curSessionId = activeUsers[userId];
     var curSession = sessions[curSessionId];
-    return parseInt(sessionId, 10) === curSessionId && curSession.dayCount === parseInt(dayCount, 10);
+    return sessionId === curSessionId && curSession.dayCount === dayCount;
 };
 
 var callGameAction = function (userId, optionArray) {
@@ -114,8 +114,8 @@ var callGameAction = function (userId, optionArray) {
         action: optionArray[0],
         from: userId,
         to: optionArray[1],
-        sessionId: optionArray[2],
-        dayCount: optionArray[3]
+        sessionId: parseInt(optionArray[2], 10),
+        dayCount: parseInt(optionArray[3], 10)
     };
 
     if (!hasActiveSession(userId)) {
@@ -128,8 +128,6 @@ var callGameAction = function (userId, optionArray) {
         return;
     }
 
-    var session = sessions[activeUsers[userId]];
-    console.log("Session before calling mafia.gameAction: " + session);
     mafia.gameAction(session, properties);
 };
 

@@ -33,7 +33,7 @@ var getUserFromId = function (session, userId) {
 
 var hasAlreadyVoted = function (session, userId) {
     var property = String(userId);
-    return typeof session.voteTally[userId] !== 'undefined'
+    return typeof session.voteTally[userId] !== 'undefined';
 };
 
 var beforeVotePhase = function (session) {
@@ -111,7 +111,7 @@ var checkNightPhase = function (session, userId) {
 
 var gameAction = function (session, properties) {
     console.log("Reached game action inside Mafia");
-    console.log("properties before calling switch: " + properties);
+    console.log("properties before calling switch: " + JSON.stringify(properties));
     switch (properties.action) {
         case 'vote':
             vote(session, properties.from, properties.to);
