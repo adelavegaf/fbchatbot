@@ -6,9 +6,9 @@ var rolemanager = require('./rolemanager');
 var names = ['Peyton', 'Sam', 'Alex', 'Morgan', 'Taylor', 'Carter', 'Jessie'];
 
 
-var dayDuration = 9000;
-var votingDuration = 3000;
-var nightDuration = 3000;
+var dayDuration = 9000; // 90000
+var votingDuration = 9000; // 30000
+var nightDuration = 9000; // 30000
 // WARNING: Change timeouts to real values. REFACTOR BY CREATING VARIABLES.
 
 var aliveUsers = function (users) {
