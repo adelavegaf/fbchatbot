@@ -101,7 +101,7 @@ var nightAction = function (session, properties) {
     var actions = session.nightActions;
     console.log('got actions: ' + actions);
     actions[id] = role.action(session.users, properties);
-    console.log('got action ' + action[id]);
+    console.log('got action ' + actions[id]);
 };
 
 var getRoleNames = function () {
