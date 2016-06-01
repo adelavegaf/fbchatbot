@@ -103,7 +103,7 @@ var parseMessage = function (userId, text) {
  * we must verify the button was pressed in the current session,
  * and in the corresponding turn.
  */
-var verifyActionStamp(userId, sessionId, dayCount) {
+var verifyActionStamp = function (userId, sessionId, dayCount) {
     var curSessionId = activeUsers[userId];
     var curSession = sessions[curSessionId];
     return sessionId === curSessionId && curSession.dayCount === dayCount;
