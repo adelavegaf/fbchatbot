@@ -87,8 +87,7 @@ var sendExitGame = function (userId) {
 };
 
 var sendRoleInfo = function (userId, role) {
-    var role = rolemanager.getRole(role);
-
+    var roleData = rolemanager.getRole(role);
     var messageData = {
         "attachment": {
             "type": "template",
@@ -96,7 +95,7 @@ var sendRoleInfo = function (userId, role) {
                 "template_type": "generic",
                 "elements": [{
                     "title": role,
-                    "subtitle": role.description
+                    "subtitle": roleData.description
                 }]
             }
         }

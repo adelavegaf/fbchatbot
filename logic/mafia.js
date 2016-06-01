@@ -123,23 +123,23 @@ var gameAction = function (session, properties) {
 };
 
 var nightTime = function (session) {
-    beforeNightPhase();
+    beforeNightPhase(session);
     session.state = 'night';
     var alive = aliveUsers(session.users);
     messages.broadcastNightAction(session.sessionId, session.dayCount, alive);
     setTimeout(function () {
-        afterNightPhase();
+        afterNightPhase(session);
         gameStates(session);
     }, nightDuration);
 };
 
 var votingTime = function (session) {
-    beforeVotePhase();
+    beforeVotePhase(session);
     session.state = 'voting';
     var alive = aliveUsers(session.users);
     messages.broadcastVoting(session.sessionId, session.dayCount, alive);
     setTimeout(function () {
-        afterVotePhase();
+        afterVotePhase(session);
         nightTime(session);
     }, votingDuration);
 };
