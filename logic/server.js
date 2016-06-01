@@ -110,12 +110,15 @@ var verifyActionStamp = function (userId, sessionId, dayCount) {
 };
 
 var callGameAction = function (userId, optionArray) {
+    var sessionId = parseInt(optionArray[2], 10);
+    var dayCount = parseInt(optionArray[3], 10);
+
     var properties = {
         action: optionArray[0],
         from: userId,
         to: optionArray[1],
-        sessionId: parseInt(optionArray[2], 10),
-        dayCount: parseInt(optionArray[3], 10)
+        sessionId: sessionId,
+        dayCount: dayCount
     };
 
     if (!hasActiveSession(userId)) {
