@@ -55,7 +55,7 @@ var calculateQuorum = function (users) {
 
 var afterVotePhase = function (session) {
     if (typeof session.votedUser.name !== 'undefined') {
-        messages.broadcastText(session.users, user.votedUser.name + " has been lynched");
+        messages.broadcastText(session.users, session.votedUser.name + " has been lynched");
         return;
     }
     messages.broadcastText(session.users, "No one was lynched");
