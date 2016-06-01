@@ -99,7 +99,7 @@ var nightAction = function (session, properties) {
     var id = role.id;
     console.log('got role id ' + id);
     var actions = session.nightActions;
-    console.log('got actions: ' + actions);
+    console.log('got actions: ' + typeof actions);
     actions[id] = role.action(session.users, properties);
     console.log('got action ' + actions[id]);
 };
