@@ -121,8 +121,8 @@ var gameAction = function (session, properties) {
             console.log('be4 check night phase');
             if (checkNightPhase(session, properties.from)) {
                 console.log("b4 night");
-                properties.to = getUserFromId(properties.to);
-                properties.from = getUserFromId(properties.from);
+                properties.to = getUserFromId(session, properties.to);
+                properties.from = getUserFromId(session, properties.from);
                 rolemanager.nightAction(session, properties);
                 console.log('after: nightaction call');
             }
