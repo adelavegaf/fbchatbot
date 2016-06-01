@@ -106,9 +106,7 @@ var parseMessage = function (userId, text) {
 var verifyActionStamp = function (userId, sessionId, dayCount) {
     var curSessionId = activeUsers[userId];
     var curSession = sessions[curSessionId];
-    console.log("Sess ids: " + typeof sessionId + " " + typeof curSessionId);
-    console.log("DayCounts: " + typeof curSession.dayCount + " " + typeof dayCount);
-    return sessionId === curSessionId && curSession.dayCount === dayCount;
+    return parseInt(sessionId, 10) === curSessionId && curSession.dayCount === parseInt(dayCount, 10);
 };
 
 var callGameAction = function (userId, optionArray) {
