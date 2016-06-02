@@ -11,8 +11,8 @@ var roles = {
         'alliance': 'town',
         'description': "Block another person's ability each night.",
         'nightinfo': 'Choose who you want to block.',
-        'action': function (messages, users, properties) {
-            return function () {
+        'action': function (properties) {
+            return function (messages, users) {
                 if (properties.from.state === 'blocked') {
                     messages.sendText(properties.from.id, `You were roleblocked by the bartender.`);
                 } else {
@@ -27,8 +27,8 @@ var roles = {
         'alliance': 'town',
         'description': 'Prevent someone from dying each night.',
         'nightinfo': 'Choose who you want to save.',
-        'action': function (messages, users, properties) {
-            return function () {
+        'action': function (properties) {
+            return function (messages, users) {
                 if (properties.from.state === 'blocked') {
                     messages.sendText(properties.from.id, `You were roleblocked by the bartender.`);
                 } else {
@@ -42,8 +42,8 @@ var roles = {
         'alliance': 'mafia',
         'description': 'Choose who to kill each night.',
         'nightinfo': 'Choose who to kill',
-        'action': function (messages, users, properties) {
-            return function () {
+        'action': function (properties) {
+            return function (messages, users) {
                 if (properties.from.state === 'blocked') {
                     messages.sendText(properties.from.id, `You were roleblocked by the bartender.`);
                 } else if (properties.to.state === 'healed') {
@@ -61,8 +61,8 @@ var roles = {
         'alliance': 'town',
         'description': "Learn another person's role each night.",
         'nightinfo': 'Choose who you want to investigate.',
-        'action': function (messages, users, properties) {
-            return function () {
+        'action': function (properties) {
+            return function (messages, users) {
                 if (properties.from.state === 'blocked') {
                     messages.sendText(properties.from.id, `You were roleblocked by the bartender.`);
                 } else {
@@ -76,8 +76,8 @@ var roles = {
         'alliance': 'town',
         'description': 'Kill someone each night in the name of justice.',
         'nightinfo': 'Choose who you want to kill.',
-        'action': function (messages, users, properties) {
-            return function () {
+        'action': function (properties) {
+            return function (messages, users) {
                 if (properties.from.state === 'blocked') {
                     messages.sendText(properties.from.id, `You were roleblocked by the bartender.`);
                 } else if (properties.to.state === 'healed') {
@@ -95,8 +95,8 @@ var roles = {
         'alliance': 'mafia',
         'description': 'Advise Boss who to kill each night.',
         'nightinfo': 'You can speak to the mafia.',
-        'action': function (messages, users, properties) {
-            return function () {
+        'action': function (properties) {
+            return function (messages, users) {
                 if (properties.from.state === 'blocked') {
                     messages.sendText(properties.from.id, `You were roleblocked by the bartender.`);
                 }
@@ -106,11 +106,10 @@ var roles = {
 };
 
 var nightAction = function (session, properties) {
-    var messages = require('./messages');
     var role = roles[properties.action];
     var id = role.id;
     var actions = session.nightActions;
-    actions[id] = role['action'](messages, session.users, properties);
+    actions[id] = role['action'](properties);
 };
 
 var getRoleNames = function () {

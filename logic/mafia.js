@@ -97,7 +97,7 @@ var afterNightPhase = function (session) {
     var actions = session.nightActions;
     for (var i = 0; i < actions.length; i++) {
         if (typeof actions[i] !== 'undefined') {
-            actions[i]();
+            actions[i](messages, session.users);
         }
     }
     var users = session.users;
