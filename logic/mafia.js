@@ -169,7 +169,7 @@ var speak = function (session, userId, text) {
             messages.broadcastLimited(userId, session.users, text);
             break;
         case 'alive voting':
-            messages.sendText(userId, "You can't speak now.");
+            messages.sendText(userId, "shhh we're voting (type .vote to bring panel back)");
             break;
         case 'alive night':
             var role = rolemanager.getRole(user.role);
@@ -177,7 +177,7 @@ var speak = function (session, userId, text) {
                 var users = getUsersInMafia(session.users);
                 messages.broadcastLimited(userId, users, text);
             } else {
-                messages.sendText(userId, "You can't speak at night.");
+                messages.sendText(userId, "shhh people are sleeping. (type .night to bring panel back)");
             }
             break;
     };
@@ -214,16 +214,29 @@ var dayPhase = function (session) {
     }, dayDuration);
 };
 
-var finishGame = function (session) {
+var checkGameEnd = function (session) {
+    if (session.dayCount === 0) {
+        session.state = 'finished';
+        messages.broadcastText(session.users, 'The game has finished in a draw, there are no more turns left.');
+        return true;
+    }
+    var alive = getAliveUsers(session.users);
+    var alliance = rolemanager.getRole(alive[0].role).alliance;
+    for (var i = 1; i < alive.length; i++) {
+        var curAlliance = rolemanager.getRole(alive[i].role).alliance;
+        if (curAlliance !== alliance) {
+            return false;
+        }
+    }
     session.state = 'finished';
+    messages.broadcastText(session.users, '${alliance} has won!');
+    return true;
 };
 
 var gameStates = function (session) {
-    if (session.dayCount === 0) {
-        finishGame(session);
-        return;
+    if (!checkGameEnd(session)) {
+        dayPhase(session);
     }
-    dayPhase(session);
 };
 
 var getRandomInt = function (min, max) {
@@ -270,7 +283,7 @@ var mafia = {
     nightPhase: nightPhase,
     votingPhase: votingPhase,
     dayPhase: dayPhase,
-    finishGame: finishGame,
+    checkGameEnd: checkGameEnd,
     gameStates: gameStates,
     getRandomInt: getRandomInt,
     assignRoles: assignRoles,
