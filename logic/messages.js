@@ -86,7 +86,7 @@ var sendExitGame = function (userId) {
     sendMessage(userId, messageData);
 };
 
-var sendRoleInfo = function (userId, role) {
+var sendRoleInfo = function (userId, role, name) {
     var roleData = rolemanager.getRole(role);
     var messageData = {
         "attachment": {
@@ -94,7 +94,7 @@ var sendRoleInfo = function (userId, role) {
             "payload": {
                 "template_type": "generic",
                 "elements": [{
-                    "title": role,
+                    "title": role + " codename: " + name,
                     "subtitle": roleData.description
                 }]
             }
@@ -105,7 +105,7 @@ var sendRoleInfo = function (userId, role) {
 /**
  * Send day notification structured message to a particular user with userId.
  */
-var sendDayTime = function (userId) {
+var sendDayTime = function (userId, dayCount) {
     var messageData = {
         "attachment": {
             "type": "template",
@@ -113,7 +113,7 @@ var sendDayTime = function (userId) {
                 "template_type": "generic",
                 "elements": [{
                     "title": "Day Time",
-                    "subtitle": "1.5min to talk",
+                    "subtitle": "90s to talk. " + dayCount + " days remaning.",
                     "image_url": "https://mafiabotgame.herokuapp.com/images/day-min.png"
                 }]
             }
@@ -212,15 +212,15 @@ var broadcastVoting = function (sessionId, dayCount, users) {
     }
 };
 
-var broadcastDay = function (users) {
+var broadcastDay = function (users, dayCount) {
     for (var i = 0; i < users.length; i++) {
-        sendDayTime(users[i].id);
+        sendDayTime(users[i].id, dayCount);
     }
 };
 
 var broadcastRoles = function (users) {
     for (var i = 0; i < users.length; i++) {
-        sendRoleInfo(users[i].id, users[i].role);
+        sendRoleInfo(users[i].id, users[i].role, users[i].name);
     }
 };
 

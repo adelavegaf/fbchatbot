@@ -5,6 +5,7 @@ var rolemanager = require('./rolemanager');
 
 var names = ['Peyton', 'Sam', 'Alex', 'Morgan', 'Taylor', 'Carter', 'Jessie'];
 
+var startGameDelay = 6000;
 var gameDuration = 11;
 var dayDuration = 15000; // 90000
 var votingDuration = 15000; // 30000
@@ -71,8 +72,7 @@ var beforeVotePhase = function (session) {
 var calculateQuorum = function (users) {
     var alive = getAliveUsers(users);
     var numUsers = alive.length;
-    var min = numUsers / 2;
-    var quorum = (numUsers % 2 == 0) ? min : min + 1;
+    var quorum = numUsers / 2 + 1;
     return quorum;
 };
 
@@ -109,7 +109,7 @@ var vote = function (session, userId, toWhom) {
         session.votedUser = targetUser;
         targetUser.state = 'dead';
     }
-    messages.broadcastText(session.users, `${currentUser.name} has voted for ${targetUser.name}`);
+    messages.broadcastText(session.users, `${currentUser.name} has voted for ${targetUser.name} ${targetUser.vote}/${quorum}`);
 };
 
 var beforeNightPhase = function (session) {
@@ -208,7 +208,7 @@ var votingPhase = function (session) {
 var dayPhase = function (session) {
     session.dayCount -= 1;
     session.state = 'day';
-    messages.broadcastDay(session.users);
+    messages.broadcastDay(session.users, session.dayCount);
     setTimeout(function () {
         votingPhase(session);
     }, dayDuration);
@@ -221,7 +221,7 @@ var checkGameEnd = function (session) {
         return true;
     }
     var alive = getAliveUsers(session.users);
-    var alliance = rolemanager.getRole(alive[0].role).alliance;
+    var alliance = (alive.length === 0) ? 'No one' : rolemanager.getRole(alive[0].role).alliance;
     for (var i = 1; i < alive.length; i++) {
         var curAlliance = rolemanager.getRole(alive[i].role).alliance;
         if (curAlliance !== alliance) {
@@ -256,11 +256,14 @@ var assignRoles = function (users) {
 var startGame = function (session) {
     assignRoles(session.users);
     messages.broadcastRoles(session.users);
-    gameStates(session);
+    setTimeout(function () {
+        gameStates(session);
+    }, startGameDelay);
 };
 
 var mafia = {
     names: names,
+    startGameDelay: startGameDelay,
     gameDuration: gameDuration,
     dayDuration: dayDuration,
     nightDuration: nightDuration,
