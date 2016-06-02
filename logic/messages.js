@@ -45,20 +45,27 @@ var sendStartGame = function (userId) {
         "attachment": {
             "type": "template",
             "payload": {
-                "template_type": "button",
-                "text": "Mafia Chat Game",
-                "buttons": [{
-                    "type": "postback",
-                    "title": "Join Game",
-                    "payload": "join"
-                }, {
-                    "type": "postback",
-                    "title": "Help",
-                    "payload": "help"
-                }]
+                "template_type": "generic",
+                "elements": [{
+                    "title": "Mafia Chat Game",
+                    "image_url": "https://mafiabotgame.herokuapp.com/images/mafia-min.png",
+                    "buttons": [
+                        {
+                            "type": "postback",
+                            "title": "Join Game",
+                            "payload": "join"
+                            },
+                        {
+                            "type": "postback",
+                            "title": "Help",
+                            "payload": "help"
+                            }
+                        ]
+                    }]
             }
         }
     };
+
     sendMessage(userId, messageData);
 };
 /**
@@ -94,7 +101,7 @@ var sendRoleInfo = function (userId, role, name) {
             "payload": {
                 "template_type": "generic",
                 "elements": [{
-                    "title": role + " codename: " + name,
+                    "title": `Role: ${role} Codename: ${name}`,
                     "subtitle": roleData.description
                 }]
             }
@@ -113,7 +120,7 @@ var sendDayTime = function (userId, dayCount) {
                 "template_type": "generic",
                 "elements": [{
                     "title": "Day Time",
-                    "subtitle": "90s to talk. " + dayCount + " days remaning.",
+                    "subtitle": "90s to talk. " + dayCount + " days remaining.",
                     "image_url": "https://mafiabotgame.herokuapp.com/images/day-min.png"
                 }]
             }
