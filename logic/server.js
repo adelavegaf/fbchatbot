@@ -89,6 +89,7 @@ var hasActiveSession = function (userId) {
     var property = String(userId);
     var sessionId = activeUsers[property];
 
+    return typeof activeUsers[property] !== 'undefined';
     if (typeof sessionId === 'undefined') {
         return false;
     }
