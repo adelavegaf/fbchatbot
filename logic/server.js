@@ -34,7 +34,6 @@ var beginSession = function () {
 };
 
 // WARNING: Concurrency issues with beginSession and join. Beware.
-// REFACTOR: Change 11 (magic number) to an appropiate variable from Mafia.js
 var joinSession = function (userId) {
     if (hasActiveSession(userId)) {
         messages.sendText(userId, "You are already on a game!");
@@ -44,7 +43,7 @@ var joinSession = function (userId) {
         sessions[sessionId] = {
             sessionId: sessionId,
             state: 'connecting',
-            dayCount: 11,
+            dayCount: mafia.gameDuration,
             users: userQueue
         };
     }
@@ -92,8 +91,12 @@ var parseMessage = function (userId, text) {
             help(userId);
             break;
         default:
-            if (!hasActiveSession(userId)) messages.sendStartGame(userId);
-            else console.log('else');
+            if (!hasActiveSession(userId)) {
+                messages.sendStartGame(userId);
+            } else {
+                var session = sessions[activeUsers[userId]];
+                mafia.speak(session, userId, text);
+            }
             break;
     }
 };

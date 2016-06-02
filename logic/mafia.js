@@ -5,20 +5,43 @@ var rolemanager = require('./rolemanager');
 
 var names = ['Peyton', 'Sam', 'Alex', 'Morgan', 'Taylor', 'Carter', 'Jessie'];
 
-
-var dayDuration = 9000; // 90000
-var votingDuration = 9000; // 30000
-var nightDuration = 9000; // 30000
+var gameDuration = 11;
+var dayDuration = 15000; // 90000
+var votingDuration = 15000; // 30000
+var nightDuration = 15000; // 30000
 // WARNING: Change timeouts to real values. REFACTOR BY CREATING VARIABLES.
 
-var aliveUsers = function (users) {
-    var alive = [];
+var getUsersByAlliance = function (users, alliance) {
+    var usersByAlliance = [];
     for (var i = 0; i < users.length; i++) {
-        if (users[i].state === 'alive') {
-            alive.push(users[i]);
+        var role = rolemanager.getRole(users[i].role);
+        if (role.alliance === alliance) {
+            usersByAlliance.push(users[i]);
         }
     }
-    return alive;
+    return usersByAlliance;
+};
+
+var getUsersByState = function (users, state) {
+    var usersWithState = [];
+    for (var i = 0; i < users.length; i++) {
+        if (users[i].state === state) {
+            usersWithState.push(users[i]);
+        }
+    }
+    return usersWithState;
+};
+
+var getUsersInMafia = function (users) {
+    return getUsersByAlliance(users, 'mafia');
+};
+
+var getAliveUsers = function (users) {
+    return getUsersByState(users, 'alive');
+};
+
+var getDeadUsers = function (users) {
+    return getUsersByState(users, 'dead');
 };
 
 var getUserFromId = function (session, userId) {
@@ -46,7 +69,7 @@ var beforeVotePhase = function (session) {
 };
 
 var calculateQuorum = function (users) {
-    var alive = aliveUsers(users);
+    var alive = getAliveUsers(users);
     var numUsers = alive.length;
     var min = numUsers / 2;
     var quorum = (numUsers % 2 == 0) ? min : min + 1;
@@ -131,10 +154,38 @@ var gameAction = function (session, properties) {
     }
 };
 
+var speak = function (session, userId, text) {
+    var user = getUserFromId(session, userId);
+    text = user.name + ": " + text;
+    var combinedState = user.state + " " + session.state;
+    switch (user.state) {
+        case 'dead day':
+        case 'dead voting':
+        case 'dead night':
+            var users = getDeadUsers(session.users);
+            messages.broadcastLimited(userId, users, text);
+            break;
+        case 'alive day':
+            messages.broadcastLimited(userId, session.users, text);
+            break;
+        case 'alive voting':
+            messages.sendText(userId, "You can't speak now.");
+            break;
+        case 'alive night':
+            if (user.alliance === 'mafia') {
+                var users = getUsersInMafia(session.users);
+                messages.broadcastLimited(userId, users, text);
+            } else {
+                messages.sendText(userId, 'You may not speak at night.');
+            }
+            break;
+    };
+};
+
 var nightPhase = function (session) {
     beforeNightPhase(session);
     session.state = 'night';
-    var alive = aliveUsers(session.users);
+    var alive = getAliveUsers(session.users);
     messages.broadcastNightAction(session.sessionId, session.dayCount, alive);
     setTimeout(function () {
         afterNightPhase(session);
@@ -145,7 +196,7 @@ var nightPhase = function (session) {
 var votingPhase = function (session) {
     beforeVotePhase(session);
     session.state = 'voting';
-    var alive = aliveUsers(session.users);
+    var alive = getAliveUsers(session.users);
     messages.broadcastVoting(session.sessionId, session.dayCount, alive);
     setTimeout(function () {
         afterVotePhase(session);
@@ -196,10 +247,15 @@ var startGame = function (session) {
 
 var mafia = {
     names: names,
+    gameDuration: gameDuration,
     dayDuration: dayDuration,
     nightDuration: nightDuration,
     votingDuration: votingDuration,
-    aliveUsers: aliveUsers,
+    getUsersByAlliance: getUsersByAlliance,
+    getUsersByState: getUsersByState,
+    getUsersInMafia: getUsersInMafia,
+    getAliveUsers: getAliveUsers,
+    getDeadUsers: getDeadUsers,
     getUserFromId: getUserFromId,
     hasAlreadyVoted: hasAlreadyVoted,
     beforeVotePhase: beforeVotePhase,
@@ -209,6 +265,7 @@ var mafia = {
     beforeNightPhase: beforeNightPhase,
     checkNightPhase: checkNightPhase,
     gameAction: gameAction,
+    speak: speak,
     nightPhase: nightPhase,
     votingPhase: votingPhase,
     dayPhase: dayPhase,
