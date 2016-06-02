@@ -229,7 +229,7 @@ var checkGameEnd = function (session) {
         }
     }
     session.state = 'finished';
-    messages.broadcastText(session.users, '${alliance} has won!');
+    messages.broadcastText(session.users, `${alliance} has won!`);
     return true;
 };
 

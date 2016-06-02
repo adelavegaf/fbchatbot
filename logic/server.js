@@ -75,9 +75,21 @@ var help = function (userId) {
     messages.sendHelp(userId);
 };
 
+var cleanSession = function (sessionId) {
+    var users = sessions[sessionId].users;
+    for (var i = 0; i < users.length; i++) {
+        delete activeUsers[users[i].id];
+    }
+    delete sessions[sessionId];
+};
+
 var hasActiveSession = function (userId) {
     var property = String(userId);
-    return typeof activeUsers[property] !== 'undefined';
+    var sessionId = activeUsers[property];
+    if (typeof sessionId === 'undefined') return false;
+    if (sessions[sessionId].state !== 'finished') return true;
+    cleanSession(sessionId);
+    return false;
 };
 
 // CONSIDER EDGE CASES, i.e. User sending multiple .joins.
@@ -164,6 +176,7 @@ var server = {
     joinSession: joinSession,
     exit: exit,
     help: help,
+    cleanSession: cleanSession,
     hasActiveSession: hasActiveSession,
     parseMessage: parseMessage,
     verifyActionStamp: verifyActionStamp,
