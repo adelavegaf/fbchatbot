@@ -172,7 +172,8 @@ var speak = function (session, userId, text) {
             messages.sendText(userId, "You can't speak now.");
             break;
         case 'alive night':
-            if (user.alliance === 'mafia') {
+            var role = rolemanager.getRole(user.role);
+            if (role.alliance === 'mafia') {
                 var users = getUsersInMafia(session.users);
                 messages.broadcastLimited(userId, users, text);
             } else {
