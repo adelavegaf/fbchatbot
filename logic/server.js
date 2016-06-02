@@ -76,20 +76,17 @@ var help = function (userId) {
 };
 
 var cleanSession = function (sessionId) {
-    console.log('*********************** cleaned session. ' + sesionId);
     var users = sessions[sessionId].users;
     for (var i = 0; i < users.length; i++) {
         delete activeUsers[users[i].id];
     }
     delete sessions[sessionId];
-    console.log('*********************** finished cleaning session. ' + sessionId);
 };
 
 var hasActiveSession = function (userId) {
     var property = String(userId);
     var sessionId = activeUsers[property];
 
-    return typeof activeUsers[property] !== 'undefined';
     if (typeof sessionId === 'undefined') {
         return false;
     }
