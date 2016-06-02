@@ -131,7 +131,7 @@ var gameAction = function (session, properties) {
     }
 };
 
-var nightTime = function (session) {
+var nightPhase = function (session) {
     beforeNightPhase(session);
     session.state = 'night';
     var alive = aliveUsers(session.users);
@@ -142,23 +142,23 @@ var nightTime = function (session) {
     }, nightDuration);
 };
 
-var votingTime = function (session) {
+var votingPhase = function (session) {
     beforeVotePhase(session);
     session.state = 'voting';
     var alive = aliveUsers(session.users);
     messages.broadcastVoting(session.sessionId, session.dayCount, alive);
     setTimeout(function () {
         afterVotePhase(session);
-        nightTime(session);
+        nightPhase(session);
     }, votingDuration);
 };
 
-var dayTime = function (session) {
+var dayPhase = function (session) {
     session.dayCount -= 1;
     session.state = 'day';
     messages.broadcastDay(session.users);
     setTimeout(function () {
-        votingTime(session);
+        votingPhase(session);
     }, dayDuration);
 };
 
@@ -171,7 +171,7 @@ var gameStates = function (session) {
         finishGame(session);
         return;
     }
-    dayTime(session);
+    dayPhase(session);
 };
 
 var getRandomInt = function (min, max) {
@@ -209,9 +209,9 @@ var mafia = {
     beforeNightPhase: beforeNightPhase,
     checkNightPhase: checkNightPhase,
     gameAction: gameAction,
-    nightTime: nightTime,
-    votingTime: votingTime,
-    dayTime: dayTime,
+    nightPhase: nightPhase,
+    votingPhase: votingPhase,
+    dayPhase: dayPhase,
     finishGame: finishGame,
     gameStates: gameStates,
     getRandomInt: getRandomInt,
