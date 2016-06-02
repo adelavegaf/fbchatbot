@@ -76,7 +76,11 @@ var help = function (userId) {
 };
 
 var role = function (userId) {
-    messages.sendRole(userId);
+    if (!hasActiveSession(userId)) {
+        messages.sendText(userId, "You are not on a game!");
+        return;
+    }
+    mafia.sendRoleInfo(sessions[activeUsers[userId]], userId);
 };
 
 var cleanSession = function (sessionId) {
@@ -189,6 +193,7 @@ var server = {
     joinSession: joinSession,
     exit: exit,
     help: help,
+    role: role,
     cleanSession: cleanSession,
     hasActiveSession: hasActiveSession,
     parseMessage: parseMessage,

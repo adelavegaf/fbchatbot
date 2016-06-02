@@ -259,6 +259,8 @@ var startGame = function (session) {
     setTimeout(function () {
         gameStates(session);
     }, startGameDelay);
+    messages.broadcastText(session.users, 'Type .exit to leave the game at any time.');
+    messages.broadcastText(session.users, 'Type .role if you forget your role or codename.');
 };
 
 var mafia = {
