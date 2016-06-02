@@ -158,7 +158,7 @@ var speak = function (session, userId, text) {
     var user = getUserFromId(session, userId);
     text = user.name + ": " + text;
     var combinedState = user.state + " " + session.state;
-    switch (user.state) {
+    switch (combinedState) {
         case 'dead day':
         case 'dead voting':
         case 'dead night':
@@ -176,7 +176,7 @@ var speak = function (session, userId, text) {
                 var users = getUsersInMafia(session.users);
                 messages.broadcastLimited(userId, users, text);
             } else {
-                messages.sendText(userId, 'You may not speak at night.');
+                messages.sendText(userId, "You can't speak at night.");
             }
             break;
     };
