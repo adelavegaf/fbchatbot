@@ -75,6 +75,10 @@ var help = function (userId) {
     messages.sendHelp(userId);
 };
 
+var role = function (userId) {
+    messages.sendRole(userId);
+};
+
 var cleanSession = function (sessionId) {
     var users = sessions[sessionId].users;
     for (var i = 0; i < users.length; i++) {
@@ -107,6 +111,9 @@ var parseMessage = function (userId, text) {
             break;
         case '.help':
             help(userId);
+            break;
+        case '.role':
+            role(userId);
             break;
         default:
             if (!hasActiveSession(userId)) {

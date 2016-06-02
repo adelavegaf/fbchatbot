@@ -101,7 +101,7 @@ var sendRoleInfo = function (userId, role, name) {
             "payload": {
                 "template_type": "generic",
                 "elements": [{
-                    "title": `Role: ${role} Codename: ${name}`,
+                    "title": `Role: ${role}. \nCodename: ${name}.`,
                     "subtitle": roleData.description
                 }]
             }

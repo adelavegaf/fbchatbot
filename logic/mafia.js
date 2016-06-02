@@ -168,16 +168,11 @@ var speak = function (session, userId, text) {
         case 'alive day':
             messages.broadcastLimited(userId, session.users, text);
             break;
-        case 'alive voting':
-            messages.sendText(userId, "shhh we're voting (type .vote to bring panel back)");
-            break;
         case 'alive night':
             var role = rolemanager.getRole(user.role);
             if (role.alliance === 'mafia') {
                 var users = getUsersInMafia(session.users);
                 messages.broadcastLimited(userId, users, text);
-            } else {
-                messages.sendText(userId, "shhh people are sleeping. (type .night to bring panel back)");
             }
             break;
     };
@@ -243,6 +238,11 @@ var getRandomInt = function (min, max) {
     return min + Math.floor(Math.random() * (max - min + 1));
 };
 
+var sendRoleInfo = function (session, userId) {
+    var user = getUserFromId(session, userId);
+    messages.sendRoleInfo(userId, user.role, user.name);
+};
+
 var assignRoles = function (users) {
     var roles = rolemanager.getRoleNames();
     for (var i = 0; i < users.length; i++) {
@@ -289,6 +289,7 @@ var mafia = {
     checkGameEnd: checkGameEnd,
     gameStates: gameStates,
     getRandomInt: getRandomInt,
+    sendRoleInfo: sendRoleInfo,
     assignRoles: assignRoles,
     startGame: startGame
 };
