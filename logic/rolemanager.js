@@ -2,8 +2,12 @@
 
 /**
  * Roles are sorted in order of skill precedence, i.e. block must be executed before any other skill.
- * This influences on how the night actions execute. Each role's id in the array corresponds to each skill's preedence.
- * Barman's block (id 0) executes before Mafia's  
+ * id: determines ordering. Lower id values determine higher precedence.
+ * alliance: describes to which town faction the role corresponds to.
+ * description: message the user receives upon starting the game (or calling .role).
+ * nightinfo: message the user receives at the beginning of the night phase.
+ * action: function, that returns a function, that handles how the night skill
+ * of the particular role is executed.
  */
 var roles = {
     'Barman': {
@@ -105,13 +109,19 @@ var roles = {
     }
 };
 
+/**
+ * Adds an action to the nightAction array in the
+ * corresponding role position.
+ */
 var nightAction = function (session, properties) {
     var role = roles[properties.action];
     var id = role.id;
     var actions = session.nightActions;
     actions[id] = role['action'](properties.from, properties.to);
 };
-
+/**
+ * Returns an array with all the roles available in the game.
+ */
 var getRoleNames = function () {
     var roleNames = [];
     for (var property in roles) {
@@ -121,11 +131,15 @@ var getRoleNames = function () {
     }
     return roleNames;
 };
-
+/**
+ * Returns a role object given the role name.
+ */
 var getRole = function (role) {
     return roles[role];
 };
-
+/**
+ * Node export object.
+ */
 var rolemanager = {
     roles: roles,
     nightAction: nightAction,

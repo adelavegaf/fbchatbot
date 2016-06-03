@@ -93,6 +93,9 @@ var sendExitGame = function (userId) {
     sendMessage(userId, messageData);
 };
 
+/**
+ * Sends user with userId his game role and alias.
+ */
 var sendRoleInfo = function (userId, role, name) {
     var roleData = rolemanager.getRole(role);
     var messageData = {
@@ -183,7 +186,7 @@ var buildUserForm = function (sessionId, dayCount, users, options) {
 };
 
 /**
- * Sends the text to all of the elements in user. 
+ * Sends a text msg to all of the elements in users. 
  */
 var broadcastText = function (users, text) {
     for (var i = 0; i < users.length; i++) {
@@ -218,19 +221,28 @@ var broadcastVoting = function (sessionId, dayCount, users) {
         sendUserForm(users[i].id, elements);
     }
 };
-
+/**
+ * Informs users that the day phase has begun. 
+ */
 var broadcastDay = function (users, dayCount) {
     for (var i = 0; i < users.length; i++) {
         sendDayTime(users[i].id, dayCount);
     }
 };
 
+/**
+ * Informs users their game roles.
+ */
 var broadcastRoles = function (users) {
     for (var i = 0; i < users.length; i++) {
         sendRoleInfo(users[i].id, users[i].role, users[i].name);
     }
 };
 
+/**
+ * Informs users the available actions they can perform on a
+ * specific night.
+ */
 var broadcastNightAction = function (sessionId, dayCount, users) {
     var title = 'Night time';
     for (var i = 0; i < users.length; i++) {
@@ -247,6 +259,9 @@ var broadcastNightAction = function (sessionId, dayCount, users) {
     }
 };
 
+/**
+ * Node export object.
+ */
 var messages = {
     sendMessage: sendMessage,
     sendText: sendText,
