@@ -115,18 +115,20 @@ var beforeVotePhase = function (session) {
 var calculateQuorum = function (users) {
     var alive = getAliveUsers(users);
     var numUsers = alive.length;
-    var quorum = numUsers / 2 + 1;
+    var quorum = parseInt(numUsers / 2) + 1;
     return quorum;
 };
 /**
  * Tells users if a player was lynched in the voting phase.
+ * Returns true if a user was lynched, otherwise false.
  */
 var afterVotePhase = function (session) {
     if (typeof session.votedUser.name !== 'undefined') {
         messages.broadcastText(session.users, session.votedUser.name + " has been lynched");
-        return;
+        return true;
     }
     messages.broadcastText(session.users, "No one was lynched");
+    return false;
 };
 /**
  * Handles voting mechanism.
@@ -134,17 +136,17 @@ var afterVotePhase = function (session) {
 var vote = function (session, userId, toWhom) {
     if (session.state !== 'voting') {
         messages.sendText(userId, "It's no longer the voting phase");
-        return;
+        return false;
     }
 
     if (userId === toWhom) {
         messages.sendText(userId, "You can't vote for yourself");
-        return;
+        return false;
     }
 
     if (hasAlreadyVoted(session, userId)) {
         messages.sendText(userId, "You can't vote twice!");
-        return;
+        return false;
     }
 
     session.voteTally[userId] = true;
@@ -159,6 +161,7 @@ var vote = function (session, userId, toWhom) {
         targetUser.state = 'dead';
     }
     messages.broadcastText(session.users, `${currentUser.name} has voted for ${targetUser.name} ${targetUser.vote}/${quorum}`);
+    return true;
 };
 /**
  * Clears all the actions that were done on the previous night.
