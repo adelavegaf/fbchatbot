@@ -60,6 +60,10 @@ var getUsersByState = function (users, state) {
 var getUsersInMafia = function (users) {
     return getUsersByAlliance(users, 'mafia');
 };
+
+var getUsersInTown = function (users) {
+    return getUsersByAlliance(users, 'town');
+};
 /**
  * Returns all users whose state is 'alive'.
  */
@@ -358,6 +362,7 @@ var mafia = {
     getUsersByAlliance: getUsersByAlliance,
     getUsersByState: getUsersByState,
     getUsersInMafia: getUsersInMafia,
+    getUsersInTown: getUsersInTown,
     getAliveUsers: getAliveUsers,
     getDeadUsers: getDeadUsers,
     getUserFromId: getUserFromId,

@@ -3,7 +3,7 @@ var expect = chai.expect;
 var server = require('../../logic/server');
 
 describe('Server operations', function () {
-
+    /**
     it('join should add a person to the userQueue array', function (done) {
         server.join(123);
         expect(server.userQueue.length).to.equal(1);
@@ -24,4 +24,5 @@ describe('Server operations', function () {
     it('should do something', function (done) {
         server.parseMessage(123, 'mymessage');
     });
+    */
 });

@@ -94,8 +94,21 @@ var roles = {
             }
         }
     },
-    'Mafioso': {
+    'Consigliere': {
         'id': 5,
+        'alliance': 'mafia',
+        'description': 'Advise Boss who to kill each night.',
+        'nightinfo': 'You can speak to the mafia.',
+        'action': function (from, to) {
+            return function (messages, users) {
+                if (from.state === 'blocked') {
+                    messages.sendText(from.id, `You were roleblocked by the bartender.`);
+                }
+            }
+        }
+    },
+    'Mafioso': {
+        'id': 6,
         'alliance': 'mafia',
         'description': 'Advise Boss who to kill each night.',
         'nightinfo': 'You can speak to the mafia.',
