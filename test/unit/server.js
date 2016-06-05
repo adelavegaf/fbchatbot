@@ -3,26 +3,19 @@ var expect = chai.expect;
 var server = require('../../logic/server');
 
 describe('Server operations', function () {
-    /**
-    it('join should add a person to the userQueue array', function (done) {
-        server.join(123);
+    it('User should be able to join a new session', function () {
+        server.joinSession(100);
         expect(server.userQueue.length).to.equal(1);
-        done();
+        expect(typeof server.activeUsers[100]).to.not.equal('undefined');
     });
 
-    it('should have no users in the userQueue array', function (done) {
-        server.join(123);
-        server.join(234);
-        server.join(421);
-        server.join(149);
-        server.join(400);
-        server.join(1400);
+    it('A new game session should be created', function (done) {
+        for (var i = 1; i < server.minNumPlayers; i++) {
+            server.joinSession(i);
+            expect(server.activeUsers[i]).to.not.equal('undefined');
+        }
+        console.log(server.userQueue);
         expect(server.userQueue.length).to.equal(0);
         done();
     });
-
-    it('should do something', function (done) {
-        server.parseMessage(123, 'mymessage');
-    });
-    */
 });

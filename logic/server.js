@@ -42,10 +42,9 @@ var findUser = function (session, userId) {
  * Starts a new game with all users in userqueue.
  */
 var beginSession = function () {
-    // WARNING: Shallow copy, if userQueue contains objects, all info in session will be lost.
     messages.broadcastText(userQueue, `Game ${sessionId} is now starting...`);
-    console.log('new session: ' + sessions[sessionId]);
     userQueue = [];
+    console.log('userqueue length ' + userQueue.length);
     mafia.startGame(sessions[sessionId]);
     sessionId++;
 };
@@ -198,15 +197,16 @@ var callGameAction = function (userId, optionArray) {
 
     if (!hasActiveSession(userId)) {
         messages.sendText(userId, 'You are not in a game.');
-        return;
+        return false;
     }
 
     if (!verifyActionStamp(userId, properties.sessionId, properties.dayCount)) {
         messages.sendText(userId, 'You are not allowed to cast this action now.');
-        return;
+        return false;
     }
     var session = sessions[sessionId];
     mafia.gameAction(session, properties);
+    return true;
 };
 /**
  * Handles initial parsing of a payload. Redirects
@@ -233,6 +233,7 @@ var parsePayload = function (userId, payload) {
  * Node export object.
  */
 var server = {
+    minNumPlayers: minNumPlayers,
     activeUsers: activeUsers,
     userQueue: userQueue,
     sessions: sessions,
