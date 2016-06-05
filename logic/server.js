@@ -25,6 +25,42 @@ var sessions = {};
 var sessionId = 0;
 
 /**
+ * Reinitializes all the arrays and objects.
+ * Used for running unit tests.
+ */
+var resetServer = function () {
+    activeUsers = {};
+    userQueue = [];
+    sessions = {};
+    sessionId = 0;
+};
+
+/**
+ * Returns the userQueue array.
+ */
+var getUserQueue = function () {
+    return userQueue;
+};
+/**
+ * Returns the active users object
+ */
+var getActiveUsers = function () {
+    return activeUsers;
+};
+/**
+ * Returns the sessions object.
+ */
+var getSessions = function () {
+    return sessions;
+};
+
+/**
+ * Returns the last sessionId
+ */
+var getSessionId = function () {
+    return sessionId;
+};
+/**
  * Finds the index at which the user with userId is located
  * in the session.users array.
  */
@@ -42,9 +78,8 @@ var findUser = function (session, userId) {
  * Starts a new game with all users in userqueue.
  */
 var beginSession = function () {
-    messages.broadcastText(userQueue, `Game ${sessionId} is now starting...`);
     userQueue = [];
-    console.log('userqueue length ' + userQueue.length);
+    messages.broadcastText(userQueue, `Game ${sessionId} is now starting...`);
     mafia.startGame(sessions[sessionId]);
     sessionId++;
 };
@@ -52,11 +87,12 @@ var beginSession = function () {
 /**
  * Joins the waiting queue for a game given that the user is not
  * in a game already.
+ * Returns true if the user could join the session. Otherwise, false.
  */
 var joinSession = function (userId) {
     if (hasActiveSession(userId)) {
         messages.sendText(userId, "You are already on a game!");
-        return;
+        return false;
     }
     if (userQueue.length === 0) {
         sessions[sessionId] = {
@@ -74,15 +110,17 @@ var joinSession = function (userId) {
     if (userQueue.length === minNumPlayers) {
         beginSession();
     }
+    return true;
 };
 
 /**
  * Exits a game session, given that the user is in a game.
+ * Returns true if the user could exit the game. Otherwise false.
  */
 var exit = function (userId) {
     if (!hasActiveSession(userId)) {
         messages.sendText(userId, "You are not on a game!");
-        return;
+        return false;
     }
     var userId = String(userId);
     var sessionId = String(activeUsers[userId]);
@@ -91,6 +129,7 @@ var exit = function (userId) {
     delete activeUsers[userId];
     messages.sendText(userId, 'You have left the game');
     messages.broadcastText(session.users, `A player has left the game ${session.users.length}/${minNumPlayers}`);
+    return true;
 };
 
 /**
@@ -101,27 +140,33 @@ var help = function (userId) {
 };
 
 /**
- * Sends role infomration to a user with userId given that he is
- * in a game.
+ * Sends role information to a user with userId given that he is
+ * in a game. Returns true if the user has a role. Otherwise, false.
  */
 var role = function (userId) {
     if (!hasActiveSession(userId)) {
         messages.sendText(userId, "You are not on a game!");
-        return;
+        return false;
     }
     mafia.sendRoleInfo(sessions[activeUsers[userId]], userId);
+    return true;
 };
 
 /** 
  * Deletes all information associated to the game session
- * with sessionId.
+ * with sessionId. Returns true if the session could be deleted.
+ * Otherwise, returns false.
  */
 var cleanSession = function (sessionId) {
+    if (typeof sessions[sessionId] === 'undefined') {
+        return false;
+    }
     var users = sessions[sessionId].users;
     for (var i = 0; i < users.length; i++) {
         delete activeUsers[users[i].id];
     }
     delete sessions[sessionId];
+    return true;
 };
 
 /**
@@ -216,16 +261,16 @@ var parsePayload = function (userId, payload) {
     var optionArray = payload.split(";");
     switch (optionArray[0]) {
         case 'join':
-            joinSession(userId);
+            return joinSession(userId);
             break;
         case 'exit':
-            exit(userId);
+            return exit(userId);
             break;
         case 'help':
-            help(userId);
+            return help(userId);
             break;
         default:
-            callGameAction(userId, optionArray);
+            return callGameAction(userId, optionArray);
             break;
     }
 };
@@ -238,6 +283,11 @@ var server = {
     userQueue: userQueue,
     sessions: sessions,
     sessionId: sessionId,
+    resetServer: resetServer,
+    getUserQueue: getUserQueue,
+    getActiveUsers: getActiveUsers,
+    getSessions: getSessions,
+    getSessionId: getSessionId,
     findUser: findUser,
     beginSession: beginSession,
     joinSession: joinSession,
