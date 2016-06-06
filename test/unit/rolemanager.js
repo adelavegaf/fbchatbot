@@ -116,4 +116,50 @@ describe('Role manager: ', function () {
             }
         }
     });
+
+    it('Mafioso should become the new mafia boss', function () {
+        var mafiosos = [{
+            id: 1,
+            role: 'Fixer',
+            state: 'alive'
+        }, {
+            id: 2,
+            role: 'Mafioso',
+            state: 'alive'
+        }];
+        var exBoss = {};
+        expect(rolemanager.findNewMafiaBoss(exBoss, mafiosos, messages)).to.equal(true);
+        expect(mafiosos[1].role).to.equal('Mafia Boss');
+        expect(exBoss.role).to.equal('Ex Mafia Boss');
+    });
+
+    it('Fixer should become the new mafia boss', function () {
+        var mafiosos = [{
+            id: 1,
+            role: 'Mafioso',
+            state: 'dead'
+        }, {
+            id: 2,
+            role: 'Fixer',
+            state: 'alive'
+        }];
+        var exBoss = {};
+        expect(rolemanager.findNewMafiaBoss(exBoss, mafiosos, messages)).to.equal(true);
+        expect(mafiosos[1].role).to.equal('Mafia Boss');
+        expect(exBoss.role).to.equal('Ex Mafia Boss');
+    });
+
+    it('There should be no new mafia boss', function () {
+        var mafiosos = [{
+            id: 1,
+            role: 'Mafioso',
+            state: 'dead'
+        }, {
+            id: 2,
+            role: 'Fixer',
+            state: 'dead'
+        }];
+        var exBoss = {};
+        expect(rolemanager.findNewMafiaBoss(exBoss, mafiosos, messages)).to.equal(false);
+    });
 });
