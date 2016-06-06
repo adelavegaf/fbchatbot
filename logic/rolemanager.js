@@ -62,10 +62,20 @@ var roles = {
         'alliance': 'town',
         'description': 'Prevent someone from dying each night.',
         'nightinfo': 'Choose who you want to save.',
+        'init': function (user) {
+            user.selfHeal = 2;
+        },
         'action': function (from, to) {
             return function (messages, users) {
-                if (satisfiesConditions(from, to, messages)) {
+                if (!satisfiesConditions(from, to, messages)) {
+                    return;
+                } else if (from === to && from.selfHeal > 0) {
+                    from.selfHeal--;
+                    from.state = 'healed';
+                    messages.sendText(from.id, `You have ${from.selfHeal} self heals left`);
+                } else {
                     to.state = 'healed';
+                    messages.sendText(from.id, `You have healed ${to.name}`);
                 }
             }
         }
@@ -79,8 +89,15 @@ var roles = {
             return function (messages, users) {
                 if (!satisfiesConditions(from, to, messages)) {
                     return;
+                } else if (roles[to.role].alliance === 'mafia') {
+                    messages.sendText(from.id, `You can't kill someone in the mafia.`);
                 } else if (to.state === 'healed') {
                     messages.sendText(from.id, `${to.name} was saved by the doctor.`);
+                    for (var i = 0; i < users.length; i++) {
+                        if (users[i].role === 'Doctor') {
+                            messages.sendText(users[i].id, `${to.name} was attacked by the mafia and you saved him!`);
+                        }
+                    }
                     messages.sendText(to.id, `The mafia targeted you but you were saved by the doctor.`);
                 } else {
                     to.state = 'dead';
@@ -89,21 +106,54 @@ var roles = {
             }
         }
     },
-    'Detective': {
+    'Fixer': {
         'id': 3,
+        'alliance': 'mafia',
+        'description': 'Help out a fellow mobster by cleaning his problems',
+        'nightinfo': 'Your target will appear as a member of the town and not mafia.',
+        'init': function (user) {
+            user.fixed = 2;
+        },
+        'action': function (from, to) {
+            return function (messages, users) {
+                if (!satisfiesConditions(from, to, messages)) {
+                    return;
+                } else if (from.fixed > 0) {
+                    to.state = 'fixed';
+                    from.fixed--;
+                    messages.sendText(from.id, `You fixed ${to.name}. ${from.fixed} fixes remaining.`);
+                    messages.sendText(to.id, `Someone fixed you.`);
+                } else {
+                    messages.sendText(from.id, 'You are out of fixes');
+                }
+            }
+        }
+    },
+    'Detective': {
+        'id': 4,
         'alliance': 'town',
         'description': "Learn another person's role each night.",
         'nightinfo': 'Choose who you want to investigate.',
         'action': function (from, to) {
             return function (messages, users) {
-                if (satisfiesConditions(from, to, messages)) {
+                if (!satisfiesConditions(from, to, messages)) {
+                    return;
+                } else if (to.state === 'fixed') {
+                    for (var i = 0; i < users.length; i++) {
+                        if (users[i].alliance === 'town' && users[i].role !== 'Detective') {
+                            messages.sendText(from.id, `Investigation Result: ${to.name}'s role is ${users[i].role}`);
+                            return;
+                        }
+                    }
+                    messages.sendText(from.id, `Investigation Result: ${to.name}'s role is Doctor`);
+                } else {
                     messages.sendText(from.id, `Investigation Result: ${to.name}'s role is ${to.role}`);
                 }
             }
         }
     },
     'Vigilante': {
-        'id': 4,
+        'id': 5,
         'alliance': 'town',
         'description': 'Kill someone each night in the name of justice.',
         'nightinfo': 'Choose who you want to kill.',
@@ -121,23 +171,10 @@ var roles = {
             }
         }
     },
-    'Consigliere': {
-        'id': 5,
-        'alliance': 'mafia',
-        'description': 'Advise Boss who to kill each night.',
-        'nightinfo': 'You can speak to the mafia.',
-        'action': function (from, to) {
-            return function (messages, users) {
-                if (satisfiesConditions(from, to, messages)) {
-
-                }
-            }
-        }
-    },
     'Mafioso': {
         'id': 6,
         'alliance': 'mafia',
-        'description': 'Advise Boss who to kill each night.',
+        'description': 'Second in line when boss dies.',
         'nightinfo': 'You can speak to the mafia.',
         'action': function (from, to) {
             return function (messages, users) {
@@ -175,6 +212,31 @@ var getRoleNames = function () {
 var getRole = function (role) {
     return roles[role];
 };
+
+/**
+ * pre: Mafia Boss should be dead.
+ * post: Searches within mafia for the new mafia boss.
+ */
+var findNewMafiaBoss = function (exBoss, mafiosos, messages) {
+    for (var i = 0; i < mafiosos.length; i++) {
+        if (mafiosos[i].role === 'Mafioso' && mafiosos[i].state === 'alive') {
+            mafiosos[i].role = 'Mafia Boss';
+            messages.sendText(mafiosos[i].id, 'You are now the Mafia Boss');
+            exBoss.role = 'Ex Mafia Boss';
+            return true;
+        }
+    }
+    for (var i = 0; i < mafiosos.length; i++) {
+        if (mafiosos[i].role === 'Fixer' && mafiosos[i].state === 'alive') {
+            mafiosos[i].role = 'Mafia Boss';
+            messages.sendText(mafiosos[i].id, 'You are now the Mafia Boss');
+            exBoss.role = 'Ex Mafia Boss';
+            return true;
+        }
+    }
+    return false;
+};
+
 /**
  * Node export object.
  */
@@ -186,6 +248,7 @@ var rolemanager = {
     nightAction: nightAction,
     getRoleNames: getRoleNames,
     getRole: getRole,
+    findNewMafiaBoss: findNewMafiaBoss
 };
 
 module.exports = rolemanager;

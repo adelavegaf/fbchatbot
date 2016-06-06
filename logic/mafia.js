@@ -88,6 +88,8 @@ var getUserFromId = function (session, userId) {
     }
     return null;
 };
+
+
 /**
  * Determines whether a user has already voted in the
  * current voting phase.
@@ -125,6 +127,10 @@ var calculateQuorum = function (users) {
 var afterVotePhase = function (session) {
     if (typeof session.votedUser.name !== 'undefined') {
         messages.broadcastText(session.users, session.votedUser.name + " has been lynched");
+        if (session.votedUser.role === 'Mafia Boss') {
+            var mafiosos = getUsersInMafia(session.users);
+            rolemanager.findNewMafiaBoss(session.votedUser, mafiosos, messages);
+        }
         return true;
     }
     messages.broadcastText(session.users, "No one was lynched");
@@ -191,6 +197,9 @@ var afterNightPhase = function (session) {
     for (i = 0; i < users.length; i++) {
         if (users[i].state !== 'dead') {
             users[i].state = 'alive';
+        } else if (users[i].state === 'dead' && users[i].role === 'Mafia Boss') {
+            var mafiosos = getUsersInMafia(users);
+            rolemanager.findNewMafiaBoss(users[i], mafiosos, messages);
         }
     }
 };
@@ -345,6 +354,10 @@ var assignRoles = function (users) {
         users[i].role = roles.splice(getRandomInt(0, roles.length - 1), 1)[0];
         users[i].state = 'alive';
         users[i].vote = 0;
+        var roleObj = rolemanager.getRole(users[i].role);
+        if (typeof roleObj.init !== 'undefined') {
+            roleObj.init(users[i]);
+        }
     }
 };
 /**
