@@ -73,7 +73,7 @@ var roles = {
                     from.selfHeal--;
                     from.state = 'healed';
                     messages.sendText(from.id, `You have ${from.selfHeal} self heals left`);
-                } else {
+                } else if (from !== to) {
                     to.state = 'healed';
                     messages.sendText(from.id, `You have healed ${to.name}`);
                 }
