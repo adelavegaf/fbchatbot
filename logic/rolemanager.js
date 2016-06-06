@@ -23,8 +23,8 @@ var checkConnected = function (to) {
 /**
  * Checks whether the night action can be carried out.
  */
-var satisfiesConditions = function (from, to) {
-    if (checkConnected(to)) {
+var satisfiesConditions = function (from, to, messages) {
+    if (!checkConnected(to)) {
         messages.sendText(from.id, `The target has disconnected`);
         return false;
     } else if (checkBlock(from)) {
@@ -50,7 +50,7 @@ var roles = {
         'nightinfo': 'Choose who you want to block.',
         'action': function (from, to) {
             return function (messages, users) {
-                if (satisfiesConditions(from, to)) {
+                if (satisfiesConditions(from, to, messages)) {
                     to.state = 'blocked';
                     messages.sendText(from.id, `You roleblocked ${to.name}`);
                 }
@@ -64,7 +64,7 @@ var roles = {
         'nightinfo': 'Choose who you want to save.',
         'action': function (from, to) {
             return function (messages, users) {
-                if (satisfiesConditions(from, to)) {
+                if (satisfiesConditions(from, to, messages)) {
                     to.state = 'healed';
                 }
             }
@@ -77,7 +77,7 @@ var roles = {
         'nightinfo': 'Choose who to kill',
         'action': function (from, to) {
             return function (messages, users) {
-                if (!satisfiesConditions(from, to)) {
+                if (!satisfiesConditions(from, to, messages)) {
                     return;
                 } else if (to.state === 'healed') {
                     messages.sendText(from.id, `${to.name} was saved by the doctor.`);
@@ -96,7 +96,7 @@ var roles = {
         'nightinfo': 'Choose who you want to investigate.',
         'action': function (from, to) {
             return function (messages, users) {
-                if (satisfiesConditions(from, to)) {
+                if (satisfiesConditions(from, to, messages)) {
                     messages.sendText(from.id, `Investigation Result: ${to.name}'s role is ${to.role}`);
                 }
             }
@@ -109,7 +109,7 @@ var roles = {
         'nightinfo': 'Choose who you want to kill.',
         'action': function (from, to) {
             return function (messages, users) {
-                if (!satisfiesConditions(from, to)) {
+                if (!satisfiesConditions(from, to, messages)) {
                     return;
                 } else if (to.state === 'healed') {
                     messages.sendText(from.id, `${to.name} was saved by the doctor.`);
@@ -128,7 +128,7 @@ var roles = {
         'nightinfo': 'You can speak to the mafia.',
         'action': function (from, to) {
             return function (messages, users) {
-                if (satisfiesConditions(from, to)) {
+                if (satisfiesConditions(from, to, messages)) {
 
                 }
             }
@@ -141,7 +141,7 @@ var roles = {
         'nightinfo': 'You can speak to the mafia.',
         'action': function (from, to) {
             return function (messages, users) {
-                if (satisfiesConditions(from, to)) {}
+                if (satisfiesConditions(from, to, messages)) {}
             }
         }
     }

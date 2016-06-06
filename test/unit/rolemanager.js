@@ -1,8 +1,57 @@
 var chai = require('chai');
 var expect = chai.expect;
 var rolemanager = require('../../logic/rolemanager');
+var messages = require('../../logic/messages');
 
 describe('Role manager: ', function () {
+    it('User should be marked as blocked', function () {
+        var from = {
+            state: 'blocked'
+        };
+        expect(rolemanager.checkBlock(from)).to.equal(true);
+    });
+
+    it('User should not be marked as blocked', function () {
+        var from = {
+            state: 'alive'
+        };
+        expect(rolemanager.checkBlock(from)).to.equal(false);
+    });
+
+    it('User should be marked as not connected', function () {
+        var to = null;
+        expect(rolemanager.checkConnected(to)).to.equal(false);
+    });
+
+    it('User should be marked as connected', function () {
+        var to = {};
+        expect(rolemanager.checkConnected(to)).to.equal(true);
+    });
+
+    it('User should satisfy all conditions', function () {
+        var to = {};
+        var from = {
+            state: 'alive'
+        };
+        expect(rolemanager.satisfiesConditions(from, to, messages)).to.equal(true);
+    });
+
+    it('User should not satisfy all conditions. He is blocked', function () {
+        var to = {};
+        var from = {
+            state: 'blocked'
+        };
+        expect(rolemanager.satisfiesConditions(from, to, messages)).to.equal(false);
+    });
+
+    it('User should not satisfy all conditions. Target is not connected', function () {
+        var to = null;
+        var from = {
+            state: 'blocked'
+        };
+        expect(rolemanager.satisfiesConditions(from, to, messages)).to.equal(false);
+    });
+
     it('There is no role with the specified name', function () {
         var role = rolemanager.getRole('zzzz');
         expect(typeof role).to.equal('undefined');
