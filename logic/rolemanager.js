@@ -1,6 +1,39 @@
 'use strict';
 
 /**
+ * Checks if the user is blocked before executing his night action.
+ */
+var checkBlock = function (from) {
+    if (from.state === 'blocked') {
+        return true;
+    }
+    return false;
+};
+
+/**
+ * Checks if the target of the night action is still connected.
+ */
+var checkConnected = function (to) {
+    if (to === null) {
+        return false;
+    }
+    return true;
+};
+
+/**
+ * Checks whether the night action can be carried out.
+ */
+var satisfiesConditions = function (from, to) {
+    if (checkConnected(to)) {
+        messages.sendText(from.id, `The target has disconnected`);
+        return false;
+    } else if (checkBlock(from)) {
+        messages.sendText(from.id, `You were roleblocked by the bartender.`);
+        return false;
+    }
+    return true;
+};
+/**
  * Roles are sorted in order of skill precedence, i.e. block must be executed before any other skill.
  * id: determines ordering. Lower id values determine higher precedence.
  * alliance: describes to which town faction the role corresponds to.
@@ -17,9 +50,7 @@ var roles = {
         'nightinfo': 'Choose who you want to block.',
         'action': function (from, to) {
             return function (messages, users) {
-                if (from.state === 'blocked') {
-                    messages.sendText(from.id, `You were roleblocked by the bartender.`);
-                } else {
+                if (satisfiesConditions(from, to)) {
                     to.state = 'blocked';
                     messages.sendText(from.id, `You roleblocked ${to.name}`);
                 }
@@ -33,9 +64,7 @@ var roles = {
         'nightinfo': 'Choose who you want to save.',
         'action': function (from, to) {
             return function (messages, users) {
-                if (from.state === 'blocked') {
-                    messages.sendText(from.id, `You were roleblocked by the bartender.`);
-                } else {
+                if (satisfiesConditions(from, to)) {
                     to.state = 'healed';
                 }
             }
@@ -48,8 +77,8 @@ var roles = {
         'nightinfo': 'Choose who to kill',
         'action': function (from, to) {
             return function (messages, users) {
-                if (from.state === 'blocked') {
-                    messages.sendText(from.id, `You were roleblocked by the bartender.`);
+                if (!satisfiesConditions(from, to)) {
+                    return;
                 } else if (to.state === 'healed') {
                     messages.sendText(from.id, `${to.name} was saved by the doctor.`);
                     messages.sendText(to.id, `The mafia targeted you but you were saved by the doctor.`);
@@ -67,9 +96,7 @@ var roles = {
         'nightinfo': 'Choose who you want to investigate.',
         'action': function (from, to) {
             return function (messages, users) {
-                if (from.state === 'blocked') {
-                    messages.sendText(from.id, `You were roleblocked by the bartender.`);
-                } else {
+                if (satisfiesConditions(from, to)) {
                     messages.sendText(from.id, `Investigation Result: ${to.name}'s role is ${to.role}`);
                 }
             }
@@ -82,8 +109,8 @@ var roles = {
         'nightinfo': 'Choose who you want to kill.',
         'action': function (from, to) {
             return function (messages, users) {
-                if (from.state === 'blocked') {
-                    messages.sendText(from.id, `You were roleblocked by the bartender.`);
+                if (!satisfiesConditions(from, to)) {
+                    return;
                 } else if (to.state === 'healed') {
                     messages.sendText(from.id, `${to.name} was saved by the doctor.`);
                     messages.sendText(to.id, `The vigilante targeted you but you were saved by the doctor.`);
@@ -101,8 +128,8 @@ var roles = {
         'nightinfo': 'You can speak to the mafia.',
         'action': function (from, to) {
             return function (messages, users) {
-                if (from.state === 'blocked') {
-                    messages.sendText(from.id, `You were roleblocked by the bartender.`);
+                if (satisfiesConditions(from, to)) {
+
                 }
             }
         }
@@ -114,9 +141,7 @@ var roles = {
         'nightinfo': 'You can speak to the mafia.',
         'action': function (from, to) {
             return function (messages, users) {
-                if (from.state === 'blocked') {
-                    messages.sendText(from.id, `You were roleblocked by the bartender.`);
-                }
+                if (satisfiesConditions(from, to)) {}
             }
         }
     }
@@ -154,6 +179,9 @@ var getRole = function (role) {
  * Node export object.
  */
 var rolemanager = {
+    checkBlock: checkBlock,
+    checkConnected: checkConnected,
+    satisfiesConditions: satisfiesConditions,
     roles: roles,
     nightAction: nightAction,
     getRoleNames: getRoleNames,

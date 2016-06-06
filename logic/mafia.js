@@ -149,9 +149,16 @@ var vote = function (session, userId, toWhom) {
         return false;
     }
 
+    var targetUser = getUserFromId(session, toWhom);
+
+    if (targetUser === null) {
+        messages.sendText(userId, "That user has disconnected");
+        return false;
+    }
+
     session.voteTally[userId] = true;
     var currentUser = getUserFromId(session, userId);
-    var targetUser = getUserFromId(session, toWhom);
+
     targetUser.vote += 1;
 
     var quorum = calculateQuorum(session.users);
