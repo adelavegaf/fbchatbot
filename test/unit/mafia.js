@@ -2,7 +2,7 @@ var chai = require('chai');
 var expect = chai.expect;
 var mafia = require('../../logic/mafia');
 
-describe('Logic User Getters: ', function () {
+describe('Mafia User Getters: ', function () {
     var session = {};
     beforeEach(function () {
         var users = [{
@@ -78,16 +78,6 @@ describe('Logic User Getters: ', function () {
     it('There should be 3 users in the mafia', function () {
         var mafiaUsers = mafia.getUsersInMafia(session.users);
         expect(mafiaUsers.length).to.equal(3);
-    });
-
-    it('There should be 0 users with the given state', function () {
-        var ghost = mafia.getUsersByState(session.users, 'ghost');
-        expect(ghost.length).to.equal(0);
-    });
-
-    it('There should be 0 users with the given alliance', function () {
-        var ghost = mafia.getUsersByAlliance(session.users, 'ghost');
-        expect(ghost.length).to.equal(0);
     });
 });
 

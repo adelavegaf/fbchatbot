@@ -4,6 +4,7 @@ var rolemanager = require('../../logic/rolemanager');
 var messages = require('../../logic/messages');
 
 describe('Role manager: ', function () {
+
     it('User should be marked as blocked', function () {
         var from = {
             state: 'blocked'
@@ -161,5 +162,82 @@ describe('Role manager: ', function () {
         }];
         var exBoss = {};
         expect(rolemanager.findNewMafiaBoss(exBoss, mafiosos, messages)).to.equal(false);
+    });
+});
+
+describe('Role manager getters: ', function () {
+    var users = {};
+    beforeEach(function () {
+        users = [{
+            id: 1,
+            name: 'Peyton',
+            role: 'Mafia Boss',
+            state: 'alive',
+            vote: 0
+        }, {
+            id: 2,
+            name: 'Sam',
+            role: 'Barman',
+            state: 'alive',
+            vote: 0
+        }, {
+            id: 3,
+            name: 'Alex',
+            role: 'Doctor',
+            state: 'alive',
+            vote: 0
+        }, {
+            id: 4,
+            name: 'Morgan',
+            role: 'Detective',
+            state: 'dead',
+            vote: 0
+        }, {
+            id: 5,
+            name: 'Taylor',
+            role: 'Mafioso',
+            state: 'alive',
+            vote: 0
+        }, {
+            id: 6,
+            name: 'Carter',
+            role: 'Vigilante',
+            state: 'dead',
+            vote: 0
+        }, {
+            id: 7,
+            name: 'Jessie',
+            role: 'Mafioso',
+            state: 'dead',
+            vote: 0
+        }];
+    });
+
+    it('There should be 0 users with the given alliance', function () {
+        var ghost = rolemanager.getSameAllianceUsers('ghost', users);
+        expect(ghost.length).to.equal(0);
+    });
+
+    it('All users should have a different alliance', function () {
+        var others = rolemanager.getOtherAllianceUsers('ghost', users);
+        expect(others.length).to.equal(users.length);
+    });
+
+    it('There should be 4 users with the same alliance (town)', function () {
+        var townUsers = rolemanager.getSameAllianceUsers('town', users);
+        expect(townUsers.length).to.equal(4);
+    });
+
+    it('There should be 3 users with the same alliance (mafia)', function () {
+        var mafiaUsers = rolemanager.getSameAllianceUsers('mafia', users);
+        expect(mafiaUsers.length).to.equal(3);
+    });
+
+    it('The user should not be in the result array', function () {
+        var result = rolemanager.getOtherUsers(users[0], users);
+        expect(result.length).to.equal(users.length - 1);
+        for (var i = 0; i < result.length; i++) {
+            expect(result[i]).to.not.equal(users[0]);
+        }
     });
 });

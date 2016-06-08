@@ -30,19 +30,6 @@ var votingDuration = 15000; // 30000
 var nightDuration = 15000; // 30000
 
 /**
- * Returns all users who have a given alliance.
- */
-var getUsersByAlliance = function (users, alliance) {
-    var usersByAlliance = [];
-    for (var i = 0; i < users.length; i++) {
-        var role = rolemanager.getRole(users[i].role);
-        if (role.alliance === alliance) {
-            usersByAlliance.push(users[i]);
-        }
-    }
-    return usersByAlliance;
-};
-/**
  * Returns all users who have a given state.
  */
 var getUsersByState = function (users, state) {
@@ -58,11 +45,11 @@ var getUsersByState = function (users, state) {
  * Returns all users whose alliance is 'mafia'.
  */
 var getUsersInMafia = function (users) {
-    return getUsersByAlliance(users, 'mafia');
+    return rolemanager.getSameAllianceUsers('mafia', users);
 };
 
 var getUsersInTown = function (users) {
-    return getUsersByAlliance(users, 'town');
+    return rolemanager.getSameAllianceUsers('town', users);
 };
 /**
  * Returns all users whose state is 'alive'.
@@ -382,7 +369,6 @@ var mafia = {
     dayDuration: dayDuration,
     nightDuration: nightDuration,
     votingDuration: votingDuration,
-    getUsersByAlliance: getUsersByAlliance,
     getUsersByState: getUsersByState,
     getUsersInMafia: getUsersInMafia,
     getUsersInTown: getUsersInTown,

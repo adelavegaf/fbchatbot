@@ -132,7 +132,7 @@ var sendDayTime = function (userId, dayCount) {
     sendMessage(userId, messageData);
 };
 /**
- * Send vote structured message to a particular user with userId.
+ * Send structured message to a particular user with userId.
  * elements: information to be able to vote on each alive user.
  */
 var sendUserForm = function (userId, elements) {
@@ -212,13 +212,13 @@ var broadcastVoting = function (sessionId, dayCount, users) {
     var options = {
         title: "Voting time",
         subtitle: "30s to vote to lynch",
-        identifier: "vote"
-    }
-
-    var elements = buildUserForm(sessionId, dayCount, users, options);
-
+        identifier: "vote",
+    };
     for (var i = 0; i < users.length; i++) {
-        sendUserForm(users[i].id, elements);
+        var user = users.splice(0, 1);
+        var elements = buildUserForm(sessionId, dayCount, users, options);
+        sendUserForm(users[0].id, elements);
+        users.push(user[0]);
     }
 };
 /**
@@ -248,13 +248,14 @@ var broadcastNightAction = function (sessionId, dayCount, users) {
     for (var i = 0; i < users.length; i++) {
         var subtitle, identifier;
         var role = rolemanager.getRole(users[i].role);
+        var targetUsers = role.actiontarget(users[i], users);
         var options = {
             title: title,
             subtitle: role.nightinfo,
             identifier: users[i].role,
-            "image_url": "https://mafiabotgame.herokuapp.com/images/night-min.png"
+            "image_url": "https://mafiabotgame.herokuapp.com/images/night-min.png",
         };
-        var elements = buildUserForm(sessionId, dayCount, users, options);
+        var elements = buildUserForm(sessionId, dayCount, targetUsers, options);
         sendUserForm(users[i].id, elements);
     }
 };

@@ -1,6 +1,47 @@
 'use strict';
 
 /**
+ * Returns all users except user.
+ */
+var getOtherUsers = function (user, users) {
+    var targets = [];
+    for (var i = 0; i < users.length; i++) {
+        if (users[i] === user) {
+            continue;
+        }
+        targets.push(users[i]);
+    }
+    return targets;
+};
+
+/**
+ * Returns all users that are part of alliance.
+ */
+var getSameAllianceUsers = function (alliance, users) {
+    var targets = [];
+    for (var i = 0; i < users.length; i++) {
+        if (roles[users[i].role].alliance === alliance) {
+            targets.push(users[i]);
+        }
+    }
+    return targets;
+};
+
+/**
+ * The night action can be performed on all users that
+ * are in a different alliance.
+ */
+var getOtherAllianceUsers = function (alliance, users) {
+    var targets = [];
+    for (var i = 0; i < users.length; i++) {
+        if (roles[users[i].role].alliance !== alliance) {
+            targets.push(users[i]);
+        }
+    }
+    return targets;
+};
+
+/**
  * Checks if the user is blocked before executing his night action.
  */
 var checkBlock = function (from) {
@@ -41,6 +82,7 @@ var satisfiesConditions = function (from, to, messages) {
  * nightinfo: message the user receives at the beginning of the night phase.
  * action: function, that returns a function, that handles how the night skill
  * of the particular role is executed.
+ * actiontarget: to which group of users can the action be cast upon.
  */
 var roles = {
     'Barman': {
@@ -55,6 +97,9 @@ var roles = {
                     messages.sendText(from.id, `You roleblocked ${to.name}`);
                 }
             }
+        },
+        'actiontarget': function (user, users) {
+            return getOtherUsers(user, users);
         }
     },
     'Doctor': {
@@ -77,6 +122,13 @@ var roles = {
                     to.state = 'healed';
                     messages.sendText(from.id, `You have healed ${to.name}`);
                 }
+            }
+        },
+        'actiontarget': function (user, users) {
+            if (user.selfHeal > 0) {
+                return users;
+            } else {
+                return getOtherUsers(user, users);
             }
         }
     },
@@ -104,6 +156,9 @@ var roles = {
                     messages.broadcastText(users, `${to.name} has been killed by the mafia. His role was ${to.role}`);
                 }
             }
+        },
+        'actiontarget': function (user, users) {
+            return getOtherAllianceUsers('mafia', users);
         }
     },
     'Fixer': {
@@ -126,6 +181,13 @@ var roles = {
                 } else {
                     messages.sendText(from.id, 'You are out of fixes');
                 }
+            }
+        },
+        'actiontarget': function (user, users) {
+            if (user.fixed > 0) {
+                return getSameAllianceUsers('mafia', users);
+            } else {
+                return [];
             }
         }
     },
@@ -150,6 +212,9 @@ var roles = {
                     messages.sendText(from.id, `Investigation Result: ${to.name}'s role is ${to.role}`);
                 }
             }
+        },
+        'actiontarget': function (user, users) {
+            return getOtherUsers(user, users);
         }
     },
     'Vigilante': {
@@ -169,6 +234,9 @@ var roles = {
                     messages.broadcastText(users, `${to.name} has been killed by the vigilante. His role was ${to.role}`);
                 }
             }
+        },
+        'actiontarget': function (user, users) {
+            return getOtherUsers(user, users);
         }
     },
     'Mafioso': {
@@ -180,6 +248,9 @@ var roles = {
             return function (messages, users) {
                 if (satisfiesConditions(from, to, messages)) {}
             }
+        },
+        'actiontarget': function (user, users) {
+            return [];
         }
     }
 };
@@ -241,6 +312,9 @@ var findNewMafiaBoss = function (exBoss, mafiosos, messages) {
  * Node export object.
  */
 var rolemanager = {
+    getOtherUsers: getOtherUsers,
+    getSameAllianceUsers: getSameAllianceUsers,
+    getOtherAllianceUsers: getOtherAllianceUsers,
     checkBlock: checkBlock,
     checkConnected: checkConnected,
     satisfiesConditions: satisfiesConditions,
