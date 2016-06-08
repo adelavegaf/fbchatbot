@@ -121,6 +121,9 @@ var sendDeadInfo = function (userId, users) {
     for (var i = 0; i < users.length; i++) {
         subtitle += `name: ${users[i].name} role: ${users[i].role}\n`;
     }
+    if (subtitle.length === 0) {
+        subtitle = "no dead users";
+    }
     var messageData = {
         "attachment": {
             "type": "template",
@@ -139,7 +142,7 @@ var sendDeadInfo = function (userId, users) {
 var sendAliveInfo = function (userId, users) {
     var subtitle = "";
     for (var i = 0; i < users.length; i++) {
-        subtitle += `name: ${users[i].name}`;
+        subtitle += `name: ${users[i].name}\n`;
     }
     var messageData = {
         "attachment": {
