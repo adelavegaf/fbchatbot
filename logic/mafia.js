@@ -11,7 +11,7 @@ var names = ['Peyton', 'Sam', 'Alex', 'Morgan', 'Taylor', 'Carter', 'Jessie'];
  * Delay to start a game. This is done in order to give
  * users important information that helps them interact with the game.
  */
-var startGameDelay = 6000;
+var startGameDelay = 10000;
 /**
  * Number of turns the game lasts.
  */
@@ -372,8 +372,10 @@ var startGame = function (session) {
     setTimeout(function () {
         gameStates(session);
     }, startGameDelay);
-    messages.broadcastText(session.users, 'Type .exit to leave the game at any time.');
+    messages.broadcastText(session.users, 'Type .help for more commands.');
     messages.broadcastText(session.users, 'Type .role if you forget your role or codename.');
+    messages.broadcastText(session.users, 'Type .dead to see dead users roles and names.');
+    messages.broadcastText(session.users, 'Type .alive to see who is alive.');
 };
 /**
  * Node export object.
