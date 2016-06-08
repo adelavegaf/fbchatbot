@@ -63,6 +63,33 @@ describe('Server operations', function () {
         expect(server.role(1)).to.equal(true);
     });
 
+
+    it('should not send alive info to a user that is not on a game', function () {
+        expect(server.alive(1)).to.equal(false);
+    });
+
+    it('should send alive info to a user that is on a game', function () {
+        server.joinSession(1);
+        var userQueue = server.getUserQueue();
+        userQueue[0].role = 'Doctor';
+        userQueue[0].name = 'test';
+        userQueue[0].state = 'alive';
+        expect(server.alive(1)).to.equal(true);
+    });
+
+    it('should not send dead info to a user that is not on a game', function () {
+        expect(server.dead(1)).to.equal(false);
+    });
+
+    it('should send alive info to a user that is on a game', function () {
+        server.joinSession(1);
+        var userQueue = server.getUserQueue();
+        userQueue[0].role = 'Doctor';
+        userQueue[0].name = 'test';
+        userQueue[0].state = 'dead';
+        expect(server.dead(1)).to.equal(true);
+    });
+
     it('should not be able to delete a non-existent session', function () {
         expect(server.cleanSession(0)).to.equal(false);
     });
