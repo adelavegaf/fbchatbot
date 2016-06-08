@@ -152,6 +152,32 @@ var role = function (userId) {
     return true;
 };
 
+/**
+ * Sends a msg to user with userId about
+ * the people that are currently alive.
+ */
+var alive = function (userId) {
+    if (!hasActiveSession(userId)) {
+        messages.sendText(userId, "You are not on a game!");
+        return false;
+    }
+    mafia.sendAliveInfo(sessions[activeUsers[userId]], userId);
+    return true;
+};
+
+/**
+ * Sends a msg to user with userId about
+ * all of the dead people and their roles.
+ */
+var dead = function (userId) {
+    if (!hasActiveSession(userId)) {
+        messages.sendText(userId, "You are not on a game!");
+        return false;
+    }
+    mafia.sendDeadInfo(sessions[activeUsers[userId]], userId);
+    return true;
+};
+
 /** 
  * Deletes all information associated to the game session
  * with sessionId. Returns true if the session could be deleted.
@@ -202,6 +228,12 @@ var parseMessage = function (userId, text) {
             break;
         case '.role':
             role(userId);
+            break;
+        case '.alive':
+            alive(userId);
+            break;
+        case '.dead':
+            dead(userId);
             break;
         default:
             if (!hasActiveSession(userId)) {
@@ -294,6 +326,8 @@ var server = {
     exit: exit,
     help: help,
     role: role,
+    alive: alive,
+    dead: dead,
     cleanSession: cleanSession,
     hasActiveSession: hasActiveSession,
     parseMessage: parseMessage,

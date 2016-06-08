@@ -331,6 +331,22 @@ var sendRoleInfo = function (session, userId) {
 };
 
 /**
+ * Sends a particular user dead users info.
+ */
+var sendDeadInfo = function (session, userId) {
+    var deadUsers = getDeadUsers(session.users);
+    messages.sendDeadInfo(userId, deadUsers);
+};
+
+/**
+ * Sends a particular user dead users info.
+ */
+var sendAliveInfo = function (session, userId) {
+    var aliveUsers = getAliveUsers(session.users);
+    messages.sendAliveInfo(userId, aliveUsers);
+};
+
+/**
  * Assigns a game role, name, state and vote status to each user
  * in the current game session.
  */
@@ -391,6 +407,8 @@ var mafia = {
     gameStates: gameStates,
     getRandomInt: getRandomInt,
     sendRoleInfo: sendRoleInfo,
+    sendDeadInfo: sendDeadInfo,
+    sendAliveInfo: sendAliveInfo,
     assignRoles: assignRoles,
     startGame: startGame
 };

@@ -112,6 +112,50 @@ var sendRoleInfo = function (userId, role, name) {
     };
     sendMessage(userId, messageData);
 };
+
+/**
+ * Sends user with userId his game role and alias.
+ */
+var sendDeadInfo = function (userId, users) {
+    var subtitle = "";
+    for (var i = 0; i < users.length; i++) {
+        subtitle += `name: ${users[i].name} role: ${users[i].role}\n`;
+    }
+    var messageData = {
+        "attachment": {
+            "type": "template",
+            "payload": {
+                "template_type": "generic",
+                "elements": [{
+                    "title": `Dead Info`,
+                    "subtitle": subtitle
+                }]
+            }
+        }
+    };
+    sendMessage(userId, messageData);
+};
+
+var sendAliveInfo = function (userId, users) {
+    var subtitle = "";
+    for (var i = 0; i < users.length; i++) {
+        subtitle += `name: ${users[i].name}`;
+    }
+    var messageData = {
+        "attachment": {
+            "type": "template",
+            "payload": {
+                "template_type": "generic",
+                "elements": [{
+                    "title": `Alive Info`,
+                    "subtitle": subtitle
+                }]
+            }
+        }
+    };
+    sendMessage(userId, messageData);
+};
+
 /**
  * Send day notification structured message to a particular user with userId.
  */
@@ -269,6 +313,8 @@ var messages = {
     sendStartGame: sendStartGame,
     sendExitGame: sendExitGame,
     sendRoleInfo: sendRoleInfo,
+    sendDeadInfo: sendDeadInfo,
+    sendAliveInfo: sendAliveInfo,
     sendDayTime: sendDayTime,
     sendUserForm: sendUserForm,
     sendHelp: sendHelp,
