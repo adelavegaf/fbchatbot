@@ -217,7 +217,7 @@ var broadcastVoting = function (sessionId, dayCount, users) {
     for (var i = 0; i < users.length; i++) {
         var user = users.splice(0, 1);
         var elements = buildUserForm(sessionId, dayCount, users, options);
-        sendUserForm(users[0].id, elements);
+        sendUserForm(user[0].id, elements);
         users.push(user[0]);
     }
 };
