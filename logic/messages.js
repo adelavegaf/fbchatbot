@@ -48,7 +48,7 @@ var sendStartGame = function (userId) {
                 "template_type": "generic",
                 "elements": [{
                     "title": "Mafia Chat Game",
-                    "image_url": "https://mafiabotgame.herokuapp.com/images/mafia-min.png",
+                    "image_url": "https://mafiachatgame.herokuapp.com/images/mafia-min.png",
                     "buttons": [
                         {
                             "type": "postback",
@@ -171,7 +171,7 @@ var sendDayTime = function (userId, dayCount) {
                 "elements": [{
                     "title": "Day Time",
                     "subtitle": "90s to talk. " + dayCount + " days remaining.",
-                    "image_url": "https://mafiabotgame.herokuapp.com/images/day-min.png"
+                    "image_url": "https://mafiachatgame.herokuapp.com/images/day-min.png"
                 }]
             }
         }
@@ -300,7 +300,7 @@ var broadcastNightAction = function (sessionId, dayCount, users) {
             title: title,
             subtitle: role.nightinfo,
             identifier: users[i].role,
-            "image_url": "https://mafiabotgame.herokuapp.com/images/night-min.png",
+            "image_url": "https://mafiachatgame.herokuapp.com/images/night-min.png",
         };
         var elements = buildUserForm(sessionId, dayCount, targetUsers, options);
         sendUserForm(users[i].id, elements);
