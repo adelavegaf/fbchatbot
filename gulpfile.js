@@ -59,6 +59,8 @@ gulp.task('copyfonts', ['clean'], function () {
         .pipe(gulp.dest('./dist/fonts'));
     gulp.src('./bower_components/bootstrap/dist/fonts/**/*.{ttf,woff,eof,svg}*')
         .pipe(gulp.dest('./dist/fonts'));
+    gulp.src('./fonts/*.{ttf,woff,eof,svg}*')
+        .pipe(gulp.dest('./dist/fonts'));
 });
 
 gulp.task('copyviews', ['clean'], function () {
