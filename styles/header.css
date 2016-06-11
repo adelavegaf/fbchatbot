@@ -1,13 +1,25 @@
+.glyphicon-list-alt:before {
+    margin-right: 5px;
+    font-size: 16px;
+}
+
+.glyphicon-knight:before {
+    margin-right: 5px;
+    font-size: 16px;
+}
+
+
 /* navbar */
 
 .navbar-default {
-    background-color: rgba(0, 0, 0, 0);
+    background-color: #FFFFFF;
     border-left-color: rgba(0, 0, 0, 0);
     border-right-color: rgba(0, 0, 0, 0);
-    border-top-color: rgba(0, 0, 0, 0);
-    border-bottom-color: #9E050F !important;
+    border-top-color: #016282;
+    border-bottom-color: #E0E0E0;
     background-image: none !important;
-    margin: 0px;
+    border-top-width: thick;
+    margin-bottom: 10px;
     padding: 0px;
 }
 
@@ -15,36 +27,52 @@
 /* title */
 
 .navbar-default .navbar-brand {
-    color: #FFFFFF;
+    color: rgb(7, 41, 63);
 }
 
 .navbar-default .navbar-brand:hover,
 .navbar-default .navbar-brand:focus {
-    color: #FFFFFF;
+    color: rgb(7, 41, 63);
 }
 
 
 /* link */
 
 .navbar-default .navbar-nav > li > a {
-    color: #FFFFFF;
+    color: #A8A8A8;
 }
 
 .navbar-default .navbar-nav > li > a:hover,
 .navbar-default .navbar-nav > li > a:focus {
-    color: #FFFFFF;
+    color: #A8A8A8;
+    background-color: #F0F0F0;
 }
 
 .navbar-default .navbar-nav > .active > a,
 .navbar-default .navbar-nav > .active > a:hover,
 .navbar-default .navbar-nav > .active > a:focus {
-    color: #FFFFFF;
+    color: rgb(7, 41, 63);
+    border-bottom-color: #05A2D7;
+    border-bottom-width: thick;
+    border-bottom-style: solid;
+    background-color: white;
+    background-image: none !important;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    background-color: white !important;
 }
 
 .navbar-default .navbar-nav > .open > a,
 .navbar-default .navbar-nav > .open > a:hover,
 .navbar-default .navbar-nav > .open > a:focus {
-    color: #FFFFFF;
+    color: rgb(7, 41, 63);
+    border-bottom-color: #05A2D7;
+    border-bottom-width: thick;
+    border-bottom-style: solid;
+    background-image: none !important;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    background-color: white !important;
 }
 
 

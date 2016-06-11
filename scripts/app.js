@@ -8,6 +8,7 @@ angular.module('mafiaApp', ['ui.router', 'ngResource'])
                 views: {
                     'header': {
                         templateUrl: 'views/header.html',
+                        controller: 'HeaderController'
                     },
                     'content': {
                         templateUrl: 'views/home.html',
@@ -17,6 +18,22 @@ angular.module('mafiaApp', ['ui.router', 'ngResource'])
                     }
                 }
 
+            })
+            .state('mafia.play', {
+                url: 'play',
+                views: {
+                    'content@': {
+                        templateUrl: 'views/play.html',
+                    }
+                }
+            })
+            .state('mafia.about', {
+                url: 'about',
+                views: {
+                    'content@': {
+                        templateUrl: 'views/about.html',
+                    }
+                }
             });
-        $urlRouterProvider.otherwise('/');
+        $urlRouterProvider.otherwise('/play');
     });
