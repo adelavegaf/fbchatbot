@@ -4,7 +4,7 @@
     "private": true,
     "description": "Creates and manages Mafia game sessions using fb chat bot api.",
     "scripts": {
-        "postinstall": "./node_modules/bower/bin/bower install",
+        "postinstall": "./node_modules/bower/bin/bower install && gulp",
         "start": "node ./bin/www",
         "test": "mocha test --recursive"
     },
