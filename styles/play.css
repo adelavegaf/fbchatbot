@@ -1,7 +1,6 @@
 .vertical-center {
     min-height: 85%;
     min-height: 85vh;
-    width: 50%;
     display: flex;
     align-items: center;
     background-color: white;
@@ -13,4 +12,13 @@
 
 #start-game-font {
     color: rgba(7, 41, 63, 1);
+}
+
+.menubar {
+    padding: 0px;
+}
+
+.main {
+    margin-left: 2px;
+    margin-right: 2px;
 }
