@@ -40,6 +40,7 @@
 
 .navbar-default .navbar-nav > li > a {
     color: #A8A8A8;
+    width: 90px;
 }
 
 .navbar-default .navbar-nav > li > a:hover,
