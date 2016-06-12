@@ -1,8 +1,18 @@
-.vertical-center {
+.vertical-l-container {
     min-height: 85%;
     min-height: 85vh;
     display: flex;
-    align-items: center;
+    background-color: white;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 5px;
+    border-color: #E3E6E8;
+}
+
+.vertical-m-container {
+    min-height: 40%;
+    min-height: 40vh;
+    display: flex;
     background-color: white;
     border-width: 1px;
     border-style: solid;
@@ -16,9 +26,28 @@
 
 .menubar {
     padding: 0px;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    border-top-style: solid;
+    border-top-width: thick !important;
+    border-top-color: #86B9B9;
 }
 
 .main {
-    margin-left: 2px;
-    margin-right: 2px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.fade {
+    opacity: 1;
+}
+
+.fade.ng-enter {
+    transition: 0.5s linear all;
+    opacity: 0;
+}
+
+.fade.ng-enter.ng-enter-active {
+    opacity: 1;
 }

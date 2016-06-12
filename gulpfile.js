@@ -34,7 +34,9 @@ gulp.task('default', ['clean'], function () {
 gulp.task('usemin', ['jshint'], function () {
     return gulp.src('./views/index.html')
         .pipe(usemin({
+            libcss: ['concat', rev()],
             css: [minifycss(), rev()],
+            libjs: ['concat', rev()],
             js: [ngannotate(), uglify(), rev()]
         }))
         .pipe(gulp.dest('dist/'));
