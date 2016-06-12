@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('mafiaApp', ['ui.router', 'ngResource'])
+angular.module('mafiaApp', ['ui.router', 'ngResource', 'ngAnimate', 'ngMaterial'])
     .config(function ($stateProvider, $urlRouterProvider) {
         $stateProvider
             .state('mafia', {
@@ -24,6 +24,7 @@ angular.module('mafiaApp', ['ui.router', 'ngResource'])
                 views: {
                     'content@': {
                         templateUrl: 'views/play.html',
+                        controller: 'GameController'
                     }
                 }
             })

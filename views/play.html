@@ -1,5 +1,33 @@
-<div class="container vertical-center">
-    <div class="col-xs-12">
-        <h1 class="text-center" id="start-game-font">Join Session</h1>
+<div layout="row">
+    <div flex="5"></div>
+    <div flex="20">
+        <div class="vertical-l-container menubar fade" layout="column" ng-if="connecting">
+            <h5 class="text-center">Game Information</h5>
+            <md-divider></md-divider>
+        </div>
     </div>
+    <div flex="50">
+        <div class="vertical-l-container main" layout="column">
+            <md-button class="md-raised md-primary" md-no-ink flex ng-click="connect()" ng-if="!connecting">Play</md-button>
+            <div ng-if="connecting" layout="column" layout-align="center center" flex="100">
+                <div flex="40"></div>
+                <div flex="5" layout="column" layout-align="center center">
+                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                    <h6>waiting for players...</h6>
+                </div>
+                <div flex="55"></div>
+            </div>
+        </div>
+    </div>
+    <div class="fade" flex="20" layout="column" ng-if="connecting">
+        <div class="vertical-m-container menubar" flex="50" layout="column">
+            <h5 class="text-center">Online Stats</h5>
+            <md-divider></md-divider>
+        </div>
+        <div class="vertical-m-container menubar" flex="50" layout="column">
+            <h5 class="text-center">Actions</h5>
+            <md-divider></md-divider>
+        </div>
+    </div>
+    <div flex="5"></div>
 </div>
