@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('mafiaApp', ['ui.router', 'ngResource', 'ngAnimate', 'ngMaterial'])
+angular.module('mafiaApp', ['ui.router', 'ngResource', 'ngAnimate', 'ngMaterial', 'btford.socket-io'])
     .config(function ($stateProvider, $urlRouterProvider) {
         $stateProvider
             .state('mafia', {

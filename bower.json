@@ -25,7 +25,8 @@
     "angular": "~1.4.7",
     "angular-ui-router": "^0.3.1",
     "angular-resource": "~1.5.6",
-    "angular-material": "^1.0.9"
+    "angular-material": "^1.0.9",
+    "angular-socket-io": "0.7.0"
   },
   "resolutions": {
     "angular": "1.5.6"
