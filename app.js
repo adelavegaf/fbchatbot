@@ -29,7 +29,6 @@ app.use(express.static(path.join(__dirname, 'dist')));
 app.use('/', routes);
 app.use('/users', users);
 app.use('/webhook', webhook);
-app.use('/images', images);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

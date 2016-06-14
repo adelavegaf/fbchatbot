@@ -23,7 +23,7 @@ var server = http.createServer(app);
 var io = require('socket.io').listen(server);
 
 // Socket.io Communication
-io.sockets.on('connection', require('../routes/socket'));
+io.sockets.on('connection', require('../logic/socket'));
 
 /**
  * Listen on provided port, on all network interfaces.
