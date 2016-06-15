@@ -17,7 +17,7 @@ angular.module('mafiaApp').factory('socket', function ($rootScope) {
                         callback.apply(socket, args);
                     }
                 });
-            })
+            });
         }
     };
 });

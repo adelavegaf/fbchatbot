@@ -7,6 +7,8 @@
 var app = require('../app');
 var debug = require('debug')('mafia-bot:server');
 var http = require('http');
+var sockethandler = require('../logic/sockethandler');
+var logicserver = require('../logic/server');
 
 /**
  * Get port from environment and store in Express.
@@ -23,7 +25,8 @@ var server = http.createServer(app);
 var io = require('socket.io').listen(server);
 
 // Socket.io Communication
-io.sockets.on('connection', require('../logic/socket'));
+logicserver.setIo(io);
+io.sockets.on('connection', sockethandler.socketEvents);
 
 /**
  * Listen on provided port, on all network interfaces.

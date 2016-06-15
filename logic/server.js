@@ -23,6 +23,33 @@ var sessions = {};
  * Unique number associated with each session.
  */
 var sessionId = 0;
+/**
+ * socket handler.
+ */
+var io = {};
+
+/**
+ * Sets the io object.
+ */
+var setIo = function (ioConn) {
+    io = ioConn;
+};
+
+var getNumPlayersGame = function (sessionId) {
+    if (typeof sessions[sessionId] === 'undefined') return 0;
+    return io.sockets.adapter.rooms[sessionId.toString()].length + sessions[sessionId].users.length;
+};
+
+var getTotalNumPlayers = function () {
+    var srvSockets = io.sockets.sockets;
+    var numOnlineUsers = Object.keys(srvSockets).length;
+    for (var property in sessions) {
+        if (sessions.hasOwnProperty(property)) {
+            numOnlineUsers += sessions[property].users.length;
+        }
+    }
+    return numOnlineUsers;
+};
 
 /**
  * Reinitializes all the arrays and objects.
@@ -310,6 +337,9 @@ var parsePayload = function (userId, payload) {
  * Node export object.
  */
 var server = {
+    setIo: setIo,
+    getNumPlayersGame: getNumPlayersGame,
+    getTotalNumPlayers: getTotalNumPlayers,
     minNumPlayers: minNumPlayers,
     activeUsers: activeUsers,
     userQueue: userQueue,
