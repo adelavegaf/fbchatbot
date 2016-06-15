@@ -7,6 +7,8 @@
 var app = require('../app');
 var debug = require('debug')('mafia-bot:server');
 var http = require('http');
+var sockethandler = require('../logic/sockethandler');
+var logicserver = require('../logic/server');
 
 /**
  * Get port from environment and store in Express.
@@ -20,21 +22,18 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
-var io = require('socket.io')(server);
+var io = require('socket.io').listen(server);
+
+// Socket.io Communication
+logicserver.setIo(io);
+io.sockets.on('connection', sockethandler.socketEvents);
 
 /**
  * Listen on provided port, on all network interfaces.
  */
-
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
-
-io.on('connection', function(socket){
-  socket.on('chat message', function(msg){
-    io.emit('chat message', msg);
-  });
-});
 
 /**
  * Normalize a port into a number, string, or false.
