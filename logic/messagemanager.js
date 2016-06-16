@@ -178,7 +178,7 @@ module.exports = {
             var user = users[i];
             switch (user.type) {
                 case 'facebook':
-                    fbmessages.sendDayPhase(user, dayCount);
+                    fbmessages.sendDayPhase(user.id, dayCount);
                     break;
                 case 'web':
                     webmessages.sendDayPhase(io, user, dayCount);
