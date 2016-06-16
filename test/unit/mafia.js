@@ -10,42 +10,49 @@ describe('Mafia User Getters: ', function () {
             name: 'Peyton',
             role: 'Mafia Boss',
             state: 'alive',
+            type: 'facebook',
             vote: 0
         }, {
             id: 2,
             name: 'Sam',
             role: 'Barman',
             state: 'alive',
+            type: 'facebook',
             vote: 0
         }, {
             id: 3,
             name: 'Alex',
             role: 'Doctor',
             state: 'alive',
+            type: 'facebook',
             vote: 0
         }, {
             id: 4,
             name: 'Morgan',
             role: 'Detective',
             state: 'dead',
+            type: 'facebook',
             vote: 0
         }, {
             id: 5,
             name: 'Taylor',
             role: 'Mafioso',
             state: 'alive',
+            type: 'facebook',
             vote: 0
         }, {
             id: 6,
             name: 'Carter',
             role: 'Vigilante',
             state: 'dead',
+            type: 'facebook',
             vote: 0
         }, {
             id: 7,
             name: 'Jessie',
             role: 'Mafioso',
             state: 'dead',
+            type: 'facebook',
             vote: 0
         }];
         session = {
@@ -88,19 +95,26 @@ describe('Game logic: ', function () {
     var session = {};
     beforeEach(function () {
         var users = [{
-            id: 1
+            id: 1,
+            type: 'facebook'
         }, {
-            id: 2
+            id: 2,
+            type: 'facebook'
         }, {
-            id: 3
+            id: 3,
+            type: 'facebook'
         }, {
-            id: 4
+            id: 4,
+            type: 'facebook'
         }, {
-            id: 5
+            id: 5,
+            type: 'facebook'
         }, {
-            id: 6
+            id: 6,
+            type: 'facebook'
         }, {
-            id: 7
+            id: 7,
+            type: 'facebook'
         }];
         session = {
             dayCount: 1,

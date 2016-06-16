@@ -24,7 +24,7 @@ describe('Server operations', function () {
     });
 
     it('The user should be allowed to join a session', function () {
-        server.joinSession(1);
+        server.joinSession(1, 'facebook');
         expect(server.getActiveUsers()[1]).to.not.equal('undefined');
         expect(server.getSessions()[0]).to.not.equal('undefined');
         expect(server.getSessions()[0].state).to.equal('connecting');
@@ -32,8 +32,8 @@ describe('Server operations', function () {
     });
 
     it('The user should not be allowed to join a game session', function () {
-        server.joinSession(1);
-        expect(server.joinSession(1)).to.equal(false);
+        server.joinSession(1, 'facebook');
+        expect(server.joinSession(1, 'facebook')).to.equal(false);
     });
 
     it('The user should not be able to exit a game', function () {
@@ -41,7 +41,7 @@ describe('Server operations', function () {
     });
 
     it('The user should be able to exit a game', function () {
-        server.joinSession(1);
+        server.joinSession(1, 'facebook');
         expect(server.exit(1)).to.equal(true);
         expect(server.getActiveUsers()[1]).to.equal(undefined);
         var session = server.getSessions()[0];
@@ -56,7 +56,7 @@ describe('Server operations', function () {
     });
 
     it('should send role info to a user that is on a game', function () {
-        server.joinSession(1);
+        server.joinSession(1, 'facebook');
         var userQueue = server.getUserQueue();
         userQueue[0].role = 'Doctor';
         userQueue[0].name = 'test';
@@ -69,7 +69,7 @@ describe('Server operations', function () {
     });
 
     it('should send alive info to a user that is on a game', function () {
-        server.joinSession(1);
+        server.joinSession(1, 'facebook');
         var userQueue = server.getUserQueue();
         userQueue[0].role = 'Doctor';
         userQueue[0].name = 'test';
@@ -82,7 +82,7 @@ describe('Server operations', function () {
     });
 
     it('should send alive info to a user that is on a game', function () {
-        server.joinSession(1);
+        server.joinSession(1, 'facebook');
         var userQueue = server.getUserQueue();
         userQueue[0].role = 'Doctor';
         userQueue[0].name = 'test';
@@ -95,7 +95,7 @@ describe('Server operations', function () {
     });
 
     it('should be able to delete a existent session', function () {
-        server.joinSession(1);
+        server.joinSession(1, 'facebook');
         expect(server.cleanSession(0)).to.equal(true);
         expect(typeof server.getSessions()[0]).to.equal('undefined');
         expect(typeof server.getActiveUsers()[1]).to.equal('undefined');
@@ -106,12 +106,12 @@ describe('Server operations', function () {
     });
 
     it('The user does have an active session', function () {
-        server.joinSession(1);
+        server.joinSession(1, 'facebook');
         expect(server.hasActiveSession(1)).to.equal(true);
     });
 
     it('The users current session is finished', function () {
-        server.joinSession(1);
+        server.joinSession(1, 'facebook');
         server.getSessions()[0].state = 'finished';
         expect(server.hasActiveSession(1)).to.equal(false);
         expect(typeof server.getSessions()[0]).to.equal('undefined');
@@ -119,12 +119,12 @@ describe('Server operations', function () {
     });
 
     it('Action stamp should be invalid: sessionId does not correspond', function () {
-        server.joinSession(1);
+        server.joinSession(1, 'facebook');
         expect(server.verifyActionStamp(1, 1, 11)).to.equal(false);
     });
 
     it('Action stamp should be invalid: dayCount does not correspond', function () {
-        server.joinSession(1);
+        server.joinSession(1, 'facebook');
         expect(server.verifyActionStamp(1, 0, 8)).to.equal(false);
     });
 
@@ -133,7 +133,7 @@ describe('Server operations', function () {
     });
 
     it('Action stamp should be valid', function () {
-        server.joinSession(1);
+        server.joinSession(1, 'facebook');
         expect(server.verifyActionStamp(1, 0, 11)).to.equal(true);
     });
 
@@ -142,12 +142,12 @@ describe('Server operations', function () {
     });
 
     it('User should not be able to call a gameAction. invalid action stamp', function () {
-        server.joinSession(1);
+        server.joinSession(1, 'facebook');
         expect(server.callGameAction(1, ['Doctor', '1', '0', '12'])).to.equal(false);
     });
 
     it('User should be able to call a gameAction. invalid action stamp', function () {
-        server.joinSession(1);
+        server.joinSession(1, 'facebook');
         expect(server.callGameAction(1, ['norole', '1', '0', '11'])).to.equal(true);
     });
 
@@ -160,7 +160,7 @@ describe('Server operations', function () {
     });
 
     it('The user should exit a session using a payload that contains exit', function () {
-        server.joinSession(1);
+        server.joinSession(1, 'facebook');
         expect(server.parsePayload(1, 'exit')).to.equal(true);
         expect(server.getActiveUsers()[1]).to.equal(undefined);
         var session = server.getSessions()[0];
@@ -171,7 +171,7 @@ describe('Server operations', function () {
     });
 
     it('The user should  cast an action using a valid action payload', function () {
-        server.joinSession(1);
+        server.joinSession(1, 'facebook');
         expect(server.parsePayload(1, 'norole;1;0;11')).to.equal(true);
     });
     /**
@@ -179,7 +179,7 @@ describe('Server operations', function () {
      */
     it('A new game session should be created', function (done) {
         for (var i = 0; i < server.minNumPlayers; i++) {
-            server.joinSession(i);
+            server.joinSession(i, 'facebook');
             if (i === 0) {
                 server.getSessions()[0].dayCount = 0;
             }

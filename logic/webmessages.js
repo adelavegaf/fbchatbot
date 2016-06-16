@@ -1,9 +1,9 @@
 'use strict';
 
 // private
-var sendMsg(io, id, eventName, obj) {
+var sendMsg = function (io, id, eventName, obj) {
     io.to(id).emit(eventName, obj);
-}
+};
 
 // public
 module.exports = {
@@ -18,7 +18,7 @@ module.exports = {
 
         };
         sendMsg(io, id, 'game:start', obj);
-    }
+    },
     sendRoleInfo: function (io, id, role, name) {
         var obj = {
             role: role,

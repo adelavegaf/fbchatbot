@@ -1,7 +1,7 @@
 var chai = require('chai');
 var expect = chai.expect;
 var rolemanager = require('../../logic/rolemanager');
-var messages = require('../../logic/messages');
+var messagemanager = require('../../logic/messagemanager');
 
 describe('Role manager: ', function () {
 
@@ -34,7 +34,7 @@ describe('Role manager: ', function () {
         var from = {
             state: 'alive'
         };
-        expect(rolemanager.satisfiesConditions(from, to, messages)).to.equal(true);
+        expect(rolemanager.satisfiesConditions(from, to, messagemanager)).to.equal(true);
     });
 
     it('User should not satisfy all conditions. He is blocked', function () {
@@ -42,7 +42,7 @@ describe('Role manager: ', function () {
         var from = {
             state: 'blocked'
         };
-        expect(rolemanager.satisfiesConditions(from, to, messages)).to.equal(false);
+        expect(rolemanager.satisfiesConditions(from, to, messagemanager)).to.equal(false);
     });
 
     it('User should not satisfy all conditions. Target is not connected', function () {
@@ -50,7 +50,7 @@ describe('Role manager: ', function () {
         var from = {
             state: 'blocked'
         };
-        expect(rolemanager.satisfiesConditions(from, to, messages)).to.equal(false);
+        expect(rolemanager.satisfiesConditions(from, to, messagemanager)).to.equal(false);
     });
 
     it('There is no role with the specified name', function () {
@@ -129,7 +129,7 @@ describe('Role manager: ', function () {
             state: 'alive'
         }];
         var exBoss = {};
-        expect(rolemanager.findNewMafiaBoss(exBoss, mafiosos, messages)).to.equal(true);
+        expect(rolemanager.findNewMafiaBoss(exBoss, mafiosos, messagemanager)).to.equal(true);
         expect(mafiosos[1].role).to.equal('Mafia Boss');
         expect(exBoss.role).to.equal('Ex Mafia Boss');
     });
@@ -145,7 +145,7 @@ describe('Role manager: ', function () {
             state: 'alive'
         }];
         var exBoss = {};
-        expect(rolemanager.findNewMafiaBoss(exBoss, mafiosos, messages)).to.equal(true);
+        expect(rolemanager.findNewMafiaBoss(exBoss, mafiosos, messagemanager)).to.equal(true);
         expect(mafiosos[1].role).to.equal('Mafia Boss');
         expect(exBoss.role).to.equal('Ex Mafia Boss');
     });
@@ -161,7 +161,7 @@ describe('Role manager: ', function () {
             state: 'dead'
         }];
         var exBoss = {};
-        expect(rolemanager.findNewMafiaBoss(exBoss, mafiosos, messages)).to.equal(false);
+        expect(rolemanager.findNewMafiaBoss(exBoss, mafiosos, messagemanager)).to.equal(false);
     });
 });
 

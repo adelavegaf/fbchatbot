@@ -195,7 +195,7 @@ var afterNightPhase = function (session) {
  * Checks if current game is in the night phase.
  */
 var checkNightPhase = function (session, id) {
-    var user = getUserFromId(id);
+    var user = getUserFromId(session, id);
     if (session.state !== 'night') {
         messagemanager.gameStateError(user.id, user.type, 'night');
         return false;

@@ -207,7 +207,7 @@ module.exports = {
     notifyRoles: function (users) {
         for (var i = 0; i < users.length; i++) {
             var user = users[i];
-            switch (type) {
+            switch (user.type) {
                 case 'facebook':
                     fbmessages.sendRoleInfo(user.id, user.role, user.name);
                     break;

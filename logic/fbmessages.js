@@ -297,7 +297,7 @@ var sendNightPhase = function (sessionId, dayCount, user, users) {
         "image_url": "https://mafiachatgame.herokuapp.com/images/night-min.png",
     };
     var elements = buildUserForm(sessionId, dayCount, targetUsers, options);
-    sendUserForm(users[i].id, elements);
+    sendUserForm(user.id, elements);
 };
 
 var sendStartHelp = function (userId) {

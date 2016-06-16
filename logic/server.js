@@ -161,7 +161,7 @@ var webJoin = function (socket) {
  * General behaviour when joining a game from any source.
  */
 var joinSession = function (id, type) {
-    if (hasActiveSession(userId)) {
+    if (hasActiveSession(id)) {
         messagemanager.joinError(id, type);
         return false;
     }
