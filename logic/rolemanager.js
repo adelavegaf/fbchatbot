@@ -64,12 +64,12 @@ var checkConnected = function (to) {
 /**
  * Checks whether the night action can be carried out.
  */
-var satisfiesConditions = function (from, to, messages) {
+var satisfiesConditions = function (from, to, messagemanager) {
     if (!checkConnected(to)) {
-        messages.sendText(from.id, `The target has disconnected`);
+        messagemanager.userNotFoundError(from.id, from.type);
         return false;
     } else if (checkBlock(from)) {
-        messages.sendText(from.id, `You were roleblocked by the bartender.`);
+        messagemanager.roleAction(from, `You were roleblocked by the bartender.`);
         return false;
     }
     return true;
@@ -91,10 +91,10 @@ var roles = {
         'description': "Block another person's ability each night.",
         'nightinfo': 'Choose who you want to block.',
         'action': function (from, to) {
-            return function (messages, users) {
-                if (satisfiesConditions(from, to, messages)) {
+            return function (messagemanager, users) {
+                if (satisfiesConditions(from, to, messagemanager)) {
                     to.state = 'blocked';
-                    messages.sendText(from.id, `You roleblocked ${to.name}`);
+                    messagemanager.roleAction(from, `You roleblocked ${to.name}`);
                 }
             }
         },
@@ -111,16 +111,16 @@ var roles = {
             user.selfHeal = 2;
         },
         'action': function (from, to) {
-            return function (messages, users) {
-                if (!satisfiesConditions(from, to, messages)) {
+            return function (messagemanager, users) {
+                if (!satisfiesConditions(from, to, messagemanager)) {
                     return;
                 } else if (from === to && from.selfHeal > 0) {
                     from.selfHeal--;
                     from.state = 'healed';
-                    messages.sendText(from.id, `You have ${from.selfHeal} self heals left`);
+                    messagemanager.roleAction(from, `You have ${from.selfHeal} self heals left`);
                 } else if (from !== to) {
                     to.state = 'healed';
-                    messages.sendText(from.id, `You have healed ${to.name}`);
+                    messagemanager.roleAction(from, `You have healed ${to.name}`);
                 }
             }
         },
@@ -138,22 +138,22 @@ var roles = {
         'description': 'Choose who to kill each night.',
         'nightinfo': 'Choose who to kill',
         'action': function (from, to) {
-            return function (messages, users) {
-                if (!satisfiesConditions(from, to, messages)) {
+            return function (messagemanager, users) {
+                if (!satisfiesConditions(from, to, messagemanager)) {
                     return;
                 } else if (roles[to.role].alliance === 'mafia') {
-                    messages.sendText(from.id, `You can't kill someone in the mafia.`);
+                    messagemanager.roleAction(from, `You can't kill someone in the mafia.`);
                 } else if (to.state === 'healed') {
-                    messages.sendText(from.id, `${to.name} was saved by the doctor.`);
+                    messagemanager.roleAction(from, `${to.name} was saved by the doctor.`);
                     for (var i = 0; i < users.length; i++) {
                         if (users[i].role === 'Doctor') {
-                            messages.sendText(users[i].id, `${to.name} was attacked by the mafia and you saved him!`);
+                            messagemanager.roleAction(users[i], `${to.name} was attacked by the mafia and you saved him!`);
                         }
                     }
-                    messages.sendText(to.id, `The mafia targeted you but you were saved by the doctor.`);
+                    messagemanager.roleAction(to, `The mafia targeted you but you were saved by the doctor.`);
                 } else {
                     to.state = 'dead';
-                    messages.broadcastText(users, `${to.name} has been killed by the mafia. His role was ${to.role}`);
+                    messagemanager.notifyDeath(to, users, 'mafia');
                 }
             }
         },
@@ -170,16 +170,16 @@ var roles = {
             user.fixed = 2;
         },
         'action': function (from, to) {
-            return function (messages, users) {
-                if (!satisfiesConditions(from, to, messages)) {
+            return function (messagemanager, users) {
+                if (!satisfiesConditions(from, to, messagemanager)) {
                     return;
                 } else if (from.fixed > 0) {
                     to.state = 'fixed';
                     from.fixed--;
-                    messages.sendText(from.id, `You fixed ${to.name}. ${from.fixed} fixes remaining.`);
-                    messages.sendText(to.id, `Someone fixed you.`);
+                    messagemanager.roleAction(from, `You fixed ${to.name}. ${from.fixed} fixes remaining.`);
+                    messagemanager.roleAction(to, `Someone fixed you.`);
                 } else {
-                    messages.sendText(from.id, 'You are out of fixes');
+                    messagemanager.roleAction(from, 'You are out of fixes');
                 }
             }
         },
@@ -197,19 +197,19 @@ var roles = {
         'description': "Learn another person's role each night.",
         'nightinfo': 'Choose who you want to investigate.',
         'action': function (from, to) {
-            return function (messages, users) {
-                if (!satisfiesConditions(from, to, messages)) {
+            return function (messagemanager, users) {
+                if (!satisfiesConditions(from, to, messagemanager)) {
                     return;
                 } else if (to.state === 'fixed') {
                     for (var i = 0; i < users.length; i++) {
                         if (users[i].alliance === 'town' && users[i].role !== 'Detective') {
-                            messages.sendText(from.id, `Investigation Result: ${to.name}'s role is ${users[i].role}`);
+                            messagemanager.roleAction(from, `Investigation Result: ${to.name}'s role is ${users[i].role}`);
                             return;
                         }
                     }
-                    messages.sendText(from.id, `Investigation Result: ${to.name}'s role is Doctor`);
+                    messagemanager.roleAction(from, `Investigation Result: ${to.name}'s role is Doctor`);
                 } else {
-                    messages.sendText(from.id, `Investigation Result: ${to.name}'s role is ${to.role}`);
+                    messagemanager.roleAction(from, `Investigation Result: ${to.name}'s role is ${to.role}`);
                 }
             }
         },
@@ -223,15 +223,15 @@ var roles = {
         'description': 'Kill someone each night in the name of justice.',
         'nightinfo': 'Choose who you want to kill.',
         'action': function (from, to) {
-            return function (messages, users) {
-                if (!satisfiesConditions(from, to, messages)) {
+            return function (messagemanager, users) {
+                if (!satisfiesConditions(from, to, messagemanager)) {
                     return;
                 } else if (to.state === 'healed') {
-                    messages.sendText(from.id, `${to.name} was saved by the doctor.`);
-                    messages.sendText(to.id, `The vigilante targeted you but you were saved by the doctor.`);
+                    messagemanager.roleAction(from, `${to.name} was saved by the doctor.`);
+                    messagemanager.roleAction(to, `The vigilante targeted you but you were saved by the doctor.`);
                 } else {
                     to.state = 'dead';
-                    messages.broadcastText(users, `${to.name} has been killed by the vigilante. His role was ${to.role}`);
+                    messagemanager.notifyDeath(to, users, 'vigilante');
                 }
             }
         },
@@ -245,8 +245,8 @@ var roles = {
         'description': 'Second in line when boss dies.',
         'nightinfo': 'You can speak to the mafia.',
         'action': function (from, to) {
-            return function (messages, users) {
-                if (satisfiesConditions(from, to, messages)) {}
+            return function (messagemanager, users) {
+                if (satisfiesConditions(from, to, messagemanager)) {}
             }
         },
         'actiontarget': function (user, users) {
@@ -288,11 +288,11 @@ var getRole = function (role) {
  * pre: Mafia Boss should be dead.
  * post: Searches within mafia for the new mafia boss.
  */
-var findNewMafiaBoss = function (exBoss, mafiosos, messages) {
+var findNewMafiaBoss = function (exBoss, mafiosos, messagemanager) {
     for (var i = 0; i < mafiosos.length; i++) {
         if (mafiosos[i].role === 'Mafioso' && mafiosos[i].state === 'alive') {
             mafiosos[i].role = 'Mafia Boss';
-            messages.sendText(mafiosos[i].id, 'You are now the Mafia Boss');
+            messagemanager.roleAction(mafiosos[i], 'You are now the Mafia Boss');
             exBoss.role = 'Ex Mafia Boss';
             return true;
         }
@@ -300,7 +300,7 @@ var findNewMafiaBoss = function (exBoss, mafiosos, messages) {
     for (var i = 0; i < mafiosos.length; i++) {
         if (mafiosos[i].role === 'Fixer' && mafiosos[i].state === 'alive') {
             mafiosos[i].role = 'Mafia Boss';
-            messages.sendText(mafiosos[i].id, 'You are now the Mafia Boss');
+            messagemanager.roleAction(mafiosos[i], 'You are now the Mafia Boss');
             exBoss.role = 'Ex Mafia Boss';
             return true;
         }

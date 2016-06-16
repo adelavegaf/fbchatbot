@@ -1,7 +1,7 @@
 'use strict';
 
-var fbmessages = require('./fbmessages');
 var mafia = require('./mafia');
+var messagemanager = require('./messagemanager');
 
 /**
  * Minimum number of players to start a game. Recommended to be minimum 7.
@@ -41,7 +41,7 @@ var setIO = function (ioConn) {
 var getNumPlayersGame = function (sessionId) {
     if (typeof sessions[sessionId] === 'undefined') {
         return 0;
-    };
+    }
     var room = io.sockets.adapter.rooms[sessionId.toString()];
     var webPlayers = (typeof room === 'undefined') ? 0 : room.length;
     var messengerPlayers = sessions[sessionId].users.length;
@@ -207,7 +207,7 @@ var exit = function (id, type) {
  * Send help information to user with id.
  */
 var help = function (id) {
-    fbmessages.sendHelp(id);
+    messagemanager.help(id, 'facebook');
 };
 
 /**
@@ -293,7 +293,7 @@ var hasActiveSession = function (id) {
 var parseMessage = function (userId, text) {
     switch (text) {
         case '.exit':
-            fbmessages.sendExitGame(userId);
+            messagemanager.exitGame(userId, 'facebook');
             break;
         case '.help':
             help(userId);
@@ -309,7 +309,7 @@ var parseMessage = function (userId, text) {
             break;
         default:
             if (!hasActiveSession(userId)) {
-                fbmessages.sendStartGame(userId);
+                messagemanager.startGame(userId, 'facebook');
             } else {
                 var session = sessions[activeUsers[userId]];
                 mafia.speak(session, userId, text);

@@ -116,7 +116,7 @@ var afterVotePhase = function (session) {
         messagemanager.voteAccepted(session.users, session.votedUser);
         if (session.votedUser.role === 'Mafia Boss') {
             var mafiosos = getUsersInMafia(session.users);
-            rolemanager.findNewMafiaBoss(session.votedUser, mafiosos, messages);
+            rolemanager.findNewMafiaBoss(session.votedUser, mafiosos, messagemanager);
         }
         return true;
     }
@@ -178,7 +178,7 @@ var afterNightPhase = function (session) {
     var actions = session.nightActions;
     for (var i = 0; i < actions.length; i++) {
         if (typeof actions[i] !== 'undefined') {
-            actions[i](messages, session.users);
+            actions[i](messagemanager, session.users);
         }
     }
     var users = session.users;
@@ -187,7 +187,7 @@ var afterNightPhase = function (session) {
             users[i].state = 'alive';
         } else if (users[i].state === 'dead' && users[i].role === 'Mafia Boss') {
             var mafiosos = getUsersInMafia(users);
-            rolemanager.findNewMafiaBoss(users[i], mafiosos, messages);
+            rolemanager.findNewMafiaBoss(users[i], mafiosos, messagemanager);
         }
     }
 };
@@ -329,23 +329,25 @@ var getRandomInt = function (min, max) {
  */
 var sendRoleInfo = function (session, userId) {
     var user = getUserFromId(session, userId);
-    messages.sendRoleInfo(userId, user.role, user.name);
+    messagemanager.role(user);
 };
 
 /**
  * Sends a particular user dead users info.
  */
 var sendDeadInfo = function (session, userId) {
+    var user = getUserFromId(session, userId);
     var deadUsers = getDeadUsers(session.users);
-    messages.sendDeadInfo(userId, deadUsers);
+    messagemanager.dead(user, deadUsers);
 };
 
 /**
  * Sends a particular user dead users info.
  */
 var sendAliveInfo = function (session, userId) {
+    var user = getUserFromId(session, userId);
     var aliveUsers = getAliveUsers(session.users);
-    messages.sendAliveInfo(userId, aliveUsers);
+    messagemanager.alive(user, aliveUsers);
 };
 
 /**
@@ -374,7 +376,7 @@ var startGame = function (session) {
     setTimeout(function () {
         gameStates(session);
     }, startGameDelay);
-    messagemanager.startGame(session.users);
+    messagemanager.notifyStart(session.users);
 };
 /**
  * Node export object.

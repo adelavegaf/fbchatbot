@@ -29,17 +29,59 @@ module.exports = {
     setIO: function (ioConn) {
         io = ioConn;
     },
-    startGame: function (users) {
-        for (var i = 0; i < users.length; i++) {
-            var user = users[i];
-            switch (user.type) {
-                case 'facebook':
-                    fbmessages.sendStartHelp(user.id);
-                    break;
-                case 'web':
-                    webmessages.sendStartHelp(user.id);
-                    break;
-            }
+    startGame: function (id, type) {
+        switch (type) {
+            case 'facebook':
+                fbmessages.sendStartGame(id);
+                break;
+            case 'web':
+                break;
+        }
+    },
+    exitGame: function (id, type) {
+        switch (type) {
+            case 'facebook':
+                fbmessages.sendExitGame(id);
+                break;
+            case 'web':
+                break;
+        }
+    },
+    help: function (id, type) {
+        switch (type) {
+            case 'facebook':
+                fbmessages.sendHelp(id);
+                break;
+            case 'web':
+                break;
+        }
+    },
+    role: function (user) {
+        switch (user.type) {
+            case 'facebook':
+                fbmessages.sendRoleInfo(user.id, user.role, user.name);
+                break;
+            case 'web':
+                webmessages.sendRoleInfo(io, user.id, user.role, user.name);
+                break;
+        }
+    },
+    alive: function (user, users) {
+        switch (user.type) {
+            case 'facebook':
+                fbmessages.sendAliveInfo(user.id, users);
+                break;
+            case 'web':
+                break;
+        }
+    },
+    dead: function (user, users) {
+        switch (user.type) {
+            case 'facebook':
+                fbmessages.sendDeadInfo(user.id, users);
+                break;
+            case 'web':
+                break;
         }
     },
     joinError: function (id, type) {
@@ -76,6 +118,19 @@ module.exports = {
         var text = "You can't vote twice!";
         var title = "error";
         personalMsg(id, type, title, text);
+    },
+    notifyStart: function (users) {
+        for (var i = 0; i < users.length; i++) {
+            var user = users[i];
+            switch (user.type) {
+                case 'facebook':
+                    fbmessages.sendStartHelp(user.id);
+                    break;
+                case 'web':
+                    webmessages.sendStartHelp(user.id);
+                    break;
+            }
+        }
     },
     notifyJoin: function (users) {
         var title = 'user:join';
@@ -162,6 +217,11 @@ module.exports = {
             }
         }
     },
+    notifyDeath: function (user, users, cause) {
+        var title = 'game:kill';
+        var text = `${user.name} has been killed by the ${cause}. His role was ${user.role}`
+        broadcastMsg(users, title, text);
+    },
     broadcastText: function (id, users, text) {
         var title = 'user:msg';
         for (var i = 0; i < users.length; i++) {
@@ -170,6 +230,10 @@ module.exports = {
             }
         }
         broadcastMsg(users, title, text);
+    },
+    roleAction: function (user, text) {
+        var title = 'game:action';
+        personalMsg(user.id, user.type, title, text);
     },
     voteAccepted: function (users, votedUser) {
         var title = 'vote:accept';
