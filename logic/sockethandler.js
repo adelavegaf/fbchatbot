@@ -4,7 +4,7 @@ var server = require('./server');
 module.exports = {
     socketEvents: function (socket) {
         var sessionId = server.getSessionId();
-        server.socketJoin(socket);
+        server.webJoin(socket);
         var playersInGame = server.getNumPlayersGame(sessionId);
         var totalPlayers = server.getTotalNumPlayers();
 
