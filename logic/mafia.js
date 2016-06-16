@@ -1,7 +1,7 @@
 'use strict';
 
-var messages = require('./messages');
 var rolemanager = require('./rolemanager');
+var messagemanager = require('./messagemanager');
 /**
  * Predefined user alias.
  */
@@ -113,44 +113,45 @@ var calculateQuorum = function (users) {
  */
 var afterVotePhase = function (session) {
     if (typeof session.votedUser.name !== 'undefined') {
-        messages.broadcastText(session.users, session.votedUser.name + " has been lynched");
+        messagemanager.voteAccepted(session.users, session.votedUser);
         if (session.votedUser.role === 'Mafia Boss') {
             var mafiosos = getUsersInMafia(session.users);
             rolemanager.findNewMafiaBoss(session.votedUser, mafiosos, messages);
         }
         return true;
     }
-    messages.broadcastText(session.users, "No one was lynched");
+    messagemanager.voteDenied(session.users);
     return false;
 };
 /**
  * Handles voting mechanism.
  **/
 var vote = function (session, userId, toWhom) {
+
+    var currentUser = getUserFromId(session, userId);
+    var targetUser = getUserFromId(session, toWhom);
+
     if (session.state !== 'voting') {
-        messages.sendText(userId, "It's no longer the voting phase");
+        messagemanager.gameStateError(currentUser.id, currentUser.type, 'voting');
+        return false;
+    }
+
+    if (targetUser === null) {
+        messagemanager.userNotFoundError(currentUser.id, currentUser.type);
         return false;
     }
 
     if (userId === toWhom) {
-        messages.sendText(userId, "You can't vote for yourself");
+        messagemanager.selfVoteError(currentUser.id, currentUser.type);
         return false;
     }
 
     if (hasAlreadyVoted(session, userId)) {
-        messages.sendText(userId, "You can't vote twice!");
-        return false;
-    }
-
-    var targetUser = getUserFromId(session, toWhom);
-
-    if (targetUser === null) {
-        messages.sendText(userId, "That user has disconnected");
+        messagemanager.doubleVoteError(currentUser.id, currentUser.type);
         return false;
     }
 
     session.voteTally[userId] = true;
-    var currentUser = getUserFromId(session, userId);
 
     targetUser.vote += 1;
 
@@ -160,7 +161,7 @@ var vote = function (session, userId, toWhom) {
         session.votedUser = targetUser;
         targetUser.state = 'dead';
     }
-    messages.broadcastText(session.users, `${currentUser.name} has voted for ${targetUser.name} ${targetUser.vote}/${quorum}`);
+    messagemanager.notifyVote(session.users, currentUser, targetUser, quorum);
     return true;
 };
 /**
@@ -193,9 +194,10 @@ var afterNightPhase = function (session) {
 /**
  * Checks if current game is in the night phase.
  */
-var checkNightPhase = function (session, userId) {
+var checkNightPhase = function (session, id) {
+    var user = getUserFromId(id);
     if (session.state !== 'night') {
-        messages.sendText(userId, 'It is no longer the night phase');
+        messagemanager.gameStateError(user.id, user.type, 'night');
         return false;
     }
     return true;
@@ -222,8 +224,8 @@ var gameAction = function (session, properties) {
  * Handles the communication between users taking into account
  * their game state and roles.
  */
-var speak = function (session, userId, text) {
-    var user = getUserFromId(session, userId);
+var speak = function (session, id, text) {
+    var user = getUserFromId(session, id);
     text = user.name + ": " + text;
     var combinedState = user.state + " " + session.state;
     switch (combinedState) {
@@ -231,16 +233,16 @@ var speak = function (session, userId, text) {
         case 'dead voting':
         case 'dead night':
             var users = getDeadUsers(session.users);
-            messages.broadcastLimited(userId, users, text);
+            messagemanager.broadcastText(id, users, text);
             break;
         case 'alive day':
-            messages.broadcastLimited(userId, session.users, text);
+            messagemanager.broadcastText(id, session.users, text);
             break;
         case 'alive night':
             var role = rolemanager.getRole(user.role);
             if (role.alliance === 'mafia') {
                 var users = getUsersInMafia(session.users);
-                messages.broadcastLimited(userId, users, text);
+                messagemanager.broadcastText(id, users, text);
             }
             break;
     };
@@ -253,7 +255,7 @@ var nightPhase = function (session) {
     beforeNightPhase(session);
     session.state = 'night';
     var alive = getAliveUsers(session.users);
-    messages.broadcastNightAction(session.sessionId, session.dayCount, alive);
+    messagemanager.notifyNightPhase(alive, session.sessionId, session.dayCount);
     setTimeout(function () {
         afterNightPhase(session);
         gameStates(session);
@@ -267,7 +269,7 @@ var votingPhase = function (session) {
     beforeVotePhase(session);
     session.state = 'voting';
     var alive = getAliveUsers(session.users);
-    messages.broadcastVoting(session.sessionId, session.dayCount, alive);
+    messagemanager.notifyVotePhase(alive, session.sessionId, session.dayCount);
     setTimeout(function () {
         afterVotePhase(session);
         nightPhase(session);
@@ -280,7 +282,7 @@ var votingPhase = function (session) {
 var dayPhase = function (session) {
     session.dayCount -= 1;
     session.state = 'day';
-    messages.broadcastDay(session.users, session.dayCount);
+    messagemanager.notifyDayPhase(session.users, session.dayCount);
     setTimeout(function () {
         votingPhase(session);
     }, dayDuration);
@@ -292,7 +294,7 @@ var dayPhase = function (session) {
 var checkGameEnd = function (session) {
     if (session.dayCount === 0) {
         session.state = 'finished';
-        messages.broadcastText(session.users, 'The game has finished in a draw, there are no more turns left.');
+        messagemanager.notifyDraw(session.users);
         return true;
     }
     var alive = getAliveUsers(session.users);
@@ -304,7 +306,7 @@ var checkGameEnd = function (session) {
         }
     }
     session.state = 'finished';
-    messages.broadcastText(session.users, `${alliance} has won!`);
+    messagemanager.notifyWin(session.users, alliance);
     return true;
 };
 /**
@@ -368,14 +370,11 @@ var assignRoles = function (users) {
  */
 var startGame = function (session) {
     assignRoles(session.users);
-    messages.broadcastRoles(session.users);
+    messagemanager.notifyRoles(session.users);
     setTimeout(function () {
         gameStates(session);
     }, startGameDelay);
-    messages.broadcastText(session.users, 'Type .help for more commands.');
-    messages.broadcastText(session.users, 'Type .role if you forget your role or codename.');
-    messages.broadcastText(session.users, 'Type .dead to see dead users roles and names.');
-    messages.broadcastText(session.users, 'Type .alive to see who is alive.');
+    messagemanager.startGame(session.users);
 };
 /**
  * Node export object.

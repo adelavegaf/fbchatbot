@@ -162,7 +162,7 @@ var sendAliveInfo = function (userId, users) {
 /**
  * Send day notification structured message to a particular user with userId.
  */
-var sendDayTime = function (userId, dayCount) {
+var sendDayPhase = function (userId, dayCount) {
     var messageData = {
         "attachment": {
             "type": "template",
@@ -255,25 +255,21 @@ var broadcastLimited = function (userId, users, text) {
  * Send voting structured message to all elements in users.
  * The payload will contain info about sessionId and dayCount.
  */
-var broadcastVoting = function (sessionId, dayCount, users) {
+var sendVotePhase = function (sessionId, dayCount, user, users) {
     var options = {
         title: "Voting time",
         subtitle: "30s to vote to lynch",
         identifier: "vote",
     };
-    for (var i = 0; i < users.length; i++) {
-        var user = users.splice(0, 1);
-        var elements = buildUserForm(sessionId, dayCount, users, options);
-        sendUserForm(user[0].id, elements);
-        users.push(user[0]);
-    }
+    var elements = buildUserForm(sessionId, dayCount, users, options);
+    sendUserForm(user.id, elements);
 };
 /**
  * Informs users that the day phase has begun. 
  */
 var broadcastDay = function (users, dayCount) {
     for (var i = 0; i < users.length; i++) {
-        sendDayTime(users[i].id, dayCount);
+        sendDayPhase(users[i].id, dayCount);
     }
 };
 
@@ -290,21 +286,25 @@ var broadcastRoles = function (users) {
  * Informs users the available actions they can perform on a
  * specific night.
  */
-var broadcastNightAction = function (sessionId, dayCount, users) {
+var sendNightPhase = function (sessionId, dayCount, user, users) {
     var title = 'Night time';
-    for (var i = 0; i < users.length; i++) {
-        var subtitle, identifier;
-        var role = rolemanager.getRole(users[i].role);
-        var targetUsers = role.actiontarget(users[i], users);
-        var options = {
-            title: title,
-            subtitle: role.nightinfo,
-            identifier: users[i].role,
-            "image_url": "https://mafiachatgame.herokuapp.com/images/night-min.png",
-        };
-        var elements = buildUserForm(sessionId, dayCount, targetUsers, options);
-        sendUserForm(users[i].id, elements);
-    }
+    var role = rolemanager.getRole(user.role);
+    var targetUsers = role.actiontarget(user, users);
+    var options = {
+        title: title,
+        subtitle: role.nightinfo,
+        identifier: user.role,
+        "image_url": "https://mafiachatgame.herokuapp.com/images/night-min.png",
+    };
+    var elements = buildUserForm(sessionId, dayCount, targetUsers, options);
+    sendUserForm(users[i].id, elements);
+};
+
+var sendStartHelp = function (userId) {
+    sendText(userId, 'Type .help for more commands.');
+    sendText(userId, 'Type .role if you forget your role or codename.');
+    sendText(userId, 'Type .dead to see dead users roles and names.');
+    sendText(userId, 'Type .alive to see who is alive.');
 };
 
 /**
@@ -318,16 +318,17 @@ var messages = {
     sendRoleInfo: sendRoleInfo,
     sendDeadInfo: sendDeadInfo,
     sendAliveInfo: sendAliveInfo,
-    sendDayTime: sendDayTime,
+    sendDayPhase: sendDayPhase,
     sendUserForm: sendUserForm,
     sendHelp: sendHelp,
+    sendStartHelp: sendStartHelp,
     buildUserForm: buildUserForm,
     broadcastText: broadcastText,
     broadcastLimited: broadcastLimited,
-    broadcastVoting: broadcastVoting,
+    sendVotePhase: sendVotePhase,
     broadcastDay: broadcastDay,
     broadcastRoles: broadcastRoles,
-    broadcastNightAction: broadcastNightAction
+    sendNightPhase: sendNightPhase
 };
 
 module.exports = messages;

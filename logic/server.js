@@ -1,6 +1,6 @@
 'use strict';
 
-var messages = require('./messages');
+var fbmessages = require('./fbmessages');
 var mafia = require('./mafia');
 
 /**
@@ -31,24 +31,50 @@ var io = {};
 /**
  * Sets the io object.
  */
-var setIo = function (ioConn) {
+var setIO = function (ioConn) {
     io = ioConn;
 };
 
+/**
+ * Count of all the users that are in a game with id 'sessionId'.
+ */
 var getNumPlayersGame = function (sessionId) {
-    if (typeof sessions[sessionId] === 'undefined') return 0;
-    return io.sockets.adapter.rooms[sessionId.toString()].length + sessions[sessionId].users.length;
+    if (typeof sessions[sessionId] === 'undefined') {
+        return 0;
+    };
+    var room = io.sockets.adapter.rooms[sessionId.toString()];
+    var webPlayers = (typeof room === 'undefined') ? 0 : room.length;
+    var messengerPlayers = sessions[sessionId].users.length;
+    return webPlayers + messengerPlayers;
 };
 
+/**
+ * Count of all the users that are in games.
+ */
 var getTotalNumPlayers = function () {
-    var srvSockets = io.sockets.sockets;
-    var numOnlineUsers = Object.keys(srvSockets).length;
+    var numOnlineUsers = 0;
     for (var property in sessions) {
         if (sessions.hasOwnProperty(property)) {
-            numOnlineUsers += sessions[property].users.length;
+            numOnlineUsers += getNumPlayersGame(property);
         }
     }
     return numOnlineUsers;
+};
+
+/**
+ * Creates a new game.
+ */
+var createSession = function () {
+    if (typeof sessions[sessionId] !== 'undefined') {
+        return false;
+    }
+    sessions[sessionId] = {
+        sessionId: sessionId,
+        state: 'connecting',
+        dayCount: mafia.gameDuration,
+        users: userQueue
+    };
+    return true;
 };
 
 /**
@@ -91,10 +117,10 @@ var getSessionId = function () {
  * Finds the index at which the user with userId is located
  * in the session.users array.
  */
-var findUser = function (session, userId) {
+var findUser = function (session, id) {
     var users = session.users;
     for (var i = 0; i < users.length; i++) {
-        if (users[i].id === userId) {
+        if (users[i].id === id) {
             return i;
         }
     }
@@ -106,7 +132,6 @@ var findUser = function (session, userId) {
  */
 var beginSession = function () {
     userQueue = [];
-    messages.broadcastText(userQueue, `Game ${sessionId} is now starting...`);
     mafia.startGame(sessions[sessionId]);
     sessionId++;
 };
@@ -115,25 +140,45 @@ var beginSession = function () {
  * Joins the waiting queue for a game given that the user is not
  * in a game already.
  * Returns true if the user could join the session. Otherwise, false.
+ * Method triggered when joining through Facebook Messenger.
  */
-var joinSession = function (userId) {
+var facebookJoin = function (userId) {
+    return joinSession(userId, 'facebook');
+};
+
+/**
+ * Joins a user that is using the web app to a
+ * game session.
+ */
+var webJoin = function (socket) {
+
+    socket.join(sessionId.toString());
+
+    return joinSession(socket.id, 'web');
+};
+
+/**
+ * General behaviour when joining a game from any source.
+ */
+var joinSession = function (id, type) {
     if (hasActiveSession(userId)) {
-        messages.sendText(userId, "You are already on a game!");
+        messagemanager.joinError(id, type);
         return false;
     }
+
+    activeUsers[id] = sessionId;
+
     if (userQueue.length === 0) {
-        sessions[sessionId] = {
-            sessionId: sessionId,
-            state: 'connecting',
-            dayCount: mafia.gameDuration,
-            users: userQueue
-        };
+        server.createSession();
     }
+
     userQueue.push({
-        id: userId
+        id: id,
+        type: type
     });
-    activeUsers[userId] = sessionId;
-    messages.broadcastText(userQueue, `A player has joined ${userQueue.length}/${minNumPlayers}`);
+
+    messagemanager.notifyJoin(userQueue);
+
     if (userQueue.length === minNumPlayers) {
         beginSession();
     }
@@ -144,64 +189,63 @@ var joinSession = function (userId) {
  * Exits a game session, given that the user is in a game.
  * Returns true if the user could exit the game. Otherwise false.
  */
-var exit = function (userId) {
-    if (!hasActiveSession(userId)) {
-        messages.sendText(userId, "You are not on a game!");
+var exit = function (id, type) {
+    if (!hasActiveSession(id)) {
+        messagemanager.noGameError(id, type);
         return false;
     }
-    var userId = String(userId);
-    var sessionId = String(activeUsers[userId]);
+    var id = String(id);
+    var sessionId = String(activeUsers[id]);
     var session = sessions[sessionId];
-    session.users.splice(findUser(session, userId), 1);
-    delete activeUsers[userId];
-    messages.sendText(userId, 'You have left the game');
-    messages.broadcastText(session.users, `A player has left the game ${session.users.length}/${minNumPlayers}`);
+    session.users.splice(findUser(session, id), 1);
+    delete activeUsers[id];
+    messagemanager.notifyExit(session.users);
     return true;
 };
 
 /**
- * Send help information to user with userId.
+ * Send help information to user with id.
  */
-var help = function (userId) {
-    messages.sendHelp(userId);
+var help = function (id) {
+    fbmessages.sendHelp(id);
 };
 
 /**
- * Sends role information to a user with userId given that he is
+ * Sends role information to a user with id given that he is
  * in a game. Returns true if the user has a role. Otherwise, false.
  */
-var role = function (userId) {
-    if (!hasActiveSession(userId)) {
-        messages.sendText(userId, "You are not on a game!");
+var role = function (id) {
+    if (!hasActiveSession(id)) {
+        messagemanager.noGameError(id, 'facebook');
         return false;
     }
-    mafia.sendRoleInfo(sessions[activeUsers[userId]], userId);
+    mafia.sendRoleInfo(sessions[activeUsers[id]], id);
     return true;
 };
 
 /**
- * Sends a msg to user with userId about
+ * Sends a msg to user with id about
  * the people that are currently alive.
  */
-var alive = function (userId) {
-    if (!hasActiveSession(userId)) {
-        messages.sendText(userId, "You are not on a game!");
+var alive = function (id) {
+    if (!hasActiveSession(id)) {
+        messagemanager.noGameError(id, 'facebook');
         return false;
     }
-    mafia.sendAliveInfo(sessions[activeUsers[userId]], userId);
+    mafia.sendAliveInfo(sessions[activeUsers[id]], id);
     return true;
 };
 
 /**
- * Sends a msg to user with userId about
+ * Sends a msg to user with id about
  * all of the dead people and their roles.
  */
-var dead = function (userId) {
-    if (!hasActiveSession(userId)) {
-        messages.sendText(userId, "You are not on a game!");
+var dead = function (id) {
+    if (!hasActiveSession(id)) {
+        messagemanager.noGameError(id, 'facebook');
         return false;
     }
-    mafia.sendDeadInfo(sessions[activeUsers[userId]], userId);
+    mafia.sendDeadInfo(sessions[activeUsers[id]], id);
     return true;
 };
 
@@ -223,11 +267,11 @@ var cleanSession = function (sessionId) {
 };
 
 /**
- * Determines if the user with userId has an
+ * Determines if the user with id has an
  * active game session.
  */
-var hasActiveSession = function (userId) {
-    var property = String(userId);
+var hasActiveSession = function (id) {
+    var property = String(id);
     var sessionId = activeUsers[property];
 
     if (typeof sessionId === 'undefined') {
@@ -244,11 +288,12 @@ var hasActiveSession = function (userId) {
 /**
  * Given a user text message, determines the appropiate
  * behaviour that must be triggered by the server.
+ * Facebook Messenger Point of Entry.
  */
 var parseMessage = function (userId, text) {
     switch (text) {
         case '.exit':
-            messages.sendExitGame(userId);
+            fbmessages.sendExitGame(userId);
             break;
         case '.help':
             help(userId);
@@ -264,7 +309,7 @@ var parseMessage = function (userId, text) {
             break;
         default:
             if (!hasActiveSession(userId)) {
-                messages.sendStartGame(userId);
+                fbmessages.sendStartGame(userId);
             } else {
                 var session = sessions[activeUsers[userId]];
                 mafia.speak(session, userId, text);
@@ -278,8 +323,8 @@ var parseMessage = function (userId, text) {
  * we must verify the button was pressed in the current session,
  * and in the corresponding turn.
  */
-var verifyActionStamp = function (userId, sessionId, dayCount) {
-    var curSessionId = activeUsers[userId];
+var verifyActionStamp = function (id, sessionId, dayCount) {
+    var curSessionId = activeUsers[id];
     var curSession = sessions[curSessionId];
     return sessionId === curSessionId && curSession.dayCount === dayCount;
 };
@@ -287,25 +332,26 @@ var verifyActionStamp = function (userId, sessionId, dayCount) {
 /**
  * Organizes payload information that is sent by a user.
  * Calls appropiate method in mafia to handle user action.
+ * TO DO: ADD THIRD PARAMETER 'TYPE'.
  */
-var callGameAction = function (userId, optionArray) {
-    var sessionId = activeUsers[userId];
+var callGameAction = function (id, optionArray) {
+    var sessionId = activeUsers[id];
 
     var properties = {
         action: optionArray[0],
-        from: userId,
+        from: id,
         to: optionArray[1],
         sessionId: sessionId,
         dayCount: parseInt(optionArray[3], 10)
     };
 
-    if (!hasActiveSession(userId)) {
-        messages.sendText(userId, 'You are not in a game.');
+    if (!hasActiveSession(id)) {
+        messagemanager.noGameError(id, 'facebook');
         return false;
     }
 
-    if (!verifyActionStamp(userId, properties.sessionId, properties.dayCount)) {
-        messages.sendText(userId, 'You are not allowed to cast this action now.');
+    if (!verifyActionStamp(id, properties.sessionId, properties.dayCount)) {
+        messagemanager.actionError(id, 'facebook');
         return false;
     }
     var session = sessions[sessionId];
@@ -315,15 +361,16 @@ var callGameAction = function (userId, optionArray) {
 /**
  * Handles initial parsing of a payload. Redirects
  * further handling to appropiate function.
+ * One of facebook's messenger points of entry.
  */
 var parsePayload = function (userId, payload) {
     var optionArray = payload.split(";");
     switch (optionArray[0]) {
         case 'join':
-            return joinSession(userId);
+            return facebookJoin(userId);
             break;
         case 'exit':
-            return exit(userId);
+            return exit(userId, 'facebook');
             break;
         case 'help':
             return help(userId);
@@ -337,9 +384,11 @@ var parsePayload = function (userId, payload) {
  * Node export object.
  */
 var server = {
-    setIo: setIo,
+    setIO: setIO,
     getNumPlayersGame: getNumPlayersGame,
     getTotalNumPlayers: getTotalNumPlayers,
+    webJoin: webJoin,
+    facebookJoin: facebookJoin,
     minNumPlayers: minNumPlayers,
     activeUsers: activeUsers,
     userQueue: userQueue,
@@ -352,6 +401,7 @@ var server = {
     getSessionId: getSessionId,
     findUser: findUser,
     beginSession: beginSession,
+    createSession: createSession,
     joinSession: joinSession,
     exit: exit,
     help: help,

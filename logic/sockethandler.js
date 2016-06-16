@@ -3,23 +3,15 @@ var server = require('./server');
 // public
 module.exports = {
     socketEvents: function (socket) {
-        var roomId = server.sessionId.toString();
-        socket.join(roomId);
-        var playersInGame = server.getNumPlayersGame(server.sessionId);
+        var sessionId = server.getSessionId();
+        server.socketJoin(socket);
+        var playersInGame = server.getNumPlayersGame(sessionId);
         var totalPlayers = server.getTotalNumPlayers();
 
         socket.emit('init', {
             totalPlayers: totalPlayers,
             playersInGame: playersInGame,
             sessionId: server.sessionId
-        });
-
-        socket.emit('user:join', {
-
-        });
-
-        socket.emit('user:exit', {
-
         });
 
         socket.on('send:msg', function (msg) {
