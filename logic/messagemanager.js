@@ -226,7 +226,8 @@ module.exports = {
         var title = 'user:msg';
         for (var i = 0; i < users.length; i++) {
             if (users[i].id === id) {
-                users[i].splice(i, 1);
+                users.splice(i, 1);
+                break;
             }
         }
         broadcastMsg(users, title, text);
