@@ -8,7 +8,6 @@ var app = require('../app');
 var debug = require('debug')('mafia-bot:server');
 var http = require('http');
 var sockethandler = require('../logic/sockethandler');
-var logicserver = require('../logic/server');
 var messagemanager = require('../logic/messagemanager');
 
 /**
@@ -26,7 +25,6 @@ var server = http.createServer(app);
 var io = require('socket.io').listen(server);
 
 // Socket.io Communication
-logicserver.setIO(io);
 messagemanager.setIO(io);
 io.sockets.on('connection', sockethandler.socketEvents);
 

@@ -155,11 +155,6 @@ module.exports = {
         broadcastMsg(users, title, text);
     },
     notifyVotePhase: function (users, sessionId, dayCount) {
-        var options = {
-            title: "Voting time",
-            subtitle: "30s to vote to lynch",
-            identifier: "vote",
-        };
         for (var i = 0; i < users.length; i++) {
             var user = users.splice(0, 1)[0];
             switch (user.type) {

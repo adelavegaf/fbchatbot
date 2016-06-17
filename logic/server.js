@@ -23,17 +23,6 @@ var sessions = {};
  * Unique number associated with each session.
  */
 var sessionId = 0;
-/**
- * socket handler.
- */
-var io = {};
-
-/**
- * Sets the io object.
- */
-var setIO = function (ioConn) {
-    io = ioConn;
-};
 
 /**
  * Count of all the users that are in a game with id 'sessionId'.
@@ -397,7 +386,6 @@ var parsePayload = function (userId, payload) {
  * Node export object.
  */
 var server = {
-    setIO: setIO,
     getNumPlayersGame: getNumPlayersGame,
     getTotalNumPlayers: getTotalNumPlayers,
     webJoin: webJoin,
