@@ -225,12 +225,12 @@ module.exports = {
     broadcastText: function (id, users, text) {
         var title = 'user:msg';
         for (var i = 0; i < users.length; i++) {
+            var user = users[i];
             if (users[i].id === id) {
-                users.splice(i, 1);
-                break;
+                continue;
             }
+            personalMsg(user.id, user.type, title, text);
         }
-        broadcastMsg(users, title, text);
     },
     roleAction: function (user, text) {
         var title = 'game:action';
