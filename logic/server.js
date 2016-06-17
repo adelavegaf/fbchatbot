@@ -42,10 +42,7 @@ var getNumPlayersGame = function (sessionId) {
     if (typeof sessions[sessionId] === 'undefined') {
         return 0;
     }
-    var room = io.sockets.adapter.rooms[sessionId.toString()];
-    var webPlayers = (typeof room === 'undefined') ? 0 : room.length;
-    var messengerPlayers = sessions[sessionId].users.length;
-    return webPlayers + messengerPlayers;
+    return sessions[sessionId].users.length;
 };
 
 /**
@@ -117,7 +114,7 @@ var getSessionId = function () {
  * Finds the index at which the user with userId is located
  * in the session.users array.
  */
-var findUser = function (session, id) {
+var findUserIndex = function (session, id) {
     var users = session.users;
     for (var i = 0; i < users.length; i++) {
         if (users[i].id === id) {
@@ -125,6 +122,16 @@ var findUser = function (session, id) {
         }
     }
     return -1;
+};
+
+/**
+ * Finds the user with unique identifier id in the server.
+ */
+var findUser = function (id) {
+    var sessionId = activeUsers[id];
+    var session = sessions[sessionId];
+    var user = session.users[findUserIndex(session, id)];
+    return user;
 };
 
 /**
@@ -154,7 +161,7 @@ var webJoin = function (socket) {
 
     socket.join(sessionId.toString());
 
-    return joinSession(socket.id, 'web');
+    return joinSession(socket.id, 'web', socket);
 };
 
 /**
@@ -172,10 +179,16 @@ var joinSession = function (id, type) {
         server.createSession();
     }
 
-    userQueue.push({
+    var user = {
         id: id,
         type: type
-    });
+    };
+
+    if (type === 'web' && arguments.length !== Function.length) {
+        user.socket = arguments[Function.length];
+    }
+
+    userQueue.push(user);
 
     messagemanager.notifyJoin(userQueue);
 
@@ -197,7 +210,7 @@ var exit = function (id, type) {
     var id = String(id);
     var sessionId = String(activeUsers[id]);
     var session = sessions[sessionId];
-    session.users.splice(findUser(session, id), 1);
+    session.users.splice(findUserIndex(session, id), 1);
     delete activeUsers[id];
     messagemanager.notifyExit(session.users);
     return true;
@@ -399,7 +412,7 @@ var server = {
     getActiveUsers: getActiveUsers,
     getSessions: getSessions,
     getSessionId: getSessionId,
-    findUser: findUser,
+    findUserIndex: findUserIndex,
     beginSession: beginSession,
     createSession: createSession,
     joinSession: joinSession,

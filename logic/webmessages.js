@@ -4,7 +4,9 @@ var rolemanager = require('./rolemanager');
 
 // private
 var sendMsg = function (io, id, eventName, obj) {
-    io.sockets.in(id).emit(eventName, obj);
+    console.log(eventName + " " + id);
+    //io.sockets.sockets[id].emit(eventName, obj);
+    io.sockets.to(id).emit(eventName, obj);
 };
 
 // public
@@ -26,7 +28,7 @@ module.exports = {
             role: role,
             name: name
         };
-        sendMsg(io, id, 'role', obj);
+        sendMsg(io, id, 'user:role', obj);
     },
     sendNightPhase: function (io, sessionId, dayCount, user, users) {
         var role = rolemanager.getRole(user.role);
@@ -37,7 +39,7 @@ module.exports = {
             targets: targetUsers,
             identifier: user.role
         };
-        sendMsg(io, user.id, 'night phase', obj);
+        sendMsg(io, user.id, 'game:night', obj);
     },
     sendVotePhase: function (io, sessionId, dayCount, user, users) {
         var obj = {
@@ -46,12 +48,12 @@ module.exports = {
             targets: users,
             identifier: "vote"
         };
-        sendMsg(io, user.id, 'vote phase', obj);
+        sendMsg(io, user.id, 'game:voting', obj);
     },
     sendDayPhase: function (io, user, dayCount) {
         var obj = {
             dayCount: dayCount,
         }
-        sendMsg(io, user.id, 'day phase', obj);
+        sendMsg(io, user.id, 'game:day', obj);
     }
 };

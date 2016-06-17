@@ -127,7 +127,7 @@ module.exports = {
                     fbmessages.sendStartHelp(user.id);
                     break;
                 case 'web':
-                    webmessages.sendStartHelp(user.id);
+                    webmessages.sendStartHelp(io, user.id);
                     break;
             }
         }

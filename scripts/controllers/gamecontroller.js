@@ -4,7 +4,6 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', fun
     $scope.connecting = false;
     $scope.totalPlayers = 0;
     $scope.playersInGame = 0;
-
     $scope.connect = function () {
         $scope.connecting = true;
     };
@@ -12,5 +11,9 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', fun
     socket.on('init', function (data) {
         $scope.totalPlayers = data.totalPlayers;
         $scope.playersInGame = data.playersInGame;
+    });
+
+    socket.on('user:join', function (data) {
+        alert(data);
     });
 }]);
