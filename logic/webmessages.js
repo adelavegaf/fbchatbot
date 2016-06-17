@@ -1,5 +1,7 @@
 'use strict';
 
+var rolemanager = require('./rolemanager');
+
 // private
 var sendMsg = function (io, id, eventName, obj) {
     io.to(id).emit(eventName, obj);
