@@ -27,7 +27,7 @@ webhookRouter.route('/')
                 server.parsePayload(sender, payload);
             } else if (event.message && event.message.text) {
                 var text = event.message.text;
-                server.parseMessage(sender, text);
+                server.parseFbMessage(sender, text);
             }
         }
         res.sendStatus(200);

@@ -35,6 +35,7 @@ module.exports = {
                 fbmessages.sendStartGame(id);
                 break;
             case 'web':
+
                 break;
         }
     },
@@ -136,7 +137,6 @@ module.exports = {
         var title = 'user:join';
         var text = `A user has joined. Number of users in session: ${users.length}`;
         broadcastMsg(users, title, text);
-        // Decirles cuantos jugadores hay en el juego apenas alguien más entre.
     },
     notifyExit: function (users) {
         var title = 'user:exit';

@@ -6,20 +6,21 @@ module.exports = {
         var sessionId = server.getSessionId();
         server.webJoin(socket);
         var playersInGame = server.getNumPlayersGame(sessionId);
-        var totalPlayers = server.getTotalNumPlayers();
 
         socket.emit('init', {
-            totalPlayers: totalPlayers,
             playersInGame: playersInGame,
-            sessionId: server.sessionId
         });
 
-        socket.on('send:msg', function (msg) {
-            socket.broadcast.emit(msg)
+        socket.on('user:msg', function (msg) {
+            server.parseWebMessage(socket.id, msg);
+        });
+
+        socket.on('user:action', function (properties) {
+            server.callGameAction(socket.id, properties, 'web');
         });
 
         socket.on('disconnect', function () {
-
+            server.exit(socket.id, 'web');
         });
     }
 };

@@ -147,9 +147,7 @@ var facebookJoin = function (userId) {
  * game session.
  */
 var webJoin = function (socket) {
-
     socket.join(sessionId.toString());
-
     return joinSession(socket.id, 'web', socket);
 };
 
@@ -184,6 +182,7 @@ var joinSession = function (id, type) {
     if (userQueue.length === minNumPlayers) {
         beginSession();
     }
+
     return true;
 };
 
@@ -290,9 +289,9 @@ var hasActiveSession = function (id) {
 /**
  * Given a user text message, determines the appropiate
  * behaviour that must be triggered by the server.
- * Facebook Messenger Point of Entry.
+ * Facebook Messenger point of entry.
  */
-var parseMessage = function (userId, text) {
+var parseFbMessage = function (userId, text) {
     switch (text) {
         case '.exit':
             messagemanager.exitGame(userId, 'facebook');
@@ -321,6 +320,20 @@ var parseMessage = function (userId, text) {
 };
 
 /**
+ * Given a user text message, determines the appropiate
+ * behaviour that must be triggered by the server.
+ * Web app point of entry.
+ */
+var parseWebMessage = function (id, text) {
+    if (!hasActiveSession(userId)) {
+        messagemanager.noGameError(id, 'web');
+    } else {
+        var session = sessions[activeUsers[id]];
+        mafia.speak(session, id, text);
+    }
+};
+
+/**
  * Since postback buttons stay in the conversation indefinitely,
  * we must verify the button was pressed in the current session,
  * and in the corresponding turn.
@@ -334,11 +347,24 @@ var verifyActionStamp = function (id, sessionId, dayCount) {
 /**
  * Organizes payload information that is sent by a user.
  * Calls appropiate method in mafia to handle user action.
- * TO DO: ADD THIRD PARAMETER 'TYPE'.
  */
-var callGameAction = function (id, optionArray) {
-    var sessionId = activeUsers[id];
+var callGameAction = function (id, properties, type) {
+    if (!hasActiveSession(id)) {
+        messagemanager.noGameError(id, type);
+        return false;
+    }
 
+    if (!verifyActionStamp(id, properties.sessionId, properties.dayCount)) {
+        messagemanager.actionError(id, type);
+        return false;
+    }
+    var session = sessions[properties.sessionId];
+    mafia.gameAction(session, properties);
+    return true;
+};
+// private
+var createProperties = function (arr) {
+    var sessionId = activeUsers[id];
     var properties = {
         action: optionArray[0],
         from: id,
@@ -346,42 +372,33 @@ var callGameAction = function (id, optionArray) {
         sessionId: sessionId,
         dayCount: parseInt(optionArray[3], 10)
     };
-
-    if (!hasActiveSession(id)) {
-        messagemanager.noGameError(id, 'facebook');
-        return false;
-    }
-
-    if (!verifyActionStamp(id, properties.sessionId, properties.dayCount)) {
-        messagemanager.actionError(id, 'facebook');
-        return false;
-    }
-    var session = sessions[sessionId];
-    mafia.gameAction(session, properties);
-    return true;
+    return properties;
 };
 /**
  * Handles initial parsing of a payload. Redirects
  * further handling to appropiate function.
  * One of facebook's messenger points of entry.
  */
-var parsePayload = function (userId, payload) {
+var parsePayload = function (id, payload) {
     var optionArray = payload.split(";");
+    var properties;
     switch (optionArray[0]) {
         case 'join':
-            return facebookJoin(userId);
+            return facebookJoin(id);
             break;
         case 'exit':
-            return exit(userId, 'facebook');
+            return exit(id, 'facebook');
             break;
         case 'help':
-            return help(userId);
+            return help(id);
             break;
         default:
-            return callGameAction(userId, optionArray);
+            properties = createProperties(optionArray);
+            return callGameAction(userId, properties, 'facebook');
             break;
     }
 };
+
 /**
  * Node export object.
  */
@@ -411,9 +428,11 @@ var server = {
     dead: dead,
     cleanSession: cleanSession,
     hasActiveSession: hasActiveSession,
-    parseMessage: parseMessage,
+    parseFbMessage: parseFbMessage,
+    parseWebMessage: parseWebMessage,
     verifyActionStamp: verifyActionStamp,
     callGameAction: callGameAction,
+    createProperties: createProperties,
     parsePayload: parsePayload
 };
 
