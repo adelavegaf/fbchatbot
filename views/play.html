@@ -1,15 +1,15 @@
 <div layout="row">
     <div flex="5"></div>
     <div flex="20">
-        <div class="vertical-l-container menubar fade" layout="column" ng-if="connecting">
+        <div class="vertical-l-container menubar fade" layout="column" ng-if="isPlaying()">
             <h5 class="text-center">Game Information</h5>
             <md-divider></md-divider>
         </div>
     </div>
     <div flex="50">
         <div class="vertical-l-container main" layout="column">
-            <md-button class="md-raised md-primary" md-no-ink flex ng-click="connect()" ng-if="!connecting">Play</md-button>
-            <div ng-if="connecting" layout="column" layout-align="center center" flex="100">
+            <md-button class="md-raised md-primary" md-no-ink flex ng-click="connect()" ng-if="isDisconnected()">Play</md-button>
+            <div ng-if="isConnecting() || isConnected()" layout="column" layout-align="center center" flex="100">
                 <div flex="40"></div>
                 <div flex="5" layout="column" layout-align="center center">
                     <md-progress-circular md-mode="indeterminate"></md-progress-circular>
@@ -19,13 +19,13 @@
             </div>
         </div>
     </div>
-    <div class="fade" flex="20" layout="column" ng-if="connecting">
-        <div class="vertical-m-container menubar" flex="20" layout="column">
+    <div class="fade" flex="20" layout="column">
+        <div class="vertical-m-container menubar" flex="20" layout="column" ng-if="!isDisconnected()">
             <h5 class="text-center">Online Stats</h5>
             <md-divider></md-divider>
             <h6>Number of users in current game: {{playersInGame}}</h6>
         </div>
-        <div class="vertical-m-container menubar" flex="80" layout="column">
+        <div class="vertical-m-container menubar" flex="80" layout="column" ng-if='isPlaying()'>
             <h5 class="text-center">Actions</h5>
             <md-divider></md-divider>
         </div>

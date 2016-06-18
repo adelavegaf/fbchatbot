@@ -1,14 +1,33 @@
 'use strict';
 
 angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', function ($scope, socket) {
-    $scope.connecting = false;
+    var status = 'disconnected';
     $scope.playersInGame = 0;
+
+    $scope.isDisconnected = function () {
+        return status === 'disconnected';
+    };
+
+    $scope.isConnecting = function () {
+        return status === 'connecting';
+    };
+
+    $scope.isConnected = function () {
+        return status === 'connected';
+    };
+
+    $scope.isPlaying = function () {
+        return status === 'playing';
+    };
+
     $scope.connect = function () {
-        $scope.connecting = true;
+        status = 'connecting';
+        socket.emit('user:join', {});
     };
 
     socket.on('init', function (data) {
         $scope.playersInGame = data.playersInGame;
+        status = 'connected';
     });
 
     socket.on('user:join', function (data) {
@@ -32,7 +51,7 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', fun
     });
 
     socket.on('game:start', function (data) {
-
+        status = 'playing';
     });
 
     socket.on('game:draw', function (data) {

@@ -3,12 +3,14 @@ var server = require('./server');
 // public
 module.exports = {
     socketEvents: function (socket) {
-        var sessionId = server.getSessionId();
-        server.webJoin(socket);
-        var playersInGame = server.getNumPlayersGame(sessionId);
 
-        socket.emit('init', {
-            playersInGame: playersInGame,
+        socket.on('user:join', function (msg) {
+            var sessionId = server.getSessionId();
+            server.webJoin(socket);
+            var playersInGame = server.getNumPlayersGame(sessionId);
+            socket.emit('init', {
+                playersInGame: playersInGame,
+            });
         });
 
         socket.on('user:msg', function (msg) {
