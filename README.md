@@ -1,12 +1,12 @@
 # Mafia Chat Game 
 
-### Web application dedicated to creating and managing online [Mafia](https://en.wikipedia.org/wiki/Mafia_(party_game)) game sessions.
-Developed using Express Angular and NodeJS.  
+### Cross-platform game dedicated to creating and managing online [Mafia](https://en.wikipedia.org/wiki/Mafia_(party_game)) sessions.
 
-mafiachatgame.heroku.com  
-Facebook Page: Mafia Chat Game (application is currently not published).  
+Can be played through Facebook Messenger or through the [web app](mafiachatgame.heroku.com). 
+
+To start the server type at the command prompt:  
   
-To start the web app type at the command prompt:  
+git clone https://github.com/adelavegaf/fbchatbot.git  
 npm install  
 npm start  
   
@@ -14,5 +14,4 @@ To run tests:
 npm test  
   
 ### Notes:  
-  *Currently supported for Facebook Messenger.  
-  *A chat bot is integrated within the application to be able to access it through Facebook Messenger.  
+  *Make sure you have npm installed on your computer.  
