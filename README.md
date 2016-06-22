@@ -1,6 +1,6 @@
 # Mafia Chat Game 
 
-### Cross-platform game dedicated to creating and managing online [Mafia](https://en.wikipedia.org/wiki/Mafia_(party_game)) sessions.
+### Cross-platform online [Mafia](https://en.wikipedia.org/wiki/Mafia_(party_game)) game implementation.
 
 Can be played through Facebook Messenger or through the [web app](mafiachatgame.heroku.com). 
 
