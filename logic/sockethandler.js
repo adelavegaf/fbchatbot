@@ -13,6 +13,14 @@ module.exports = {
             });
         });
 
+        socket.on('game:alive', function (msg) {
+            server.alive(socket.id, 'web');
+        });
+
+        socket.on('game:dead', function (msg) {
+            server.dead(socket.id, 'web');
+        });
+
         socket.on('user:msg', function (msg) {
             server.parseWebMessage(socket.id, msg);
         });

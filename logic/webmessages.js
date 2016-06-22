@@ -30,6 +30,29 @@ module.exports = {
         };
         sendMsg(io, id, 'user:role', obj);
     },
+    sendAliveInfo: function (io, id, users) {
+        var simplifiedUsers = [];
+        for (var i = 0; i < users.length; i++) {
+            simplifiedUsers.push(users[i].name);
+        }
+        var obj = {
+            users: simplifiedUsers
+        }
+        sendMsg(io, id, 'game:alive', obj);
+    },
+    sendDeadInfo: function (io, id, users) {
+        var simplifiedUsers = [];
+        for (var i = 0; i < users.length; i++) {
+            simplifiedUsers.push({
+                name: users[i].name,
+                role: users[i].role
+            });
+        }
+        var obj = {
+            users: simplifiedUsers
+        };
+        sendMsg(io, id, 'game:dead', obj);
+    },
     sendNightPhase: function (io, sessionId, dayCount, user, users) {
         var role = rolemanager.getRole(user.role);
         var targetUsers = role.actiontarget(user, users);

@@ -4,6 +4,24 @@
         <div class="vertical-l-container menubar fade" layout="column" ng-if="isPlaying()">
             <h5 class="text-center">Game Information</h5>
             <md-divider></md-divider>
+            <h6>Alias: {{alias}}</h6>
+            <h6>Role: {{role}}</h6>
+            <md-divider></md-divider>
+            <h6>Phase: {{phase}}</h6>
+            <h6>Days left: {{dayCount}}</h6>
+            <md-divider></md-divider>
+
+            <h6>Alive users</h6>
+            <div ng-repeat="name in aliveUsers">
+                <h6>{{name}}</h6>
+            </div>
+
+            <md-divider></md-divider>
+
+            <h6>Dead users</h6>
+            <div ng-repeat="user in deadUsers">
+                <h6>{{user.name}} - {{user.role}}</h6>
+            </div>
         </div>
     </div>
     <div flex="50">
@@ -16,6 +34,15 @@
                     <h6>waiting for players...</h6>
                 </div>
                 <div flex="55"></div>
+            </div>
+            <div ng-if="isPlaying()" layout="column" layout-align="center center" flex="100">
+                <md-content>
+                    <md-list flex ng-repeat="msg in messages">
+                        <md-list-item>
+                            {{msg}}
+                        </md-list-item>
+                    </md-list>
+                </md-content>
             </div>
         </div>
     </div>

@@ -73,6 +73,7 @@ module.exports = {
                 fbmessages.sendAliveInfo(user.id, users);
                 break;
             case 'web':
+                webmessages.sendAliveInfo(io, user.id, users);
                 break;
         }
     },
@@ -82,6 +83,7 @@ module.exports = {
                 fbmessages.sendDeadInfo(user.id, users);
                 break;
             case 'web':
+                webmessages.sendDeadInfo(io, user.id, users);
                 break;
         }
     },

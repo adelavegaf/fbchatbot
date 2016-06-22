@@ -228,9 +228,9 @@ var role = function (id) {
  * Sends a msg to user with id about
  * the people that are currently alive.
  */
-var alive = function (id) {
+var alive = function (id, type) {
     if (!hasActiveSession(id)) {
-        messagemanager.noGameError(id, 'facebook');
+        messagemanager.noGameError(id, type);
         return false;
     }
     mafia.sendAliveInfo(sessions[activeUsers[id]], id);
@@ -241,9 +241,9 @@ var alive = function (id) {
  * Sends a msg to user with id about
  * all of the dead people and their roles.
  */
-var dead = function (id) {
+var dead = function (id, type) {
     if (!hasActiveSession(id)) {
-        messagemanager.noGameError(id, 'facebook');
+        messagemanager.noGameError(id, type);
         return false;
     }
     mafia.sendDeadInfo(sessions[activeUsers[id]], id);
@@ -303,10 +303,10 @@ var parseFbMessage = function (userId, text) {
             role(userId);
             break;
         case '.alive':
-            alive(userId);
+            alive(userId, 'facebook');
             break;
         case '.dead':
-            dead(userId);
+            dead(userId, 'facebook');
             break;
         default:
             if (!hasActiveSession(userId)) {

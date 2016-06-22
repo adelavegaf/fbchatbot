@@ -3,6 +3,13 @@
 angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', function ($scope, socket) {
     var status = 'disconnected';
     $scope.playersInGame = 0;
+    $scope.messages = [];
+    $scope.aliveUsers = [];
+    $scope.deadUsers = [];
+    $scope.alias = "";
+    $scope.role = "";
+    $scope.phase = "";
+    $scope.dayCount = 0;
 
     $scope.isDisconnected = function () {
         return status === 'disconnected';
@@ -27,11 +34,10 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', fun
 
     socket.on('init', function (data) {
         $scope.playersInGame = data.playersInGame;
-        status = 'connected';
     });
 
     socket.on('user:join', function (data) {
-
+        $scope.playersInGame++;
     });
 
     socket.on('user:vote', function (data) {
@@ -39,15 +45,16 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', fun
     });
 
     socket.on('user:msg', function (data) {
-
+        messages.push(data);
     });
 
     socket.on('user:role', function (data) {
-
+        $scope.role = data.role;
+        $scope.alias = data.name;
     });
 
     socket.on('user:exit', function (data) {
-
+        $scope.playersInGame--;
     });
 
     socket.on('game:start', function (data) {
@@ -63,15 +70,26 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', fun
     });
 
     socket.on('game:night', function (data) {
-
+        $scope.phase = 'night';
     });
 
     socket.on('game:day', function (data) {
-
+        $scope.phase = 'day';
+        $scope.dayCount = data.dayCount;
+        socket.emit('game:alive', {});
+        socket.emit('game:dead', {});
     });
 
     socket.on('game:voting', function (data) {
+        $scope.phase = 'voting';
+    });
 
+    socket.on('game:alive', function (data) {
+        $scope.aliveUsers = data.users;
+    });
+
+    socket.on('game:dead', function (data) {
+        $scope.deadUsers = data.users;
     });
 
     socket.on('game:action', function (data) {
@@ -92,6 +110,7 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', fun
 
     socket.on('error', function (data) {
         // display angular-material alert.
+        alert(data);
     });
 
 
