@@ -28,12 +28,15 @@
     margin-right: 5px;
     border-top-style: solid;
     border-top-width: thick !important;
-    border-top-color: #86B9B9;
+    border-top-color: #86B9B9 !important;
 }
 
 .main {
     margin-left: 5px;
     margin-right: 5px;
+    border-top-style: solid;
+    border-top-width: thick !important;
+    border-top-color: #86B9B9 !important;
 }
 
 .fade {
@@ -53,6 +56,8 @@
     height: 74vh;
     width: 100%;
 }
+
+.message-form {}
 
 .auto-overflow {
     overflow: auto;

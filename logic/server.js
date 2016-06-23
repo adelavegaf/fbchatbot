@@ -325,7 +325,7 @@ var parseFbMessage = function (userId, text) {
  * Web app point of entry.
  */
 var parseWebMessage = function (id, text) {
-    if (!hasActiveSession(userId)) {
+    if (!hasActiveSession(id)) {
         messagemanager.noGameError(id, 'web');
     } else {
         var session = sessions[activeUsers[id]];

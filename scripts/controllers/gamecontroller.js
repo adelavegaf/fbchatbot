@@ -2,6 +2,9 @@
 
 angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', function ($scope, socket) {
     var status = 'disconnected';
+    $scope.message = {
+        text: ''
+    };
     $scope.playersInGame = 0;
     $scope.messages = [];
     $scope.aliveUsers = [];
@@ -10,6 +13,14 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', fun
     $scope.role = "";
     $scope.phase = "";
     $scope.dayCount = 0;
+
+    $scope.sendMessage = function (keyEvent) {
+        if (keyEvent.which === 13) {
+            $scope.messages.push($scope.alias + ': ' + $scope.message.text);
+            socket.emit('user:msg', $scope.message.text);
+            $scope.message.text = '';
+        }
+    };
 
     $scope.isDisconnected = function () {
         return status === 'disconnected';
@@ -45,7 +56,7 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', fun
     });
 
     socket.on('user:msg', function (data) {
-        messages.push(data);
+        $scope.messages.push(data.text);
     });
 
     socket.on('user:role', function (data) {
