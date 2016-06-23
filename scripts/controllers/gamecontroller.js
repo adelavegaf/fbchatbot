@@ -62,7 +62,7 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', fun
     });
 
     socket.on('game:draw', function (data) {
-
+        status = 'draw';
     });
 
     socket.on('game:win', function (data) {

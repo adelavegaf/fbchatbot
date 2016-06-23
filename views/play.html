@@ -24,28 +24,43 @@
             </div>
         </div>
     </div>
-    <div flex="50">
+
+    <div ng-if="isDisconnected()" flex="50">
         <div class="vertical-l-container main" layout="column">
-            <md-button class="md-raised md-primary" md-no-ink flex ng-click="connect()" ng-if="isDisconnected()">Play</md-button>
-            <div ng-if="isConnecting() || isConnected()" layout="column" layout-align="center center" flex="100">
-                <div flex="40"></div>
-                <div flex="5" layout="column" layout-align="center center">
-                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
-                    <h6>waiting for players...</h6>
-                </div>
-                <div flex="55"></div>
+            <md-button class="md-raised md-primary" md-no-ink ng-click="connect()" flex>Play</md-button>
+        </div>
+    </div>
+
+    <div ng-if="isConnecting() || isConnected()" flex="50">
+        <div class="vertical-l-container main" layout="column" layout-align="center stretch" flex>
+            <div flex="40"></div>
+            <div flex="5" layout="column" layout-align="center center">
+                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                <h6>waiting for players...</h6>
             </div>
-            <div ng-if="isPlaying()" layout="column" layout-align="center center" flex="100">
-                <md-content>
-                    <md-list flex ng-repeat="msg in messages">
-                        <md-list-item>
+            <div flex="55"></div>
+        </div>
+    </div>
+
+    <div ng-if="isPlaying()" flex="50">
+        <div class="vertical-l-container main" layout="column" flex>
+            <container flex="90">
+                <section class="auto-overflow">
+                    <md-list layout="column" id="message-container" layout-padding>
+                        <md-list-item ng-repeat="msg in messages" flex>
                             {{msg}}
                         </md-list-item>
                     </md-list>
-                </md-content>
+                </section>
+            </container>
+            <div>
+                <md-input-container layout="row" flex>
+                    <input type="text" ng-required="true" placeholder="msg" flex>
+                </md-input-container>
             </div>
         </div>
     </div>
+
     <div class="fade" flex="20" layout="column">
         <div class="vertical-m-container menubar" flex="20" layout="column" ng-if="!isDisconnected()">
             <h5 class="text-center">Online Stats</h5>
