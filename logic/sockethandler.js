@@ -22,7 +22,11 @@ module.exports = {
         });
 
         socket.on('user:msg', function (msg) {
-            server.parseWebMessage(socket.id, msg);
+            if (server.parseWebMessage(socket.id, msg)) {
+                socket.emit('user:msg', {
+                    text: msg
+                });
+            }
         });
 
         socket.on('user:action', function (properties) {

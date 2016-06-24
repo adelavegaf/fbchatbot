@@ -16,7 +16,6 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', fun
 
     $scope.sendMessage = function (keyEvent) {
         if (keyEvent.which === 13) {
-            $scope.messages.push($scope.alias + ': ' + $scope.message.text);
             socket.emit('user:msg', $scope.message.text);
             $scope.message.text = '';
         }
@@ -56,7 +55,12 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', fun
     });
 
     socket.on('user:msg', function (data) {
-        $scope.messages.push(data.text);
+        var parseData = data.text.split(': ');
+        var listMessage = {
+            alias: (parseData.length > 1) ? parseData[0] : $scope.alias,
+            text: (parseData.length > 1) ? parseData[1] : parseData[0]
+        };
+        $scope.messages.push(listMessage);
     });
 
     socket.on('user:role', function (data) {
@@ -81,18 +85,18 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', fun
     });
 
     socket.on('game:night', function (data) {
-        $scope.phase = 'night';
+        $scope.phase = 'Night';
     });
 
     socket.on('game:day', function (data) {
-        $scope.phase = 'day';
+        $scope.phase = 'Day';
         $scope.dayCount = data.dayCount;
         socket.emit('game:alive', {});
         socket.emit('game:dead', {});
     });
 
     socket.on('game:voting', function (data) {
-        $scope.phase = 'voting';
+        $scope.phase = 'Voting';
     });
 
     socket.on('game:alive', function (data) {

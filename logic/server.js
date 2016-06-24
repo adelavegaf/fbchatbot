@@ -327,9 +327,10 @@ var parseFbMessage = function (userId, text) {
 var parseWebMessage = function (id, text) {
     if (!hasActiveSession(id)) {
         messagemanager.noGameError(id, 'web');
+        return false;
     } else {
         var session = sessions[activeUsers[id]];
-        mafia.speak(session, id, text);
+        return mafia.speak(session, id, text);
     }
 };
 

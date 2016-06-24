@@ -1,27 +1,52 @@
 <div layout="row">
     <div flex="5"></div>
-    <div flex="20">
-        <div class="vertical-l-container menubar fade" layout="column" ng-if="isPlaying()">
-            <h5 class="text-center">Game Information</h5>
-            <md-divider></md-divider>
-            <h6>Alias: {{alias}}</h6>
-            <h6>Role: {{role}}</h6>
-            <md-divider></md-divider>
-            <h6>Phase: {{phase}}</h6>
-            <h6>Days left: {{dayCount}}</h6>
-            <md-divider></md-divider>
+    <div flex="20" layout="column">
+        <div class="fade" flex="20" ng-if="isPlaying()">
+            <md-card>
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-headline">{{phase}}</span>
+                        <span class="md-subhead">{{dayCount}} turns left</span>
+                    </md-card-title-text>
+                    <md-card-title-media>
+                        <div class="md-media-sm card-media"></div>
+                    </md-card-title-media>
+                </md-card-title>
+            </md-card>
+        </div>
 
-            <h6>Alive users</h6>
-            <div ng-repeat="name in aliveUsers">
-                <h6>{{name}}</h6>
-            </div>
+        <div class="fade" layout="column" ng-if="isPlaying()" flex="80">
+            <md-card>
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-headline">Player Status</span>
 
-            <md-divider></md-divider>
+                        <section class="auto-overflow">
+                            <md-list layout="column" flex>
+                                <md-list-item class="md-2-line" ng-repeat="name in aliveUsers" ng-click="null">
+                                    <img ng-src="" class="md-avatar" alt="" />
+                                    <div class="md-list-item-text" layout="column">
+                                        <h5>{{name}}</h5>
+                                        <p>alive</p>
+                                    </div>
+                                </md-list-item>
+                            </md-list>
+                        </section>
 
-            <h6>Dead users</h6>
-            <div ng-repeat="user in deadUsers">
-                <h6>{{user.name}} - {{user.role}}</h6>
-            </div>
+                        <section class="auto-overflow">
+                            <md-list layout="column" flex>
+                                <md-list-item class="md-2-line" ng-repeat="user in deadUsers" ng-click="null">
+                                    <img ng-src="" class="md-avatar" alt="" />
+                                    <div class="md-list-item-text" layout="column">
+                                        <h5>{{user.name}}</h5>
+                                        <p>{{user.role}}</p>
+                                    </div>
+                                </md-list-item>
+                            </md-list>
+                        </section>
+                    </md-card-title-text>
+                </md-card-title>
+            </md-card>
         </div>
     </div>
 
@@ -46,9 +71,12 @@
         <div class="vertical-l-container main" layout="column" flex>
             <container flex="90">
                 <section class="auto-overflow">
-                    <md-list layout="column" id="message-container" layout-align="start stretch" layout-padding flex>
-                        <md-list-item ng-repeat="msg in messages track by $index" flex="10">
-                            {{msg}}
+                    <md-list layout="column" id="message-container" layout-align="start stretch" flex>
+                        <md-list-item class="md-2-line" ng-repeat="msg in messages track by $index" flex="10">
+                            <div class="md-list-item-text" layout="column">
+                                <h4>{{msg.alias}}</h4>
+                                <p>{{msg.text}}</p>
+                            </div>
                         </md-list-item>
                     </md-list>
                 </section>
@@ -57,22 +85,27 @@
                 <form name="messageForm">
                     <md-input-container layout="row" flex>
                         <label flex>{{alias}}: </label>
-                        <input name="messaging" type="text" ng-model="message.text" ng-keypress="sendMessage($event)" flex>
+                        <input name="messaging" ng-model="message.text" ng-keypress="sendMessage($event)" flex>
                     </md-input-container>
                 </form>
             </div>
         </div>
     </div>
 
-    <div class="fade" flex="20" layout="column">
-        <div class="vertical-m-container menubar" flex="20" layout="column" ng-if="!isDisconnected()">
-            <h5 class="text-center">Online Stats</h5>
-            <md-divider></md-divider>
-            <h6>Number of users in current game: {{playersInGame}}</h6>
-        </div>
-        <div class="vertical-m-container menubar" flex="80" layout="column" ng-if='isPlaying()'>
-            <h5 class="text-center">Actions</h5>
-            <md-divider></md-divider>
+    <div flex="20" layout="column">
+
+        <div class="fade" flex="20" ng-if="isPlaying()">
+            <md-card>
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-headline">{{alias}}</span>
+                        <span class="md-subhead">{{role}}</span>
+                    </md-card-title-text>
+                    <md-card-title-media>
+                        <div class="md-media-sm card-media"></div>
+                    </md-card-title-media>
+                </md-card-title>
+            </md-card>
         </div>
     </div>
     <div flex="5"></div>

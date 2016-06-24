@@ -227,6 +227,7 @@ var gameAction = function (session, properties) {
 var speak = function (session, id, text) {
     var user = getUserFromId(session, id);
     text = user.name + ": " + text;
+    var didSpeak = true;
     var combinedState = user.state + " " + session.state;
     switch (combinedState) {
         case 'dead day':
@@ -245,7 +246,11 @@ var speak = function (session, id, text) {
                 messagemanager.broadcastText(id, users, text);
             }
             break;
-    };
+        default:
+            didSpeak = false;
+            break;
+    }
+    return didSpeak;
 };
 /**
  * Handles the actions to be taken before the night phase begins.
