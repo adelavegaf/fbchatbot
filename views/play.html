@@ -1,21 +1,7 @@
 <div layout="row">
     <div flex="5"></div>
     <div flex="20" layout="column">
-        <div class="fade" flex="20" ng-if="isPlaying()">
-            <md-card>
-                <md-card-title>
-                    <md-card-title-text>
-                        <span class="md-headline">{{phase}}</span>
-                        <span class="md-subhead">{{dayCount}} turns left</span>
-                    </md-card-title-text>
-                    <md-card-title-media>
-                        <div class="md-media-sm card-media"></div>
-                    </md-card-title-media>
-                </md-card-title>
-            </md-card>
-        </div>
-
-        <div class="fade" layout="column" ng-if="isPlaying()" flex="80">
+        <div class="fade" layout="column" ng-if="isPlaying()" flex="100">
             <md-card>
                 <md-card-title>
                     <md-card-title-text>
@@ -23,11 +9,11 @@
 
                         <section class="auto-overflow">
                             <md-list layout="column" flex>
-                                <md-list-item class="md-2-line" ng-repeat="name in aliveUsers" ng-click="null">
+                                <md-list-item class="md-2-line" ng-repeat="user in aliveUsers" ng-click="userClick(user)">
                                     <img ng-src="" class="md-avatar" alt="" />
                                     <div class="md-list-item-text" layout="column">
-                                        <h5>{{name}}</h5>
-                                        <p>alive</p>
+                                        <h5>{{user.name}}</h5>
+                                        <p>{{user.message}}</p>
                                     </div>
                                 </md-list-item>
                             </md-list>
@@ -84,7 +70,7 @@
             <div class="message-form">
                 <form name="messageForm">
                     <md-input-container layout="row" flex>
-                        <label flex>{{alias}}: </label>
+                        <label flex>{{currentUser.alias}}: </label>
                         <input name="messaging" ng-model="message.text" ng-keypress="sendMessage($event)" flex>
                     </md-input-container>
                 </form>
@@ -98,8 +84,22 @@
             <md-card>
                 <md-card-title>
                     <md-card-title-text>
-                        <span class="md-headline">{{alias}}</span>
-                        <span class="md-subhead">{{role}}</span>
+                        <span class="md-headline">{{currentUser.alias}}</span>
+                        <span class="md-subhead">{{currentUser.role}}</span>
+                    </md-card-title-text>
+                    <md-card-title-media>
+                        <div class="md-media-sm card-media"></div>
+                    </md-card-title-media>
+                </md-card-title>
+            </md-card>
+        </div>
+
+        <div class="fade" flex="20" ng-if="isPlaying()">
+            <md-card>
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-headline">{{phase}}</span>
+                        <span class="md-subhead">{{dayCount}} turns left</span>
                     </md-card-title-text>
                     <md-card-title-media>
                         <div class="md-media-sm card-media"></div>

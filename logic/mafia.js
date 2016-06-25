@@ -383,6 +383,13 @@ var startGame = function (session) {
     }, startGameDelay);
     messagemanager.notifyStart(session.users);
 };
+
+var revealRole = function (id, session) {
+    var user = getUserFromId(session, id);
+    if (user.state === 'alive') {
+        messagemanager.revealRole(user, session.users);
+    }
+};
 /**
  * Node export object.
  */
@@ -418,7 +425,8 @@ var mafia = {
     sendDeadInfo: sendDeadInfo,
     sendAliveInfo: sendAliveInfo,
     assignRoles: assignRoles,
-    startGame: startGame
+    startGame: startGame,
+    revealRole: revealRole
 };
 
 module.exports = mafia;

@@ -201,6 +201,7 @@ var exit = function (id, type) {
     session.users.splice(findUserIndex(session, id), 1);
     delete activeUsers[id];
     messagemanager.notifyExit(session.users);
+    mafia.revealRole(id, session.users);
     return true;
 };
 

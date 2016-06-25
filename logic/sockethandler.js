@@ -10,6 +10,7 @@ module.exports = {
             var playersInGame = server.getNumPlayersGame(sessionId);
             socket.emit('init', {
                 playersInGame: playersInGame,
+                sessionId: sessionId
             });
         });
 

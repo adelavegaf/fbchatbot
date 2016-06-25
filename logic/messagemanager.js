@@ -229,6 +229,11 @@ module.exports = {
             personalMsg(user.id, user.type, title, text);
         }
     },
+    revealRole: function (user, users) {
+        var title = 'game:reveal';
+        var text = `${user.name} role was ${user.role}`
+        broadcastMsg(users, title, text);
+    },
     roleAction: function (user, text) {
         var title = 'game:action';
         personalMsg(user.id, user.type, title, text);

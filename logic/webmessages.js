@@ -9,6 +9,17 @@ var sendMsg = function (io, id, eventName, obj) {
     io.sockets.to(id).emit(eventName, obj);
 };
 
+var simplifyUsers = function (users) {
+    var simplifiedUsers = [];
+    for (var i = 0; i < users.length; i++) {
+        simplifiedUsers.push({
+            name: users[i].name,
+            id: users[i].id
+        });
+    }
+    return simplifiedUsers;
+};
+
 // public
 module.exports = {
     sendText: function (io, id, eventName, text) {
@@ -26,15 +37,13 @@ module.exports = {
     sendRoleInfo: function (io, id, role, name) {
         var obj = {
             role: role,
-            name: name
+            name: name,
+            id: id
         };
         sendMsg(io, id, 'user:role', obj);
     },
     sendAliveInfo: function (io, id, users) {
-        var simplifiedUsers = [];
-        for (var i = 0; i < users.length; i++) {
-            simplifiedUsers.push(users[i].name);
-        }
+        var simplifiedUsers = simplifyUsers(users);
         var obj = {
             users: simplifiedUsers
         }
@@ -45,7 +54,8 @@ module.exports = {
         for (var i = 0; i < users.length; i++) {
             simplifiedUsers.push({
                 name: users[i].name,
-                role: users[i].role
+                role: users[i].role,
+                id: users[i].id
             });
         }
         var obj = {
@@ -55,7 +65,7 @@ module.exports = {
     },
     sendNightPhase: function (io, sessionId, dayCount, user, users) {
         var role = rolemanager.getRole(user.role);
-        var targetUsers = role.actiontarget(user, users);
+        var targetUsers = simplifyUsers(role.actiontarget(user, users));
         var obj = {
             id: sessionId,
             dayCount: dayCount,
@@ -65,10 +75,11 @@ module.exports = {
         sendMsg(io, user.id, 'game:night', obj);
     },
     sendVotePhase: function (io, sessionId, dayCount, user, users) {
+        var targetUsers = simplifyUsers(users);
         var obj = {
             id: sessionId,
             dayCount: dayCount,
-            targets: users,
+            targets: targetUsers,
             identifier: "vote"
         };
         sendMsg(io, user.id, 'game:voting', obj);

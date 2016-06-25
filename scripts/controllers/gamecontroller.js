@@ -2,6 +2,8 @@
 
 angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', function ($scope, socket) {
     var status = 'disconnected';
+    var actionProperties = {};
+    var sessionId = -1;
     $scope.message = {
         text: ''
     };
@@ -9,10 +11,30 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', fun
     $scope.messages = [];
     $scope.aliveUsers = [];
     $scope.deadUsers = [];
-    $scope.alias = "";
-    $scope.role = "";
+    $scope.currentUser = {};
     $scope.phase = "";
     $scope.dayCount = 0;
+
+    function setPlayersMessage(players, message) {
+        for (var i = 0; i < players.length; i++) {
+            players[i].message = message;
+        }
+    }
+
+    function matchTargetUsers(tempArray, referenceArray) {
+        var match = [];
+        for (var i = 0; i < tempArray.length; i++) {
+            for (var j = 0; j < referenceArray.length; j++) {
+                if (tempArray[i].id === referenceArray[j].id) {
+                    referenceArray[j].eligible = true;
+                    match.push(referenceArray[j]);
+                } else if (!referenceArray[j].eligible) {
+                    referenceArray[j].eligible = false;
+                }
+            }
+        }
+        return match;
+    }
 
     $scope.sendMessage = function (keyEvent) {
         if (keyEvent.which === 13) {
@@ -42,8 +64,25 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', fun
         socket.emit('user:join', {});
     };
 
+    $scope.userClick = function (user) {
+        if ($scope.phase === 'Day') {
+            return;
+        }
+        if (!user.eligible) {
+            return;
+        }
+        socket.emit('user:action', {
+            sessionId: sessionId,
+            action: actionProperties.identifier,
+            dayCount: actionProperties.dayCount,
+            to: user.id,
+            from: $scope.currentUser.id
+        });
+    };
+
     socket.on('init', function (data) {
         $scope.playersInGame = data.playersInGame;
+        sessionId = data.sessionId;
     });
 
     socket.on('user:join', function (data) {
@@ -51,26 +90,40 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', fun
     });
 
     socket.on('user:vote', function (data) {
-
+        var listMessage = {
+            alias: 'Game',
+            text: data.text
+        };
+        $scope.messages.push(listMessage);
     });
 
     socket.on('user:msg', function (data) {
         var parseData = data.text.split(': ');
         var listMessage = {
-            alias: (parseData.length > 1) ? parseData[0] : $scope.alias,
+            alias: (parseData.length > 1) ? parseData[0] : $scope.currentUser.alias,
             text: (parseData.length > 1) ? parseData[1] : parseData[0]
         };
         $scope.messages.push(listMessage);
     });
 
     socket.on('user:role', function (data) {
-        $scope.role = data.role;
-        $scope.alias = data.name;
+        $scope.currentUser.role = data.role;
+        $scope.currentUser.alias = data.name;
+        $scope.currentUser.id = data.id;
     });
 
     socket.on('user:exit', function (data) {
         $scope.playersInGame--;
+        var listMessage = {
+            alias: 'Game',
+            text: data.text
+        };
+        $scope.messages.push(listMessage);
     });
+
+    socket.on('game:reveal', function (data)) {
+
+    };
 
     socket.on('game:start', function (data) {
         status = 'playing';
@@ -78,17 +131,23 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', fun
 
     socket.on('game:draw', function (data) {
         status = 'draw';
+        alert('draw');
     });
 
     socket.on('game:win', function (data) {
-
+        status = 'win';
+        alert('win');
     });
 
     socket.on('game:night', function (data) {
+        actionProperties = data;
         $scope.phase = 'Night';
+        var targetUsers = matchTargetUsers(actionProperties.targets, $scope.aliveUsers);
+        setPlayersMessage(targetUsers, 'click to action');
     });
 
     socket.on('game:day', function (data) {
+        actionProperties = {};
         $scope.phase = 'Day';
         $scope.dayCount = data.dayCount;
         socket.emit('game:alive', {});
@@ -96,14 +155,19 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', fun
     });
 
     socket.on('game:voting', function (data) {
+        actionProperties = data;
         $scope.phase = 'Voting';
+        var targetUsers = matchTargetUsers(actionProperties.targets, $scope.aliveUsers);
+        setPlayersMessage(targetUsers, 'click to vote');
     });
 
     socket.on('game:alive', function (data) {
+        setPlayersMessage(data.users, 'Alive');
         $scope.aliveUsers = data.users;
     });
 
     socket.on('game:dead', function (data) {
+        setPlayersMessage(data.users, 'Dead');
         $scope.deadUsers = data.users;
     });
 
@@ -125,7 +189,7 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', fun
 
     socket.on('error', function (data) {
         // display angular-material alert.
-        alert(data);
+        alert(data.text);
     });
 
 
