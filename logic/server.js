@@ -58,7 +58,8 @@ var createSession = function () {
         sessionId: sessionId,
         state: 'connecting',
         dayCount: mafia.gameDuration,
-        users: userQueue
+        users: userQueue,
+        disconnected: []
     };
     return true;
 };
@@ -198,10 +199,11 @@ var exit = function (id, type) {
     var id = String(id);
     var sessionId = String(activeUsers[id]);
     var session = sessions[sessionId];
-    session.users.splice(findUserIndex(session, id), 1);
+    var user = session.users.splice(findUserIndex(session, id), 1);
     delete activeUsers[id];
     messagemanager.notifyExit(session.users);
-    mafia.revealRole(id, session.users);
+    session.disconnected.push(user);
+    mafia.revealRole(user, session);
     return true;
 };
 

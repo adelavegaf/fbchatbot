@@ -343,7 +343,8 @@ var sendRoleInfo = function (session, userId) {
 var sendDeadInfo = function (session, userId) {
     var user = getUserFromId(session, userId);
     var deadUsers = getDeadUsers(session.users);
-    messagemanager.dead(user, deadUsers);
+    var completeDeadUsers = deadUsers.concat(session.disconnected);
+    messagemanager.dead(user, completeDeadUsers);
 };
 
 /**
@@ -384,8 +385,7 @@ var startGame = function (session) {
     messagemanager.notifyStart(session.users);
 };
 
-var revealRole = function (id, session) {
-    var user = getUserFromId(session, id);
+var revealRole = function (user, session) {
     if (user.state === 'alive') {
         messagemanager.revealRole(user, session.users);
     }

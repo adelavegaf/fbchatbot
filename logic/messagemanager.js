@@ -144,7 +144,6 @@ module.exports = {
         var title = 'user:exit';
         var text = `A user has left. Number of users in session: ${users.length}`;
         broadcastMsg(users, title, text);
-        // messages.broadcastText(session.users, `A player has left the game ${session.users.length}/${minNumPlayers}`);
     },
     notifyDraw: function (users) {
         var title = 'game:draw';

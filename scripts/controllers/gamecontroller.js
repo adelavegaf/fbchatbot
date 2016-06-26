@@ -121,9 +121,13 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', fun
         $scope.messages.push(listMessage);
     });
 
-    socket.on('game:reveal', function (data)) {
-
-    };
+    socket.on('game:reveal', function (data) {
+        var listMessage = {
+            alias: 'Game',
+            text: data.text
+        };
+        $scope.messages.push(listMessage);
+    });
 
     socket.on('game:start', function (data) {
         status = 'playing';
@@ -172,11 +176,11 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', fun
     });
 
     socket.on('game:action', function (data) {
-
+        alert(data.text);
     });
 
     socket.on('game:kill', function (data) {
-
+        alert(data.text);
     });
 
     socket.on('vote:accept', function (data) {
