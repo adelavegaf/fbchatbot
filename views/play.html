@@ -10,7 +10,7 @@
                         <section class="auto-overflow">
                             <md-list layout="column" flex>
                                 <md-list-item class="md-2-line" ng-repeat="user in aliveUsers" ng-click="userClick(user)">
-                                    <img ng-src="" class="md-avatar" alt="" />
+                                    <img ng-src="../images/{{user.name.toLowerCase()}}.svg" class="md-avatar" alt="" />
                                     <div class="md-list-item-text" layout="column">
                                         <h5>{{user.name}}</h5>
                                         <p>{{user.message}}</p>
