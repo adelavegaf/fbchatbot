@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', function ($scope, socket) {
+angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$mdDialog', function ($scope, socket, $mdDialog) {
     var status = 'disconnected';
     var actionProperties = {};
     var sessionId = -1;
@@ -34,6 +34,18 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', fun
             }
         }
         return match;
+    }
+
+    function showAlert(title, message) {
+        $mdDialog.show(
+            $mdDialog.alert()
+            .parent(angular.element(document.querySelector('#popupContainer')))
+            .clickOutsideToClose(true)
+            .title(title)
+            .textContent(message)
+            .ariaLabel('Alert Dialog Demo')
+            .ok('Got it!')
+        );
     }
 
     $scope.sendMessage = function (keyEvent) {
@@ -135,12 +147,12 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', fun
 
     socket.on('game:draw', function (data) {
         status = 'draw';
-        alert('draw');
+        showAlert('Game', data.text);
     });
 
     socket.on('game:win', function (data) {
         status = 'win';
-        alert('win');
+        showAlert('Game', data.text);
     });
 
     socket.on('game:night', function (data) {
@@ -176,11 +188,11 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', fun
     });
 
     socket.on('game:action', function (data) {
-        alert(data.text);
+        showAlert('Game', data.text);
     });
 
     socket.on('game:kill', function (data) {
-        alert(data.text);
+        showAlert('Game', data.text);
     });
 
     socket.on('vote:accept', function (data) {
@@ -192,8 +204,7 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', fun
     });
 
     socket.on('error', function (data) {
-        // display angular-material alert.
-        alert(data.text);
+        showAlert('Error', data.text);
     });
 
 
