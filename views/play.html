@@ -22,7 +22,7 @@
                         <section class="auto-overflow">
                             <md-list layout="column" flex>
                                 <md-list-item class="md-2-line" ng-repeat="user in deadUsers" ng-click="null">
-                                    <img ng-src="" class="md-avatar" alt="" />
+                                    <img ng-src="../images/{{user.name.toLowerCase()}}.svg" class="md-avatar" alt="" />
                                     <div class="md-list-item-text" layout="column">
                                         <h5>{{user.name}}</h5>
                                         <p>{{user.role}}</p>
@@ -88,7 +88,9 @@
                         <span class="md-subhead">{{currentUser.role}}</span>
                     </md-card-title-text>
                     <md-card-title-media>
-                        <div class="md-media-sm card-media"></div>
+                        <div class="md-media-sm card-media">
+                            <img ng-src="../images/{{currentUser.alias.toLowerCase()}}.svg" alt="" />
+                        </div>
                     </md-card-title-media>
                 </md-card-title>
             </md-card>
