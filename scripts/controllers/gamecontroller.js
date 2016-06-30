@@ -196,11 +196,11 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
     });
 
     socket.on('vote:accept', function (data) {
-
+        showAlert('Game', data.text);
     });
 
     socket.on('vote:denied', function (data) {
-
+        showAlert('Game', data.text);
     });
 
     socket.on('error', function (data) {
