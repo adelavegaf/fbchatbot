@@ -300,7 +300,8 @@ var sendNightPhase = function (sessionId, dayCount, user, users) {
     sendUserForm(user.id, elements);
 };
 
-var sendStartHelp = function (userId) {
+var sendStartHelp = function (userId, delay) {
+    sendText(userId, `The game will start in ${delay/1000} seconds`);
     sendText(userId, 'Type .help for more commands.');
     sendText(userId, 'Type .role if you forget your role or codename.');
     sendText(userId, 'Type .dead to see dead users roles and names.');

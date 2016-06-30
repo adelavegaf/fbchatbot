@@ -28,9 +28,9 @@ module.exports = {
         };
         sendMsg(io, id, eventName, obj);
     },
-    sendStartHelp: function (io, id) {
+    sendStartHelp: function (io, id, delay) {
         var obj = {
-
+            delay: delay
         };
         sendMsg(io, id, 'game:start', obj);
     },

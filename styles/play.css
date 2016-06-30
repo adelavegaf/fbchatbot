@@ -82,3 +82,7 @@ md-list-item.md-2-line,
 md-list-item.md-2-line>.md-no-style {
     min-height: 50px;
 }
+
+.no-padding-bottom {
+    padding-bottom: 0px !important;
+}

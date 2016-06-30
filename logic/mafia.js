@@ -382,7 +382,7 @@ var startGame = function (session) {
     setTimeout(function () {
         gameStates(session);
     }, startGameDelay);
-    messagemanager.notifyStart(session.users);
+    messagemanager.notifyStart(session.users, startGameDelay);
 };
 
 var revealRole = function (user, session) {
