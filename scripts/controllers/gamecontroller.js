@@ -4,6 +4,8 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
     var status;
     var actionProperties;
     var sessionId;
+    var durations;
+    var counterTimeout;
     $scope.message;
     $scope.playersInGame;
     $scope.messages;
@@ -12,10 +14,12 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
     $scope.currentUser;
     $scope.phase;
     $scope.dayCount;
+    $scope.counter;
 
     function initVariables() {
         status = 'disconnected';
         actionProperties = {};
+        durations = {};
         sessionId = -1;
         $scope.playersInGame = 0;
         $scope.messages = [];
@@ -24,9 +28,22 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
         $scope.currentUser = {};
         $scope.phase = "";
         $scope.dayCount = 0;
+        $scope.counter = 0;
         $scope.message = {
             text: ''
         };
+    }
+
+    function clearClicks(players) {
+        for (var i = 0; i < players.length; i++) {
+            players[i].clicked = false;
+        }
+    }
+
+    function clearEligible(players) {
+        for (var i = 0; i < players.length; i++) {
+            players[i].eligible = false;
+        }
     }
 
     function setPlayersMessage(players, message) {
@@ -57,6 +74,17 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
             text: text
         };
         $scope.messages.push(listMessage);
+    }
+
+    function onCounterTimeout() {
+        if ($scope.counter > 0) {
+            $scope.counter--;
+        }
+        counterTimeout = $timeout(onCounterTimeout, 1000);
+    }
+
+    function cancelCounterTimeout() {
+        $timeout.cancel(counterTimeout);
     }
 
     function gameStartMessage() {
@@ -118,6 +146,13 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
         if (!user.eligible) {
             return;
         }
+        if ($scope.phase === 'Voting') {
+            clearEligible($scope.aliveUsers);
+        }
+
+        clearClicks($scope.aliveUsers);
+        user.clicked = true;
+
         socket.emit('user:action', {
             sessionId: sessionId,
             action: actionProperties.identifier,
@@ -171,31 +206,41 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
 
     socket.on('game:start', function (data) {
         status = 'playing';
-        var delay = data.delay / 1000;
+        durations = data.durations;
+        var delay = durations.startGameDelay / 1000;
         addMessage('Game', 'The game will start in ' + delay + ' seconds');
-        $timeout(gameStartMessage, data.delay);
+        $timeout(gameStartMessage, durations.startGameDelay);
     });
 
     socket.on('game:draw', function (data) {
+        cancelCounterTimeout();
         showAlert('Game', data.text);
         initVariables();
     });
 
     socket.on('game:win', function (data) {
+        cancelCounterTimeout();
         showAlert('Game', data.text);
         initVariables();
     });
 
     socket.on('game:night', function (data) {
+        clearClicks($scope.aliveUsers);
+        cancelCounterTimeout();
+        $scope.counter = durations.nightDuration / 1000;
+        counterTimeout = $timeout(onCounterTimeout, 1000);
         actionProperties = data;
         $scope.phase = 'Night';
         var targetUsers = matchTargetUsers(actionProperties.targets, $scope.aliveUsers);
-        setPlayersMessage(targetUsers, 'click to ' + $scope.currentUser.actionName);
+        setPlayersMessage(targetUsers, $scope.currentUser.actionName);
         addMessage('Game', $scope.currentUser.nightinfo);
     });
 
     socket.on('game:day', function (data) {
         actionProperties = {};
+        cancelCounterTimeout();
+        $scope.counter = durations.dayDuration / 1000;
+        counterTimeout = $timeout(onCounterTimeout, 1000);
         $scope.phase = 'Day';
         $scope.dayCount = data.dayCount;
         socket.emit('game:alive', {});
@@ -203,6 +248,10 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
     });
 
     socket.on('game:voting', function (data) {
+        clearClicks($scope.aliveUsers);
+        cancelCounterTimeout();
+        $scope.counter = durations.votingDuration / 1000;
+        counterTimeout = $timeout(onCounterTimeout, 1000);
         actionProperties = data;
         $scope.phase = 'Voting';
         var targetUsers = matchTargetUsers(actionProperties.targets, $scope.aliveUsers);

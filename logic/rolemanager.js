@@ -90,7 +90,7 @@ var roles = {
         'alliance': 'town',
         'description': "Block another person's ability each night.",
         'nightinfo': 'Choose who you want to block.',
-        'actionName': 'role block',
+        'actionName': 'Roleblock',
         'action': function (from, to) {
             return function (messagemanager, users) {
                 if (satisfiesConditions(from, to, messagemanager)) {
@@ -111,7 +111,7 @@ var roles = {
         'init': function (user) {
             user.selfHeal = 2;
         },
-        'actionName': 'heal',
+        'actionName': 'Save',
         'action': function (from, to) {
             return function (messagemanager, users) {
                 if (!satisfiesConditions(from, to, messagemanager)) {
@@ -139,7 +139,7 @@ var roles = {
         'alliance': 'mafia',
         'description': 'Choose who to kill each night.',
         'nightinfo': 'Choose who to kill',
-        'actionName': 'kill',
+        'actionName': 'Kill',
         'action': function (from, to) {
             return function (messagemanager, users) {
                 if (!satisfiesConditions(from, to, messagemanager)) {
@@ -172,7 +172,7 @@ var roles = {
         'init': function (user) {
             user.fixed = 2;
         },
-        'actionName': 'fix',
+        'actionName': 'Fix',
         'action': function (from, to) {
             return function (messagemanager, users) {
                 if (!satisfiesConditions(from, to, messagemanager)) {
@@ -200,7 +200,7 @@ var roles = {
         'alliance': 'town',
         'description': "Learn another person's role each night.",
         'nightinfo': 'Choose who you want to investigate.',
-        'actionName': 'investigate',
+        'actionName': 'Investigate',
         'action': function (from, to) {
             return function (messagemanager, users) {
                 if (!satisfiesConditions(from, to, messagemanager)) {
@@ -227,7 +227,7 @@ var roles = {
         'alliance': 'town',
         'description': 'Kill someone each night in the name of justice.',
         'nightinfo': 'Choose who you want to kill.',
-        'actionName': 'kill',
+        'actionName': 'Kill',
         'action': function (from, to) {
             return function (messagemanager, users) {
                 if (!satisfiesConditions(from, to, messagemanager)) {
@@ -250,7 +250,7 @@ var roles = {
         'alliance': 'mafia',
         'description': 'Second in line when boss dies.',
         'nightinfo': 'You can speak to the mafia.',
-        'actionName': 'advise',
+        'actionName': 'Advise',
         'action': function (from, to) {
             return function (messagemanager, users) {
                 if (satisfiesConditions(from, to, messagemanager)) {}

@@ -86,3 +86,7 @@ md-list-item.md-2-line>.md-no-style {
 .no-padding-bottom {
     padding-bottom: 0px !important;
 }
+
+.glyphicon-ok {
+    color: #00D9A3;
+}

@@ -13,9 +13,14 @@
                         <md-list layout="column" flex>
                             <md-list-item class="md-2-line" ng-repeat="user in aliveUsers" ng-click="userClick(user)">
                                 <img ng-src="../images/{{user.name.toLowerCase()}}.svg" class="md-avatar" alt="" />
-                                <div class="md-list-item-text" layout="column">
-                                    <h5>{{user.name}}</h5>
-                                    <p>{{user.message}}</p>
+                                <div class="md-list-item-text" layout="row">
+                                    <div flex="80" layout="column">
+                                        <h5>{{user.name}}</h5>
+                                        <p>{{user.message}}</p>
+                                    </div>
+                                    <div flex="20" layout="column" layout-align="center center">
+                                        <span class="glyphicon glyphicon-ok" ng-if="user.clicked"></span>
+                                    </div>
                                 </div>
                             </md-list-item>
                         </md-list>
@@ -105,6 +110,9 @@
                         <span class="md-title">{{phase}}</span>
                         <span class="md-subhead">{{dayCount}} turns left</span>
                     </md-card-header-text>
+                    <div flex="20" layout="column" layout-align="center center">
+                        <span>{{counter}}s</span>
+                    </div>
                 </md-card-header>
             </md-card>
         </div>

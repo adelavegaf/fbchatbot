@@ -122,15 +122,15 @@ module.exports = {
         var title = "error";
         personalMsg(id, type, title, text);
     },
-    notifyStart: function (users, delay) {
+    notifyStart: function (users, durations) {
         for (var i = 0; i < users.length; i++) {
             var user = users[i];
             switch (user.type) {
                 case 'facebook':
-                    fbmessages.sendStartHelp(user.id, delay);
+                    fbmessages.sendStartHelp(user.id, durations.startGameDelay);
                     break;
                 case 'web':
-                    webmessages.sendStartHelp(io, user.id, delay);
+                    webmessages.sendStartHelp(io, user.id, durations);
                     break;
             }
         }

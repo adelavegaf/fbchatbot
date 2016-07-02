@@ -384,7 +384,13 @@ var startGame = function (session) {
     setTimeout(function () {
         gameStates(session);
     }, startGameDelay);
-    messagemanager.notifyStart(session.users, startGameDelay);
+    var durations = {
+        startGameDelay: startGameDelay,
+        dayDuration: dayDuration,
+        votingDuration: votingDuration,
+        nightDuration: nightDuration
+    };
+    messagemanager.notifyStart(session.users, durations);
 };
 
 var revealRole = function (user, session) {
