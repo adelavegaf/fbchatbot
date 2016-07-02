@@ -39,6 +39,7 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
         var match = [];
         for (var i = 0; i < tempArray.length; i++) {
             for (var j = 0; j < referenceArray.length; j++) {
+                referenceArray[j].message = '';
                 if (tempArray[i].id === referenceArray[j].id) {
                     referenceArray[j].eligible = true;
                     match.push(referenceArray[j]);
@@ -150,6 +151,11 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
         $scope.currentUser.role = data.role;
         $scope.currentUser.alias = data.name;
         $scope.currentUser.id = data.id;
+        $scope.currentUser.actionName = data.actionName;
+        $scope.currentUser.alliance = data.alliance;
+        $scope.currentUser.nightinfo = data.nightinfo;
+        $scope.currentUser.roleDescription = data.description;
+
         var msg = 'You have been assigned the name ' + data.name + ' and the role ' + data.role + '.';
         addMessage('Game', msg);
     });
@@ -184,7 +190,8 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
         actionProperties = data;
         $scope.phase = 'Night';
         var targetUsers = matchTargetUsers(actionProperties.targets, $scope.aliveUsers);
-        setPlayersMessage(targetUsers, 'click to action');
+        setPlayersMessage(targetUsers, 'click to ' + $scope.currentUser.actionName);
+        addMessage('Game', $scope.currentUser.nightinfo);
     });
 
     socket.on('game:day', function (data) {

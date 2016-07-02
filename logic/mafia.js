@@ -226,7 +226,6 @@ var gameAction = function (session, properties) {
  */
 var speak = function (session, id, text) {
     var user = getUserFromId(session, id);
-    text = user.name + ": " + text;
     var didSpeak = true;
     var combinedState = user.state + " " + session.state;
     switch (combinedState) {
@@ -234,14 +233,17 @@ var speak = function (session, id, text) {
         case 'dead voting':
         case 'dead night':
             var users = getDeadUsers(session.users);
+            text = user.name + ' (dead): ' + text;
             messagemanager.broadcastText(id, users, text);
             break;
         case 'alive day':
+            text = user.name + ': ' + text;
             messagemanager.broadcastText(id, session.users, text);
             break;
         case 'alive night':
             var role = rolemanager.getRole(user.role);
             if (role.alliance === 'mafia') {
+                text = user.name + ' (mafia): ' + text;
                 var users = getUsersInMafia(session.users);
                 messagemanager.broadcastText(id, users, text);
             }

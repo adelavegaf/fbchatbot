@@ -35,8 +35,13 @@ module.exports = {
         sendMsg(io, id, 'game:start', obj);
     },
     sendRoleInfo: function (io, id, role, name) {
+        var roleData = rolemanager.getRole(role);
         var obj = {
             role: role,
+            nightinfo: roleData.nightinfo,
+            actionName: roleData.actionName,
+            description: roleData.description,
+            alliance: roleData.alliance,
             name: name,
             id: id
         };
