@@ -6,7 +6,7 @@ var messagemanager = require('./messagemanager');
 /**
  * Minimum number of players to start a game. Recommended to be minimum 7.
  */
-var minNumPlayers = 2;
+var minNumPlayers = 7;
 /**
  * Contains all of the active users.
  */

@@ -104,7 +104,7 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
     }
 
     $scope.sendMessage = function (keyEvent) {
-        if (keyEvent.which === 13) {
+        if (keyEvent.which === 13 && $scope.message.text.length > 0) {
             socket.emit('user:msg', $scope.message.text);
             $scope.message.text = '';
         }
@@ -277,11 +277,13 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
     });
 
     socket.on('vote:accept', function (data) {
+        socket.emit('game:alive', {});
+        socket.emit('game:dead', {});
         showAlert('Game', data.text);
     });
 
     socket.on('vote:denied', function (data) {
-        showAlert('Game', data.text);
+        addMessage('Game', data.text);
     });
 
     socket.on('error', function (data) {

@@ -78,9 +78,9 @@ md-card md-card-title {
     height: 100%;
 }
 
-md-list-item.md-2-line,
-md-list-item.md-2-line>.md-no-style {
-    min-height: 50px;
+md-card md-card-content {
+    display: block;
+    padding: 0px 16px 16px 16px;
 }
 
 .no-padding-bottom {
@@ -89,4 +89,21 @@ md-list-item.md-2-line>.md-no-style {
 
 .glyphicon-ok {
     color: #00D9A3;
+}
+
+md-list.md-default-theme md-list-item.md-2-line .md-list-item-text p,
+md-list md-list-item.md-2-line .md-list-item-text p,
+md-list.md-default-theme md-list-item.md-3-line .md-list-item-text p,
+md-list md-list-item.md-3-line .md-list-item-text p {
+    color: rgba(0, 0, 0, 0.54);
+    word-break: break-word;
+}
+
+#chat-msg {
+    background-color: lightblue;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-top-right-radius: 8px;
+    width: 80%;
+    padding: 3px;
 }
