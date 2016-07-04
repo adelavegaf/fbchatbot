@@ -6,6 +6,8 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
     var sessionId;
     var durations;
     var counterTimeout;
+    var userColors;
+    var chatColors;
     $scope.message;
     $scope.playersInGame;
     $scope.messages;
@@ -19,8 +21,12 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
     function initVariables() {
         status = 'disconnected';
         actionProperties = {};
-        durations = {};
         sessionId = -1;
+        durations = {};
+        userColors = {
+            Game: '#ff6666'
+        };
+        chatColors = ['#d9ff66', '#cc99ff', '#ffcc66', '#cceeff', '#ffccff', '#ffff80', '#ccffcc'];
         $scope.playersInGame = 0;
         $scope.messages = [];
         $scope.aliveUsers = [];
@@ -89,6 +95,12 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
 
     function gameStartMessage() {
         addMessage('Game', 'The game will now start.');
+    }
+
+    function pickColor(alias) {
+        var color = chatColors.splice(0, 1);
+        userColors[alias] = color;
+        return color;
     }
 
     function showAlert(title, message) {
@@ -160,6 +172,17 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
             to: user.id,
             from: $scope.currentUser.id
         });
+    };
+
+    $scope.chatColor = function (msg) {
+        var alias = msg.alias;
+        var style = {};
+        if (userColors[alias]) {
+            style['background-color'] = userColors[alias];
+        } else {
+            style['background-color'] = pickColor(alias);
+        }
+        return style;
     };
 
     socket.on('init', function (data) {

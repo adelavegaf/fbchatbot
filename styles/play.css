@@ -99,7 +99,7 @@ md-list md-list-item.md-3-line .md-list-item-text p {
     word-break: break-word;
 }
 
-#chat-msg {
+.chat-msg {
     background-color: lightblue;
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
