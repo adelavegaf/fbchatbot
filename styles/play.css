@@ -106,16 +106,15 @@ md-list md-list-item.md-2-line .md-list-item-text p,
 md-list.md-default-theme md-list-item.md-3-line .md-list-item-text p,
 md-list md-list-item.md-3-line .md-list-item-text p {
     color: rgba(0, 0, 0, 0.54);
-    word-break: break-word;
 }
 
 .chat-msg {
-    background-color: lightblue;
+    word-break: break-all;
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
     border-top-right-radius: 8px;
-    width: 80%;
-    padding: 3px;
+    max-width: 90%;
+    padding: 1px 3px;
 }
 
 .counter {

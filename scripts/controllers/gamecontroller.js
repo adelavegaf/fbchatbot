@@ -338,20 +338,20 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
     });
 
     socket.on('game:action', function (data) {
-        showAlert('Game', data.text);
         addMessage('Game', data.text);
+        showAlert('Game', data.text);
     });
 
     socket.on('game:kill', function (data) {
-        showAlert('Game', data.text);
         addMessage('Game', data.text);
+        showAlert('Game', data.text);
     });
 
     socket.on('vote:accept', function (data) {
         socket.emit('game:alive', {});
         socket.emit('game:dead', {});
-        showAlert('Game', data.text);
         addMessage('Game', data.text);
+        showAlert('Game', data.text);
     });
 
     socket.on('vote:denied', function (data) {
