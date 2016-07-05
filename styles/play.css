@@ -107,3 +107,8 @@ md-list md-list-item.md-3-line .md-list-item-text p {
     width: 80%;
     padding: 3px;
 }
+
+.counter {
+    color: rgba(0, 0, 0, 0.54);
+    font-size: 14px;
+}
