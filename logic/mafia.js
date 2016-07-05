@@ -262,7 +262,8 @@ var nightPhase = function (session) {
     beforeNightPhase(session);
     session.state = 'night';
     var alive = getAliveUsers(session.users);
-    messagemanager.notifyNightPhase(alive, session.sessionId, session.dayCount);
+    var dead = getDeadUsers(session.users);
+    messagemanager.notifyNightPhase(alive, dead, session.sessionId, session.dayCount);
     setTimeout(function () {
         afterNightPhase(session);
         gameStates(session);
@@ -276,7 +277,8 @@ var votingPhase = function (session) {
     beforeVotePhase(session);
     session.state = 'voting';
     var alive = getAliveUsers(session.users);
-    messagemanager.notifyVotePhase(alive, session.sessionId, session.dayCount);
+    var dead = getDeadUsers(session.users);
+    messagemanager.notifyVotePhase(alive, dead, session.sessionId, session.dayCount);
     setTimeout(function () {
         afterVotePhase(session);
         nightPhase(session);

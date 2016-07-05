@@ -29,7 +29,7 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
         counterTimeout = {};
         loadingTimeout = {};
         userColors = {
-            Game: '#FF8A8A'
+            Game: '#FFB5B5'
         };
         loadingMsgs = {
             init: 'waiting for players',

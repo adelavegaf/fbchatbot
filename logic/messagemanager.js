@@ -155,18 +155,29 @@ module.exports = {
         var text = `${alliance} has won!`;
         broadcastMsg(users, title, text);
     },
-    notifyVotePhase: function (users, sessionId, dayCount) {
-        for (var i = 0; i < users.length; i++) {
-            var user = users.splice(0, 1)[0];
+    notifyVotePhase: function (alive, dead, sessionId, dayCount) {
+        for (var i = 0; i < alive.length; i++) {
+            var user = alive.splice(0, 1)[0];
             switch (user.type) {
                 case 'facebook':
-                    fbmessages.sendVotePhase(sessionId, dayCount, user, users);
+                    fbmessages.sendVotePhase(sessionId, dayCount, user, alive);
                     break;
                 case 'web':
-                    webmessages.sendVotePhase(io, sessionId, dayCount, user, users);
+                    webmessages.sendVotePhase(io, sessionId, dayCount, user, alive);
                     break;
             }
-            users.push(user);
+            alive.push(user);
+        }
+        for (var i = 0; i < dead.length; i++) {
+            var user = dead[i];
+            switch (user.type) {
+                case 'facebook':
+                    fbmessages.sendVotePhase(sessionId, dayCount, user, []);
+                    break;
+                case 'web':
+                    webmessages.sendVotePhase(io, sessionId, dayCount, user, []);
+                    break;
+            }
         }
     },
     notifyDayPhase: function (users, dayCount) {
@@ -187,15 +198,27 @@ module.exports = {
         var text = `${from.name} has voted for ${to.name}. ${to.vote}/${quorum}`;
         broadcastMsg(users, title, text);
     },
-    notifyNightPhase: function (users, sessionId, dayCount) {
-        for (var i = 0; i < users.length; i++) {
-            var user = users[i];
+    notifyNightPhase: function (alive, dead, sessionId, dayCount) {
+        for (var i = 0; i < alive.length; i++) {
+            var user = alive[i];
             switch (user.type) {
                 case 'facebook':
-                    fbmessages.sendNightPhase(sessionId, dayCount, user, users);
+                    fbmessages.sendNightPhase(sessionId, dayCount, user, alive);
                     break;
                 case 'web':
-                    webmessages.sendNightPhase(io, sessionId, dayCount, user, users);
+                    webmessages.sendNightPhase(io, sessionId, dayCount, user, alive);
+                    break;
+            }
+        }
+
+        for (var i = 0; i < dead.length; i++) {
+            var user = dead[i];
+            switch (user.type) {
+                case 'facebook':
+                    fbmessages.sendNightPhase(sessionId, dayCount, user, []);
+                    break;
+                case 'web':
+                    webmessages.sendNightPhase(io, sessionId, dayCount, user, []);
                     break;
             }
         }
