@@ -178,7 +178,8 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
     };
 
     $scope.chatColor = function (msg) {
-        var alias = msg.alias;
+        var index = msg.alias.indexOf(' ');
+        var alias = (index === -1) ? msg.alias : msg.alias.substring(0, index);
         var style = {};
         if (userColors[alias]) {
             style['background-color'] = userColors[alias];
