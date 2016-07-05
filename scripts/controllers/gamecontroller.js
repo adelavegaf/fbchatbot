@@ -117,7 +117,10 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
 
     $scope.sendMessage = function (keyEvent) {
         if (keyEvent.which === 13 && $scope.message.text.length > 0) {
-            socket.emit('user:msg', $scope.message.text);
+            socket.emit('user:msg', {
+                alias: $scope.currentUser.alias,
+                text: $scope.message.text
+            });
             $scope.message.text = '';
         }
     };
@@ -199,9 +202,9 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
     });
 
     socket.on('user:msg', function (data) {
-        var parseData = data.text.split(': ');
-        var alias = (parseData.length > 1) ? parseData[0] : $scope.currentUser.alias;
-        var text = (parseData.length > 1) ? parseData[1] : parseData[0];
+        var split = data.text.indexOf(': ');
+        var alias = data.text.substring(0, split);
+        var text = data.text.substring(split + 2);
         addMessage(alias, text);
     });
 

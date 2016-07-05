@@ -23,9 +23,9 @@ module.exports = {
         });
 
         socket.on('user:msg', function (msg) {
-            if (server.parseWebMessage(socket.id, msg)) {
+            if (server.parseWebMessage(socket.id, msg.text)) {
                 socket.emit('user:msg', {
-                    text: msg
+                    text: msg.alias + ': ' + msg.text
                 });
             }
         });
