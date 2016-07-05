@@ -203,6 +203,7 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
         }
         if ($scope.phase === 'Voting') {
             clearEligible($scope.aliveUsers);
+            setPlayersMessage($scope.aliveUsers, '');
         }
 
         clearClicks($scope.aliveUsers);
@@ -325,7 +326,7 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
         actionProperties = data;
         $scope.phase = 'Voting';
         var targetUsers = matchTargetUsers(actionProperties.targets, $scope.aliveUsers);
-        setPlayersMessage(targetUsers, 'click to vote');
+        setPlayersMessage(targetUsers, 'vote');
     });
 
     socket.on('game:alive', function (data) {
@@ -338,16 +339,19 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
 
     socket.on('game:action', function (data) {
         showAlert('Game', data.text);
+        addMessage('Game', data.text);
     });
 
     socket.on('game:kill', function (data) {
         showAlert('Game', data.text);
+        addMessage('Game', data.text);
     });
 
     socket.on('vote:accept', function (data) {
         socket.emit('game:alive', {});
         socket.emit('game:dead', {});
         showAlert('Game', data.text);
+        addMessage('Game', data.text);
     });
 
     socket.on('vote:denied', function (data) {
@@ -359,4 +363,4 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
     });
 
     initVariables();
-            }]);
+}]);
