@@ -10,7 +10,8 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
     var userColors;
     var chatColors;
     var loadingMsgs;
-    $scope.message;    $scope.playersInGame;
+    $scope.message;
+    $scope.playersInGame;
     $scope.messages;
     $scope.aliveUsers;
     $scope.deadUsers;
@@ -264,6 +265,8 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
     socket.on('user:exit', function (data) {
         $scope.playersInGame--;
         addMessage('Game', data.text);
+        socket.emit('game:alive', {});
+        socket.emit('game:dead', {});
     });
 
     socket.on('game:reveal', function (data) {
@@ -326,12 +329,10 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
     });
 
     socket.on('game:alive', function (data) {
-        setPlayersMessage(data.users, 'Alive');
         $scope.aliveUsers = data.users;
     });
 
     socket.on('game:dead', function (data) {
-        setPlayersMessage(data.users, 'Dead');
         $scope.deadUsers = data.users;
     });
 
