@@ -279,7 +279,7 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
         status = 'playing';
         durations = data.durations;
         var delay = durations.startGameDelay / 1000;
-        addMessage('Game', 'The game will start in ' + delay + ' seconds');
+        addMessage('Game', 'The game will start in ' + delay + ' seconds.');
         $timeout(gameStartMessage, durations.startGameDelay);
     });
 
