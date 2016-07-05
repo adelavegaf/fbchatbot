@@ -49,7 +49,7 @@
             <div flex="40"></div>
             <div flex="5" layout="column" layout-align="center center">
                 <md-progress-circular md-mode="indeterminate"></md-progress-circular>
-                <h6>waiting for players...</h6>
+                <h6 class="fade" ng-if="loadingStatus() && (isConnecting() || isConnected())">{{loadingMsg}}</h6>
             </div>
             <div flex="55"></div>
         </div>

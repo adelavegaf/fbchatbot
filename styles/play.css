@@ -52,6 +52,16 @@
     opacity: 1;
 }
 
+.fade.ng-leave {
+    transition: 0.5s linear all;
+    opacity: 1;
+}
+
+.fade.ng-leave.ng-leave-active {
+    transition: 0.5s linear all;
+    opacity: 0;
+}
+
 #message-container {
     height: 74vh;
     width: 100%;

@@ -6,10 +6,11 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
     var sessionId;
     var durations;
     var counterTimeout;
+    var loadingTimeout;
     var userColors;
     var chatColors;
-    $scope.message;
-    $scope.playersInGame;
+    var loadingMsgs;
+    $scope.message;    $scope.playersInGame;
     $scope.messages;
     $scope.aliveUsers;
     $scope.deadUsers;
@@ -17,22 +18,30 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
     $scope.phase;
     $scope.dayCount;
     $scope.counter;
+    $scope.loadingMsg;
 
     function initVariables() {
         status = 'disconnected';
         actionProperties = {};
         sessionId = -1;
         durations = {};
+        counterTimeout = {};
+        loadingTimeout = {};
         userColors = {
             Game: '#ff6666'
         };
+        loadingMsgs = {
+            init: 'waiting for players',
+            status: 'players in lobby: '
+        };
         chatColors = ['#d9ff66', '#cc99ff', '#ffcc66', '#cceeff', '#ffccff', '#ffff80', '#ccffcc'];
-        $scope.playersInGame = 0;
+        $scope.playersInGame = 1;
         $scope.messages = [];
         $scope.aliveUsers = [];
         $scope.deadUsers = [];
         $scope.currentUser = {};
-        $scope.phase = "";
+        $scope.phase = '';
+        $scope.loadingMsg = ' ';
         $scope.dayCount = 0;
         $scope.counter = 0;
         $scope.message = {
@@ -89,8 +98,32 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
         counterTimeout = $timeout(onCounterTimeout, 1000);
     }
 
+    function setLoadingMessage(msg) {
+        if (msg === loadingMsgs.init) {
+            $scope.loadingMsg = loadingMsgs.status + $scope.playersInGame;
+        } else {
+            $scope.loadingMsg = loadingMsgs.init;
+        }
+        loadingTimeout = $timeout(toggleLoadingMessage, 3000);
+    }
+
+    function clearLoadingMessage(prevMsg) {
+        $scope.loadingMsg = ' ';
+        loadingTimeout = $timeout(function () {
+            setLoadingMessage(prevMsg);
+        }, 510);
+    }
+
+    function toggleLoadingMessage() {
+        clearLoadingMessage($scope.loadingMsg);
+    }
+
     function cancelCounterTimeout() {
         $timeout.cancel(counterTimeout);
+    }
+
+    function cancelLoadingTimeout() {
+        $timeout.cancel(loadingTimeout);
     }
 
     function gameStartMessage() {
@@ -141,6 +174,10 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
         return status === 'playing';
     };
 
+    $scope.loadingStatus = function () {
+        return $scope.loadingMsg !== ' ';
+    };
+
     $scope.hasRole = function () {
         return typeof $scope.currentUser.role !== 'undefined';
     };
@@ -152,6 +189,8 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
     $scope.connect = function () {
         status = 'connecting';
         socket.emit('user:join', {});
+        $scope.loadingMsg = loadingMsgs.init;
+        toggleLoadingMessage();
     };
 
     $scope.userClick = function (user) {
@@ -232,6 +271,7 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
     });
 
     socket.on('game:start', function (data) {
+        cancelLoadingTimeout();
         status = 'playing';
         durations = data.durations;
         var delay = durations.startGameDelay / 1000;
@@ -318,4 +358,4 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
     });
 
     initVariables();
-}]);
+            }]);
