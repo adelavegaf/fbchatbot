@@ -4,8 +4,6 @@ var rolemanager = require('./rolemanager');
 
 // private
 var sendMsg = function (io, id, eventName, obj) {
-    console.log(eventName + " " + id);
-    //io.sockets.sockets[id].emit(eventName, obj);
     io.sockets.to(id).emit(eventName, obj);
 };
 
