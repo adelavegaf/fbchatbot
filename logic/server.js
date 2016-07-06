@@ -367,14 +367,14 @@ var callGameAction = function (id, properties, type) {
     return true;
 };
 // private
-var createProperties = function (arr) {
+var createProperties = function (id, array) {
     var sessionId = activeUsers[id];
     var properties = {
-        action: optionArray[0],
+        action: array[0],
         from: id,
-        to: optionArray[1],
+        to: array[1],
         sessionId: sessionId,
-        dayCount: parseInt(optionArray[3], 10)
+        dayCount: parseInt(array[3], 10)
     };
     return properties;
 };
@@ -397,8 +397,8 @@ var parsePayload = function (id, payload) {
             return help(id);
             break;
         default:
-            properties = createProperties(optionArray);
-            return callGameAction(userId, properties, 'facebook');
+            properties = createProperties(id, optionArray);
+            return callGameAction(id, properties, 'facebook');
             break;
     }
 };
