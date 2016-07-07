@@ -57,7 +57,7 @@ module.exports = {
         for (var i = 0; i < users.length; i++) {
             simplifiedUsers.push({
                 name: users[i].name,
-                role: users[i].role,
+                role: (typeof users[i].originalRole === 'undefined') ? users[i].role : users[i].originalRole,
                 id: users[i].id
             });
         }

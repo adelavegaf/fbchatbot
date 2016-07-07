@@ -253,8 +253,12 @@ module.exports = {
     },
     revealRole: function (user, users) {
         var title = 'game:reveal';
-        var text = `${user.name} role was ${user.role}`
+        var text = `${user.name} role was ${user.role}`;
         broadcastMsg(users, title, text);
+    },
+    updateRole: function (user, text) {
+        var title = 'game:update';
+        personalMsg(user.id, user.type, title, text);
     },
     roleAction: function (user, text) {
         var title = 'game:action';

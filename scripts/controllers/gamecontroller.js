@@ -342,6 +342,13 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
         showAlert('Game', data.text);
     });
 
+    socket.on('game:update', function (data) {
+        addMessage('Game', data.text);
+        $scope.currentUser.role = 'Mafia Boss';
+        $scope.currentUser.actionName = 'Kill';
+        showAlert('Game', data.text);
+    });
+
     socket.on('game:kill', function (data) {
         addMessage('Game', data.text);
         showAlert('Game', data.text);

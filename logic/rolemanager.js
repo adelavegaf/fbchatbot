@@ -295,20 +295,22 @@ var getRole = function (role) {
  * pre: Mafia Boss should be dead.
  * post: Searches within mafia for the new mafia boss.
  */
-var findNewMafiaBoss = function (exBoss, mafiosos, messagemanager) {
+var findNewMafiaBoss = function (mafiosos, messagemanager) {
     for (var i = 0; i < mafiosos.length; i++) {
-        if (mafiosos[i].role === 'Mafioso' && mafiosos[i].state === 'alive') {
-            mafiosos[i].role = 'Mafia Boss';
-            messagemanager.roleAction(mafiosos[i], 'You are now the Mafia Boss');
-            exBoss.role = 'Ex Mafia Boss';
+        var mafioso = mafiosos[i];
+        if (mafioso.role === 'Mafioso' && mafioso.state === 'alive') {
+            mafioso.originalRole = 'Mafioso';
+            mafioso.role = 'Mafia Boss';
+            messagemanager.updateRole(mafioso, 'You are now the Mafia Boss');
             return true;
         }
     }
     for (var i = 0; i < mafiosos.length; i++) {
-        if (mafiosos[i].role === 'Fixer' && mafiosos[i].state === 'alive') {
-            mafiosos[i].role = 'Mafia Boss';
-            messagemanager.roleAction(mafiosos[i], 'You are now the Mafia Boss');
-            exBoss.role = 'Ex Mafia Boss';
+        var mafioso = mafiosos[i];
+        if (mafioso.role === 'Fixer' && mafioso.state === 'alive') {
+            mafioso.originalRole = 'Fixer';
+            mafioso.role = 'Mafia Boss';
+            messagemanager.updateRole(mafioso, 'You are now the Mafia Boss');
             return true;
         }
     }

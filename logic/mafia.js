@@ -116,7 +116,7 @@ var afterVotePhase = function (session) {
         messagemanager.voteAccepted(session.users, session.votedUser);
         if (session.votedUser.role === 'Mafia Boss') {
             var mafiosos = getUsersInMafia(session.users);
-            rolemanager.findNewMafiaBoss(session.votedUser, mafiosos, messagemanager);
+            rolemanager.findNewMafiaBoss(mafiosos, messagemanager);
         }
         return true;
     }
@@ -187,7 +187,7 @@ var afterNightPhase = function (session) {
             users[i].state = 'alive';
         } else if (users[i].state === 'dead' && users[i].role === 'Mafia Boss') {
             var mafiosos = getUsersInMafia(users);
-            rolemanager.findNewMafiaBoss(users[i], mafiosos, messagemanager);
+            rolemanager.findNewMafiaBoss(mafiosos, messagemanager);
         }
     }
 };
