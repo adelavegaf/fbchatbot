@@ -366,7 +366,10 @@ var callGameAction = function (id, properties, type) {
     mafia.gameAction(session, properties);
     return true;
 };
-// private
+
+/**
+ * Parses the array to the format the server recognizes.
+ */
 var createProperties = function (id, array) {
     var sessionId = activeUsers[id];
     var properties = {

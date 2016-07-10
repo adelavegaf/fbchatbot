@@ -148,7 +148,8 @@ describe('Server operations', function () {
 
     it('User should be able to call a gameAction. invalid action stamp', function () {
         server.joinSession(1, 'facebook');
-        expect(server.callGameAction(1, ['norole', '1', '0', '11'])).to.equal(true);
+        var properties = server.createProperties(1, ['norole', '1', '0', '11']);
+        expect(server.callGameAction(1, properties, 'facebook')).to.equal(true);
     });
 
     it('The user should join a session using a payload that contains join', function () {

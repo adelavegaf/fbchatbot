@@ -128,10 +128,9 @@ describe('Role manager: ', function () {
             role: 'Mafioso',
             state: 'alive'
         }];
-        var exBoss = {};
-        expect(rolemanager.findNewMafiaBoss(exBoss, mafiosos, messagemanager)).to.equal(true);
+        expect(rolemanager.findNewMafiaBoss(mafiosos, messagemanager)).to.equal(true);
         expect(mafiosos[1].role).to.equal('Mafia Boss');
-        expect(exBoss.role).to.equal('Ex Mafia Boss');
+        expect(mafiosos[1].originalRole).to.equal('Mafioso');
     });
 
     it('Fixer should become the new mafia boss', function () {
@@ -144,10 +143,9 @@ describe('Role manager: ', function () {
             role: 'Fixer',
             state: 'alive'
         }];
-        var exBoss = {};
-        expect(rolemanager.findNewMafiaBoss(exBoss, mafiosos, messagemanager)).to.equal(true);
+        expect(rolemanager.findNewMafiaBoss(mafiosos, messagemanager)).to.equal(true);
         expect(mafiosos[1].role).to.equal('Mafia Boss');
-        expect(exBoss.role).to.equal('Ex Mafia Boss');
+        expect(mafiosos[1].originalRole).to.equal('Fixer');
     });
 
     it('There should be no new mafia boss', function () {
