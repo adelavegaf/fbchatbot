@@ -3,7 +3,6 @@ var server = require('./server');
 // public
 module.exports = {
     socketEvents: function (socket) {
-
         socket.on('user:join', function (msg) {
             var sessionId = server.getSessionId();
             server.webJoin(socket);
