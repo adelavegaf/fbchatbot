@@ -20,6 +20,7 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
     $scope.dayCount;
     $scope.counter;
     $scope.loadingMsg;
+    $scope.showDescription;
 
     function initVariables() {
         status = 'disconnected';
@@ -36,6 +37,7 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
             status: 'players in lobby: '
         };
         chatColors = ['#d9ff66', '#cc99ff', '#ffcc66', '#cceeff', '#ffccff', '#ffff80', '#ccffcc'];
+        $scope.showDescription = false;
         $scope.playersInGame = 1;
         $scope.messages = [];
         $scope.aliveUsers = [];
@@ -185,6 +187,10 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
 
     $scope.isGameActive = function () {
         return $scope.phase.length > 0;
+    };
+
+    $scope.toggleDescription = function () {
+        $scope.showDescription = !$scope.showDescription;
     };
 
     $scope.connect = function () {

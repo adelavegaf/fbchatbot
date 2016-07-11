@@ -88,20 +88,6 @@
 
     <div flex="20" layout="column">
 
-        <div class="fade" flex="20" ng-if="hasRole()">
-            <md-card>
-                <md-card-header>
-                    <md-card-avatar>
-                        <img ng-src="../images/{{currentUser.alias.toLowerCase()}}.svg" alt="" class="md-user-avatar" />
-                    </md-card-avatar>
-                    <md-card-header-text>
-                        <span class="md-title">{{currentUser.alias}}</span>
-                        <span class="md-subhead">{{currentUser.role}}</span>
-                    </md-card-header-text>
-                </md-card-header>
-            </md-card>
-        </div>
-
         <div class="fade" flex="20" ng-if="isGameActive()">
             <md-card>
                 <md-card-header>
@@ -118,11 +104,31 @@
                 </md-card-header>
             </md-card>
         </div>
-        <div class="fade" flex="60" ng-if="isGameActive()">
-            <md-card flex>
 
+        <div class="fade" flex="80" ng-if="isGameActive()">
+            <md-card>
+                <md-card-header>
+                    <md-card-avatar>
+                        <img ng-src="../images/{{currentUser.alias.toLowerCase()}}.svg" alt="" class="md-user-avatar" />
+                    </md-card-avatar>
+                    <md-card-header-text>
+                        <span class="md-title">{{currentUser.alias}}</span>
+                        <span class="md-subhead">{{currentUser.role}}</span>
+                    </md-card-header-text>
+                    <div flex="20" layout="column" layout-align="center center" ng-if="!showDescription" ng-click="toggleDescription()">
+                        <span class="glyphicon glyphicon-menu-down"></span>
+                    </div>
+                    <div flex="20" layout="column" layout-align="center center" ng-if="showDescription" ng-click="toggleDescription()">
+                        <span class="glyphicon glyphicon-menu-up"></span>
+                    </div>
+                </md-card-header>
+                <md-card-content class="role-description" ng-if="showDescription">
+                    <p>You belong to the {{currentUser.alliance}}.</p>
+                    <p>{{currentUser.roleDescription}}</p>
+                </md-card-content>
             </md-card>
         </div>
+
     </div>
     <div flex="5"></div>
 </div>

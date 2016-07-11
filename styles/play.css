@@ -100,6 +100,14 @@ md-card md-card-content {
     color: #00D9A3;
 }
 
+.glyphicon-menu-down {
+    color: rgba(0, 0, 0, 0.54);
+}
+
+.glyphicon-menu-up {
+    color: rgba(0, 0, 0, 0.54);
+}
+
 md-list.md-default-theme md-list-item.md-2-line .md-list-item-text p,
 md-list md-list-item.md-2-line .md-list-item-text p,
 md-list.md-default-theme md-list-item.md-3-line .md-list-item-text p,
@@ -124,6 +132,10 @@ md-list-item.md-2-line>.md-no-style {
 .counter {
     color: rgba(0, 0, 0, 0.54);
     font-size: 14px;
+}
+
+.role-description {
+    color: rgba(0, 0, 0, 0.54);
 }
 
 #player-status-title {
