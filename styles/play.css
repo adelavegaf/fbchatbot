@@ -107,6 +107,11 @@ md-list md-list-item.md-3-line .md-list-item-text p {
     color: rgba(0, 0, 0, 0.54);
 }
 
+md-list-item.md-2-line,
+md-list-item.md-2-line>.md-no-style {
+    min-height: 70px !important;
+}
+
 .chat-msg {
     word-break: break-all;
     border-bottom-left-radius: 8px;
