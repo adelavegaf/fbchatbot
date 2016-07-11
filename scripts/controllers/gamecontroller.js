@@ -189,6 +189,10 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
         return $scope.phase.length > 0;
     };
 
+    $scope.isOwnMessage = function (message) {
+        return $scope.currentUser.alias === message.alias;
+    };
+
     $scope.toggleDescription = function () {
         $scope.showDescription = !$scope.showDescription;
     };
