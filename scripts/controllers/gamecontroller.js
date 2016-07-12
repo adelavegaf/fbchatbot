@@ -21,6 +21,7 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
     $scope.counter;
     $scope.loadingMsg;
     $scope.showDescription;
+    $scope.roles;
 
     function initVariables() {
         status = 'disconnected';
@@ -37,11 +38,12 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
             status: 'players in lobby: '
         };
         chatColors = ['#d9ff66', '#cc99ff', '#ffcc66', '#cceeff', '#ffccff', '#ffff80', '#ccffcc'];
-        $scope.showDescription = false;
+        $scope.showDescription = true;
         $scope.playersInGame = 1;
         $scope.messages = [];
         $scope.aliveUsers = [];
         $scope.deadUsers = [];
+        $scope.roles = [];
         $scope.currentUser = {};
         $scope.phase = '';
         $scope.loadingMsg = ' ';
@@ -115,6 +117,12 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
         loadingTimeout = $timeout(function () {
             setLoadingMessage(prevMsg);
         }, 510);
+    }
+
+    function refreshGameStatus() {
+        socket.emit('game:alive', {});
+        socket.emit('game:dead', {});
+        socket.emit('game:roles', {});
     }
 
     function toggleLoadingMessage() {
@@ -240,6 +248,10 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
         return style;
     };
 
+    $scope.getRoleImage = function (role) {
+        return (role.name) ? role.name.toLowerCase() : 'avatar';
+    };
+
     socket.on('init', function (data) {
         $scope.playersInGame = data.playersInGame;
         sessionId = data.sessionId;
@@ -276,8 +288,7 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
     socket.on('user:exit', function (data) {
         $scope.playersInGame--;
         addMessage('Game', data.text);
-        socket.emit('game:alive', {});
-        socket.emit('game:dead', {});
+        refreshGameStatus();
     });
 
     socket.on('game:reveal', function (data) {
@@ -324,8 +335,7 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
         counterTimeout = $timeout(onCounterTimeout, 1000);
         $scope.phase = 'Day';
         $scope.dayCount = data.dayCount;
-        socket.emit('game:alive', {});
-        socket.emit('game:dead', {});
+        refreshGameStatus();
     });
 
     socket.on('game:voting', function (data) {
@@ -347,6 +357,10 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
         $scope.deadUsers = data.users;
     });
 
+    socket.on('game:roles', function (data) {
+        $scope.roles = data.roles;
+    });
+
     socket.on('game:action', function (data) {
         addMessage('Game', data.text);
         showAlert('Game', data.text);
@@ -365,8 +379,7 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
     });
 
     socket.on('vote:accept', function (data) {
-        socket.emit('game:alive', {});
-        socket.emit('game:dead', {});
+        refreshGameStatus();
         addMessage('Game', data.text);
         showAlert('Game', data.text);
     });

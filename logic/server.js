@@ -228,6 +228,18 @@ var role = function (id) {
 };
 
 /**
+ * Sends to user with id all roles that are in current game session.
+ */
+var roles = function (id) {
+    if (!hasActiveSession(id)) {
+        messagemanager.noGameError(id, 'facebook');
+        return false;
+    }
+    mafia.sendRoles(sessions[activeUsers[id]], id);
+    return true;
+};
+
+/**
  * Sends a msg to user with id about
  * the people that are currently alive.
  */
@@ -304,6 +316,9 @@ var parseFbMessage = function (userId, text) {
             break;
         case '.role':
             role(userId);
+            break;
+        case '.roles':
+            roles(userId);
             break;
         case '.alive':
             alive(userId, 'facebook');
@@ -431,6 +446,7 @@ var server = {
     exit: exit,
     help: help,
     role: role,
+    roles: roles,
     alive: alive,
     dead: dead,
     cleanSession: cleanSession,

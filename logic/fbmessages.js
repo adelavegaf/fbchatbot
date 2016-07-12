@@ -204,6 +204,20 @@ var sendHelp = function (userId) {
 };
 
 /**
+ * Send a text message with all the roles of the users
+ * in the game session.
+ */
+var sendRoles = function (userId, roles) {
+    var text = 'Roles:\n';
+    for (var i = 0; i < roles.length; i++) {
+        text += roles[i].role + ' - ';
+        text += (roles[i].revealed) ? roles[i].name : 'Not revealed';
+        text += '\n';
+    }
+    sendText(userId, text);
+};
+
+/**
  * Generates the elements needed to send a structured message
  * that displays the name of all the users that are alive
  * as buttons.
@@ -322,6 +336,7 @@ var messages = {
     sendDayPhase: sendDayPhase,
     sendUserForm: sendUserForm,
     sendHelp: sendHelp,
+    sendRoles: sendRoles,
     sendStartHelp: sendStartHelp,
     buildUserForm: buildUserForm,
     broadcastText: broadcastText,

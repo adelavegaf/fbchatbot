@@ -34,8 +34,22 @@
                         </md-tab>
 
                         <md-tab label="Roles">
-                            <md-content>
-                                Info
+                            <md-content class="auto-overflow" flex>
+                                <md-list layout="column" flex>
+                                    <md-list-item class="md-2-line" ng-repeat="role in roles" ng-click="null">
+                                        <img ng-src="../images/{{getRoleImage(role)}}.svg" class="md-avatar" alt="" />
+                                        <div class="md-list-item-text" layout="row">
+                                            <div flex="80" layout="column">
+                                                <h5>{{role.role}}</h5>
+                                                <p ng-if="role.revealed">{{role.name}}</p>
+                                            </div>
+                                            <div flex="20" layout="column" layout-align="center center">
+                                                <span class="glyphicon glyphicon-ok" ng-if="role.revealed"></span>
+                                                <span class="glyphicon glyphicon-remove" ng-if="!role.revealed"></span>
+                                            </div>
+                                        </div>
+                                    </md-list-item>
+                                </md-list>
                             </md-content>
                         </md-tab>
                     </md-tabs>

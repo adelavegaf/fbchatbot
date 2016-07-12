@@ -57,6 +57,16 @@ module.exports = {
                 break;
         }
     },
+    roles: function (user, roles) {
+        switch (user.type) {
+            case 'facebook':
+                fbmessages.sendRoles(user.id, roles);
+                break;
+            case 'web':
+                webmessages.sendRoles(io, user.id, roles);
+                break;
+        }
+    },
     role: function (user) {
         switch (user.type) {
             case 'facebook':

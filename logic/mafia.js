@@ -342,6 +342,46 @@ var sendRoleInfo = function (session, userId) {
 };
 
 /**
+ * Determines if otherUser's role should be revealed to referenceUser.
+ */
+function shouldRevealRole(referenceUser, otherUser) {
+    var referenceAlliance = rolemanager.getRole(referenceUser.role).alliance;
+    var otherAlliance = rolemanager.getRole(otherUser.role).alliance;
+
+    if (referenceUser === otherUser) {
+        return true;
+    } else if (referenceAlliance === 'mafia' && otherAlliance === 'mafia') {
+        return true;
+    } else if (otherUser.state === 'dead' || otherUser.state === 'disconnected') {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
+ * Sends a particular user with userId the information about all the roles
+ * that are in play in the current game session. Reveals which user has which role
+ * if conditions are met.
+ */
+var sendRoles = function (session, userId) {
+    var roles = [];
+    var referenceUser = getUserFromId(session, userId);
+    var completeUsers = session.users.concat(session.disconnected);
+    for (var i = 0; i < completeUsers.length; i++) {
+        var otherUser = completeUsers[i];
+        var role = {};
+        role.role = (typeof otherUser.originalRole === 'undefined') ? otherUser.role : otherUser.originalRole;
+        role.revealed = shouldRevealRole(referenceUser, otherUser);
+        if (role.revealed) {
+            role.name = otherUser.name;
+        }
+        roles.push(role);
+    }
+    messagemanager.roles(referenceUser, roles);
+};
+
+/**
  * Sends a particular user dead users info.
  */
 var sendDeadInfo = function (session, userId) {
@@ -381,7 +421,7 @@ var assignRoles = function (users) {
  * Initiates a new game by setting up roles and timeouts.
  */
 var startGame = function (session) {
-    assignRoles(session.users);
+    session.roles = assignRoles(session.users);
     messagemanager.notifyRoles(session.users);
     setTimeout(function () {
         gameStates(session);
@@ -432,6 +472,7 @@ var mafia = {
     gameStates: gameStates,
     getRandomInt: getRandomInt,
     sendRoleInfo: sendRoleInfo,
+    sendRoles: sendRoles,
     sendDeadInfo: sendDeadInfo,
     sendAliveInfo: sendAliveInfo,
     assignRoles: assignRoles,

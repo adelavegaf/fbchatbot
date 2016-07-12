@@ -100,6 +100,10 @@ md-card md-card-content {
     color: #00D9A3;
 }
 
+.glyphicon-remove {
+    color: crimson;
+}
+
 .glyphicon-menu-down {
     color: rgba(0, 0, 0, 0.54);
 }

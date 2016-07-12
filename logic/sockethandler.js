@@ -21,6 +21,10 @@ module.exports = {
             server.dead(socket.id, 'web');
         });
 
+        socket.on('game:roles', function (msg) {
+            server.roles(socket.id);
+        });
+
         socket.on('user:msg', function (msg) {
             if (server.parseWebMessage(socket.id, msg.text)) {
                 socket.emit('user:msg', {

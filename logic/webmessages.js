@@ -45,6 +45,12 @@ module.exports = {
         };
         sendMsg(io, id, 'user:role', obj);
     },
+    sendRoles: function (io, id, roles) {
+        var obj = {
+            roles: roles
+        };
+        sendMsg(io, id, 'game:roles', obj);
+    },
     sendAliveInfo: function (io, id, users) {
         var simplifiedUsers = simplifyUsers(users);
         var obj = {
