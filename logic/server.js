@@ -202,8 +202,10 @@ var exit = function (id, type) {
     var user = session.users.splice(findUserIndex(session, id), 1);
     delete activeUsers[id];
     messagemanager.notifyExit(session.users);
-    session.disconnected.push(user[0]);
-    mafia.revealRole(user, session);
+    if (session.state !== 'connecting') {
+        session.disconnected.push(user[0]);
+        mafia.revealRole(user, session);
+    }
     return true;
 };
 

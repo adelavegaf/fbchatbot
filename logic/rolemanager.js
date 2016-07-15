@@ -167,7 +167,7 @@ var roles = {
     'Fixer': {
         'id': 3,
         'alliance': 'mafia',
-        'description': 'Help out a fellow mobster by cleaning his problems',
+        'description': 'Disguise a mobster as a town member by switching his role at night.',
         'nightinfo': 'Your target will appear as a member of the town and not mafia.',
         'init': function (user) {
             user.fixed = 2;

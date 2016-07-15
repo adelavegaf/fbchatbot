@@ -287,8 +287,10 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
 
     socket.on('user:exit', function (data) {
         $scope.playersInGame--;
-        addMessage('Game', data.text);
-        refreshGameStatus();
+        if ($scope.phase.length > 0) {
+            addMessage('Game', data.text);
+            refreshGameStatus();
+        }
     });
 
     socket.on('game:reveal', function (data) {
@@ -375,13 +377,11 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
 
     socket.on('game:kill', function (data) {
         addMessage('Game', data.text);
-        showAlert('Game', data.text);
     });
 
     socket.on('vote:accept', function (data) {
         refreshGameStatus();
         addMessage('Game', data.text);
-        showAlert('Game', data.text);
     });
 
     socket.on('vote:denied', function (data) {

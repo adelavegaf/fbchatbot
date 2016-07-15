@@ -281,7 +281,9 @@ var votingPhase = function (session) {
     messagemanager.notifyVotePhase(alive, dead, session.sessionId, session.dayCount);
     setTimeout(function () {
         afterVotePhase(session);
-        nightPhase(session);
+        if (!checkGameEnd(session)) {
+            nightPhase(session);
+        }
     }, votingDuration);
 };
 /**
@@ -293,7 +295,9 @@ var dayPhase = function (session) {
     session.state = 'day';
     messagemanager.notifyDayPhase(session.users, session.dayCount);
     setTimeout(function () {
-        votingPhase(session);
+        if (!checkGameEnd(session)) {
+            votingPhase(session);
+        }
     }, dayDuration);
 };
 /**
@@ -421,8 +425,9 @@ var assignRoles = function (users) {
  * Initiates a new game by setting up roles and timeouts.
  */
 var startGame = function (session) {
-    session.roles = assignRoles(session.users);
+    session.roles = assignRoles(session.users.concat(session.disconnected));
     messagemanager.notifyRoles(session.users);
+    session.state = 'starting';
     setTimeout(function () {
         gameStates(session);
     }, startGameDelay);
