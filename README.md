@@ -15,3 +15,4 @@ npm test
   
 ### Notes:  
   *Make sure you have npm installed on your computer.  
+  *Developed using AngularJS, NodeJS, SocketIO, Express, and Facebook Messenger API.
