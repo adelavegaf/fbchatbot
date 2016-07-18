@@ -1,20 +1,20 @@
-<section class="white-panel" layout="row" flex>
-    <div layout="column">
-        <md-sidenav class="md-sidenav-left" md-component-id="left" md-is-locked-open="true" md-disable-backdrop md-whiteframe="4" layout="column" flex="100">
-            <md-toolbar class="md-theme-indigo" flex="10">
-                <h1 class="md-toolbar-tools">About</h1>
+<md-content layout="column" flex="100" layout-align="end stretch" layout-fill>
+    <div layout-fill flex="90"></div>
+    <div flex="10">
+        <md-fab-toolbar md-direction="left">
+            <md-fab-trigger>
+                <md-button aria-label="menu" class="md-fab md-primary">
+                    <span class="glyphicon glyphicon-menu-hamburger"></span>
+                </md-button>
+            </md-fab-trigger>
+            <md-toolbar flex="100">
+                <md-fab-actions class="md-toolbar-tools">
+                    <md-button aria-label="play">Play</md-button>
+                    <md-button aria-label="gameplay">Gameplay</md-button>
+                    <md-button aria-label="roles">Roles</md-button>
+                    <md-button aria-label="development">Development</md-button>
+                </md-fab-actions>
             </md-toolbar>
-            <md-content layout-padding flex>
-                <h1>Game</h1>
-                <h1>Web</h1>
-                <h1>Facebook</h1>
-                <h1>Development</h1>
-            </md-content>
-        </md-sidenav>
+        </md-fab-toolbar>
     </div>
-    <md-content flex>
-        <div layout="column" layout-fill flex>
-            <p>Info goes here</p>
-        </div>
-    </md-content>
-</section>
+</md-content>
