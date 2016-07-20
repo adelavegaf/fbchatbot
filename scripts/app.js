@@ -11,10 +11,11 @@ angular.module('mafiaApp', ['ui.router', 'ngResource', 'ngAnimate', 'ngMaterial'
                         controller: 'HeaderController'
                     },
                     'content': {
-                        templateUrl: 'views/home.html',
+                        templateUrl: 'views/home.html'
                     },
                     'footer': {
                         templateUrl: 'views/footer.html',
+                        controller: 'FooterController'
                     }
                 }
 
@@ -28,11 +29,27 @@ angular.module('mafiaApp', ['ui.router', 'ngResource', 'ngAnimate', 'ngMaterial'
                     }
                 }
             })
-            .state('mafia.about', {
-                url: 'about',
+            .state('mafia.gameplay', {
+                url: 'gameplay',
                 views: {
                     'content@': {
-                        templateUrl: 'views/about.html',
+                        templateUrl: 'views/gameplay.html',
+                    }
+                }
+            })
+            .state('mafia.roles', {
+                url: 'roles',
+                views: {
+                    'content@': {
+                        templateUrl: 'views/roles.html',
+                    }
+                }
+            })
+            .state('mafia.development', {
+                url: 'development',
+                views: {
+                    'content@': {
+                        templateUrl: 'views/development.html',
                     }
                 }
             });

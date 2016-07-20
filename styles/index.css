@@ -1,4 +1,8 @@
+html {
+    background: #F5F8FA !important;
+}
+
 body {
-    background-color: #F5F8FA;
+    background: #F5F8FA !important;
     font-family: Roboto, "Helvetica Neue", sans-serif !important;
 }
