@@ -103,7 +103,7 @@
                 <form name="messageForm">
                     <md-input-container layout="row" flex>
                         <label flex>{{currentUser.alias}}: </label>
-                        <input name="messaging" ng-model="message.text" ng-keypress="sendMessage($event)" maxlength="140" flex>
+                        <input name="messaging" ng-model="message.text" ng-keypress="sendMessage($event)" maxlength="140" ng-disabled="!canChat()" flex>
                     </md-input-container>
                 </form>
             </div>

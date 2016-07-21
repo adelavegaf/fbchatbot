@@ -54,6 +54,13 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
         };
     }
 
+    function setCurrentUserState(text) {
+        var deadAlias = text.match(/[a-z]+/i)[0];
+        if (deadAlias === $scope.currentUser.alias) {
+            $scope.currentUser.state = 'dead';
+        }
+    }
+
     function clearClicks(players) {
         for (var i = 0; i < players.length; i++) {
             players[i].clicked = false;
@@ -248,6 +255,16 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
         return style;
     };
 
+    $scope.canChat = function () {
+        if ($scope.currentUser.state === 'alive' && $scope.phase === 'Voting') {
+            return false;
+        }
+        if ($scope.currentUser.state === 'alive' && $scope.phase === 'Night' && $scope.currentUser.alliance !== 'mafia') {
+            return false;
+        }
+        return true;
+    };
+
     $scope.getRoleImage = function (role) {
         return (role.name) ? role.name.toLowerCase() : 'avatar';
     };
@@ -280,7 +297,7 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
         $scope.currentUser.alliance = data.alliance;
         $scope.currentUser.nightinfo = data.nightinfo;
         $scope.currentUser.roleDescription = data.description;
-
+        $scope.currentUser.state = 'alive';
         var msg = 'You have been assigned the name ' + data.name + ' and the role ' + data.role + '.';
         addMessage('Game', msg);
     });
@@ -377,11 +394,13 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
 
     socket.on('game:kill', function (data) {
         addMessage('Game', data.text);
+        setCurrentUserState(data.text);
     });
 
     socket.on('vote:accept', function (data) {
         refreshGameStatus();
         addMessage('Game', data.text);
+        setCurrentUserState(data.text);
     });
 
     socket.on('vote:denied', function (data) {
