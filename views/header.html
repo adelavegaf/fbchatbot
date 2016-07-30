@@ -3,21 +3,21 @@
         <span flex="5"></span>
         <h4 class="primary-text"><span>Mafia Chat Game</span></h4>
         <span flex></span>
-        <md-button class="primary-text" aria-label="gameplay" ui-sref="mafia.gameplay" layout="row" layout-align="space-between center">
+        <md-button class="primary-text" aria-label="gameplay" ui-sref="mafia.gameplay" layout="row" layout-align="space-between center" ng-click="setActive('mafia.gameplay')" ng-class="{'active-state': isActive('mafia.gameplay')}">
             <md-icon class="material-icons icon-color" flex="25">games</md-icon>
-            <span flex="75">Gameplay</span>
+            <span flex="75">gameplay</span>
         </md-button>
-        <md-button class="primary-text" aria-label="roles" ui-sref="mafia.roles" layout="row" layout-align="space-between center">
+        <md-button class="primary-text" aria-label="roles" ui-sref="mafia.roles" layout="row" layout-align="space-between center" ng-click="setActive('mafia.roles')" ng-class="{'active-state': isActive('mafia.roles')}">
             <md-icon class="material-icons icon-color" flex="25">supervisor_account</md-icon>
-            <span flex="75">Roles</span>
+            <span flex="75">roles</span>
         </md-button>
-        <md-button class="primary-text" aria-label="development" ui-sref="mafia.development" layout="row" layout-align="space-between center">
-            <md-icon class="material-icons icon-color" flex="25">laptop</md-icon>
-            <span flex="75">Development</span>
+        <md-button class="primary-text" aria-label="development" ui-sref="mafia.development" layout="row" layout-align="space-between center" ng-click="setActive('mafia.development')" ng-class="{'active-state': isActive('mafia.development')}">
+            <md-icon class="material-icons icon-color" flex="20">laptop</md-icon>
+            <span flex="80">development</span>
         </md-button>
-        <md-button class="primary-text" aria-label="play" ui-sref="mafia.play" layout="row" layout-align="space-between center">
+        <md-button class="primary-text" aria-label="play" ui-sref="mafia.play" layout="row" layout-align="space-between center" ng-click="setActive('mafia.play')" ng-class="{'active-state': isActive('mafia.play')}">
             <md-icon class="material-icons icon-color" flex="25">videogame_asset</md-icon>
-            <span flex="75">Play</span>
+            <span flex="75">play</span>
         </md-button>
         <span flex="5"></span>
     </div>

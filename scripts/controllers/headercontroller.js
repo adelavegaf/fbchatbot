@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('mafiaApp').controller('HeaderController', ['$scope', function ($scope) {
+angular.module('mafiaApp').controller('HeaderController', ['$scope', '$state', function ($scope, $state) {
 
-    $scope.active = 'play';
+    $scope.active = $state.current.name;
 
     $scope.setActive = function (link) {
         $scope.active = link;

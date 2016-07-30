@@ -1,16 +1,3 @@
-.glyphicon-list-alt:before {
-    margin-right: 5px;
-    font-size: 16px;
-}
-
-.glyphicon-knight:before {
-    margin-right: 5px;
-    font-size: 16px;
-}
-
-
-/* navbar */
-
 .primary-toolbar {
     background-color: #FFFFFF !important;
     border-style: solid;
@@ -23,9 +10,6 @@
     margin-bottom: 10px !important;
     padding: 0px !important;
 }
-
-
-/* title */
 
 .primary-text {
     color: rgb(7, 41, 63) !important;
@@ -41,69 +25,8 @@
     color: #016282 !important;
 }
 
-.navbar-default .navbar-brand:hover,
-.navbar-default .navbar-brand:focus {
-    color: rgb(7, 41, 63);
-}
-
-
-/* link */
-
-.navbar-default .navbar-nav > li > a {
-    color: #A8A8A8;
-    width: 90px;
-}
-
-.navbar-default .navbar-nav > li > a:hover,
-.navbar-default .navbar-nav > li > a:focus {
-    color: #A8A8A8;
-    background-color: #F0F0F0;
-}
-
-.navbar-default .navbar-nav > .active > a,
-.navbar-default .navbar-nav > .active > a:hover,
-.navbar-default .navbar-nav > .active > a:focus {
-    color: rgb(7, 41, 63);
+.active-state {
     border-bottom-color: #05A2D7;
-    border-bottom-width: thick;
     border-bottom-style: solid;
-    background-color: white;
-    background-image: none !important;
-    box-shadow: none !important;
-    -webkit-box-shadow: none !important;
-    background-color: white !important;
-}
-
-.navbar-default .navbar-nav > .open > a,
-.navbar-default .navbar-nav > .open > a:hover,
-.navbar-default .navbar-nav > .open > a:focus {
-    color: rgb(7, 41, 63);
-    border-bottom-color: #05A2D7;
-    border-bottom-width: thick;
-    border-bottom-style: solid;
-    background-image: none !important;
-    box-shadow: none !important;
-    -webkit-box-shadow: none !important;
-    background-color: white !important;
-}
-
-
-/* caret */
-
-.navbar-default .navbar-nav > .dropdown > a .caret {
-    border-top-color: #FFFFFF;
-    border-bottom-color: #FFFFFF;
-}
-
-.navbar-default .navbar-nav > .dropdown > a:hover .caret,
-.navbar-default .navbar-nav > .dropdown > a:focus .caret {
-    border-top-color: #FFFFFF;
-    border-bottom-color: #FFFFFF;
-}
-
-.navbar-default .navbar-nav > .open > a .caret,
-.navbar-default .navbar-nav > .open > a:hover .caret,
-.navbar-default .navbar-nav > .open > a:focus .caret {
-    border-top-color: #FFFFFF;
-    border-bottom-color: #FFFFFF;
+    border-bottom-width: 3px;
 }
