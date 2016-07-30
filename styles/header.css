@@ -7,7 +7,6 @@
     border-bottom-color: #E0E0E0 !important;
     border-top-width: thick !important;
     border-bottom-width: thin !important;
-    margin-bottom: 10px !important;
     padding: 0px !important;
 }
 
@@ -15,10 +14,14 @@
     color: rgb(7, 41, 63) !important;
     text-transform: uppercase;
     font-weight: 500;
-    font-size: 16px;
+    font-size: 14px;
     font-style: inherit;
     font-variant: inherit;
     font-family: inherit;
+}
+
+.brand {
+    font-size: 16px !important;
 }
 
 .icon-color {
