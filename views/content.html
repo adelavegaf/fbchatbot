@@ -3,10 +3,14 @@
     <div class="content-panel" layout="row" flex>
         <md-sidenav class="md-sidenav-left" md-component-id="left" md-is-locked-open="true" md-whiteframe="4">
             <md-toolbar class="md-theme-indigo">
-                <h1 class="md-toolbar-tools">{{title}}</h1>
+                <h1 class="md-toolbar-tools">{{title | uppercase}}</h1>
             </md-toolbar>
             <md-content>
-                <p>This is it warever waravar</p>
+                <md-list>
+                    <md-list-item ng-repeat="item in menuItems" ng-click="null">
+                        {{item.name | uppercase}}
+                    </md-list-item>
+                </md-list>
             </md-content>
         </md-sidenav>
         <md-content flex layout-padding>
