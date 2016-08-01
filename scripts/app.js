@@ -28,8 +28,22 @@ angular.module('mafiaApp', ['ui.router', 'ngResource', 'ngAnimate', 'ngMaterial'
                 url: 'gameplay',
                 views: {
                     'content@': {
-                        templateUrl: 'views/content.html',
+                        templateUrl: 'views/gameplay.html',
                         controller: 'GameplayController'
+                    }
+                }
+            })
+            .state('mafia.gameplay.rules', {
+                views: {
+                    'information@mafia.gameplay': {
+                        templateUrl: 'views/generalrules.html'
+                    }
+                }
+            })
+            .state('mafia.gameplay.phases', {
+                views: {
+                    'information@mafia.gameplay': {
+                        templateUrl: 'views/phases.html'
                     }
                 }
             })
@@ -37,7 +51,7 @@ angular.module('mafiaApp', ['ui.router', 'ngResource', 'ngAnimate', 'ngMaterial'
                 url: 'roles',
                 views: {
                     'content@': {
-                        templateUrl: 'views/content.html',
+                        templateUrl: 'views/roles.html',
                         controller: 'RolesController'
                     }
                 }
@@ -46,7 +60,7 @@ angular.module('mafiaApp', ['ui.router', 'ngResource', 'ngAnimate', 'ngMaterial'
                 url: 'development',
                 views: {
                     'content@': {
-                        templateUrl: 'views/content.html',
+                        templateUrl: 'views/gameplay.html',
                         controller: 'DevelopmentController'
                     }
                 }

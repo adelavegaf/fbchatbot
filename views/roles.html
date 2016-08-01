@@ -1,0 +1,48 @@
+<div layout="row" class="full-height" flex>
+    <div flex="10"></div>
+    <div class="content-panel" layout="column" flex>
+        <md-tabs>
+            <md-tab label="{{item}}" ng-repeat="item in tabItems" md-on-select="selectItem(item)"></md-tab>
+        </md-tabs>
+        <md-content flex layout="row" layout-padding>
+            <div flex layout="row" layout-padding class="information">
+                <div flex="50">
+                    <md-card layout="column" flex="100">
+                        <md-card-title>
+                            <span class="md-headline">{{selectedItem}}</span>
+                        </md-card-title>
+                        <md-card-content layout="column">
+                            <div layout="row" layout-align="center center" flex="70">
+                                <img class="md-media-xl" ng-src="../images/{{selectedItem.toLowerCase()}}.svg" flex/>
+                            </div>
+                            <div layout="row" layout-align="center center" flex="10">
+                                <p flex="50" layout="row" layout-align="center center">
+                                    <span>
+                                        <md-icon class="material-icons home">home</md-icon>
+                                        Alliance: {{information[selectedItem].alliance}}
+                                    </span>
+                                </p>
+                                <p flex="50" layout="row" layout-align="center center">
+                                    <span>
+                                        <md-icon class="material-icons star">star_rate</md-icon>
+                                        Skill: {{information[selectedItem].skill}}
+                                    </span>
+                                </p>
+                            </div>
+                            <p flex="20" layout="row" layout-align="center center">{{information[selectedItem].description}}</p>
+                        </md-card-content>
+                    </md-card>
+                </div>
+                <div flex="10"></div>
+                <div layout="column" flex="40">
+                    <h3>Story</h3>
+                    <p>
+                        {{information[selectedItem].story}}
+                    </p>
+                </div>
+            </div>
+            <div flex="5"></div>
+        </md-content>
+    </div>
+    <div flex="10"></div>
+</div>
