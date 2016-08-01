@@ -55,15 +55,6 @@ angular.module('mafiaApp', ['ui.router', 'ngResource', 'ngAnimate', 'ngMaterial'
                         controller: 'RolesController'
                     }
                 }
-            })
-            .state('mafia.development', {
-                url: 'development',
-                views: {
-                    'content@': {
-                        templateUrl: 'views/gameplay.html',
-                        controller: 'DevelopmentController'
-                    }
-                }
             });
         $urlRouterProvider.otherwise('/play');
     });
