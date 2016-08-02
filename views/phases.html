@@ -1,17 +1,84 @@
-<div>
-    <p>
-        Each game consists of 10 turns. If no party has won after 10 turns, the game will result in a draw. A turn is completed once the day-voting-night phases have been completed.
-    </p>
-    <p>
-        Day: Each turn starts in the day phase. This phase lasts for 90 seconds. Every alive player may speak with each other in this phase. Normally, players would try and pinpoint a mafia member with what they have discovered in the night phase. However, be careful who you trust, a mafia member may be trying to deceive you.
-    </p>
-    <p>
-        Voting: The second phase of a turn. This phase lasts for 30 seconds. No one is allowed to speak during this phase. Each player can only vote once for the player they think is a mafia member. Don’t waste your vote, you may not change it. Take into account that whenever someone votes, it will be publicly announced to the rest of the players who he voted for.
-    </p>
-    <p>
-        Night: The last phase of a turn. This phase lasts for 30 seconds. Only mafia members may speak during the night in order to plot their attack. However, each player has assigned a role that has a special ability that can be used during this phase. You may change the target of your special ability how many times you want before the night phase ends. At the end of the night phase, you will be notified if your special ability had any effect and if anyone was murdered.
-    </p>
-    <p>
-        Note that dead players may speak at any phase with each other.
-    </p>
+<div layout="row" class="full-height">
+
+    <md-card class="day" layout="column" flex="30">
+        <md-card-header>
+            <md-card-avatar>
+                <img class="md-user-avatar" ng-src="../images/day.svg" />
+            </md-card-avatar>
+            <md-card-header-text>
+                <span class="md-headline">Day</span>
+                <span class="md-subhead special-subhead" layout="row" layout-align="space-between center">
+                    <span>Duration: 90s</span>
+                <span>1st Phase</span>
+                </span>
+            </md-card-header-text>
+        </md-card-header>
+        <md-card-content layout="column">
+            <p>
+                Every alive player may speak with each other in this phase.
+            </p>
+            <p>
+                Normally, players would try and pinpoint mafia members using the evidence they have gathered.
+            </p>
+            <p>
+                However, be careful who you trust, a mafia member may be trying to deceive you.
+            </p>
+        </md-card-content>
+    </md-card>
+
+    <div flex="5"></div>
+
+    <md-card class="voting" layout="column" flex="30">
+        <md-card-header>
+            <md-card-avatar>
+                <img class="md-user-avatar" ng-src="../images/voting.svg" />
+            </md-card-avatar>
+            <md-card-header-text>
+                <span class="md-headline">Voting</span>
+                <span class="md-subhead special-subhead" layout="row" layout-align="space-between center">
+                    <span>Duration: 30s</span>
+                <span>2nd Phase</span>
+                </span>
+            </md-card-header-text>
+        </md-card-header>
+        <md-card-content layout="column">
+            <p>
+                No one is allowed to speak during this phase.
+            </p>
+            <p>
+                Each player can only vote once for the player they think is a mafia member. Don’t waste your vote, you can't change it.
+            </p>
+            <p>
+                Additionally, all votes are publicly announced in the game chat. Everyone knows who you voted for.
+            </p>
+        </md-card-content>
+    </md-card>
+
+    <div flex="5"></div>
+
+    <md-card class="night" layout="column" flex="30">
+        <md-card-header>
+            <md-card-avatar>
+                <img class="md-user-avatar" ng-src="../images/night.svg" />
+            </md-card-avatar>
+            <md-card-header-text>
+                <span class="md-headline">Night</span>
+                <span class="md-subhead special-subhead" layout="row" layout-align="space-between center">
+                    <span>Duration: 30s</span>
+                <span>3rd Phase </span>
+                </span>
+            </md-card-header-text>
+        </md-card-header>
+        <md-card-content layout="column">
+            <p>
+                Only mafia members may speak during this phase.
+            </p>
+            <p>
+                Each player may cast his role's special ability. You may change your target freely until the time expires.
+            </p>
+            <p>
+                At the end of the night phase, you will be notified if your special ability had any effect and if anyone was murdered.
+            </p>
+        </md-card-content>
+    </md-card>
 </div>

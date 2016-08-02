@@ -1,0 +1,15 @@
+.special-subhead {
+    padding-top: 10px;
+}
+
+.voting {
+    background-color: rgba(183, 243, 183, 0.39);
+}
+
+.day {
+    background-color: lightgoldenrodyellow;
+}
+
+.night {
+    background-color: ghostwhite;
+}
