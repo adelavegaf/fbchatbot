@@ -1,14 +1,45 @@
-<div>
-    <p>
-        Mafia is an online roleplaying game that models the conflict between two parties, the mafia, and the town. At the start of the game, each player is secretly assigned a role that belongs to one of the two parties. All the players assigned to the mafia know who their teammates are, while the players assigned to the town are clueless as for who belongs to their team. The game consists of three alternating phases: day, voting, and night.
-    </p>
-    <p>
-        In each of the phases only certain actions can be performed. In the night phase, the mafia privately chooses a town citizen to murder. In the day phase, living players debate the identities of the mafia. Finally, in the voting phase, players cast votes to kill the player they suspect to belong to the mafia. You may want to refer to the phases section for more information.
-    </p>
-    <p>
-        A team wins when they are the only ones that are alive at any point in the game. Anytime a player is killed his role is revealed to the rest of the players. To make the game balanced, players are not distributed evenly among the two parties. The mafia always has fewer players than the town. Additionally, each role has a special ability that can be performed at night that may help steer the conversation to who belongs to the mafia. Each role is thoroughly described in the roles section.
-    </p>
-    <p>
-        In order for a game to start there should be 7 players connected through either the Web App or Facebook Messenger. After the game starts, each player is assigned a temporal alias that is the name everyone else sees when one speaks.
-    </p>
+<div layout="row" class="full-height">
+    <div flex="45" layout="column">
+        <div flex="95" layout="column" layout-align="center center">
+            <img ng-src="../images/mafiaiphone.png" style="border-radius: 5px" ng-if="showFirstPage()" />
+            <img ng-src="../images/mafiadesktop.png" style="border-radius: 5px" ng-if="showLastPage()" />
+        </div>
+        <div flex="5" layout="row" layout-align="start center" ng-click="prevPage()" ng-if="showLastPage()">
+            <md-button class="md-primary">
+                Previous
+            </md-button>
+        </div>
+    </div>
+    <div flex="5"></div>
+    <div flex="50" layout="column">
+        <div flex="95" layout="column" layout-align="center center">
+            <div ng-if="showFirstPage()">
+                <p>
+                    Mafia is an online multiplayer roleplaying game that models the conflict between two parties, the mafia, and the town. At the start of the game, each player is secretly assigned a role that belongs to one of the two parties. All the players assigned to the mafia know who their teammates are, while the players assigned to the town are clueless as for who belongs to their team.
+                </p>
+                <p>
+                    The game consists of three alternating phases: day, voting, and night. In each of the phases only certain actions can be performed.
+                </p>
+                <p>
+                    In the night phase, the mafia privately chooses a town citizen to murder. In the day phase, living players debate the identities of the mafia. Finally, in the voting phase, players cast votes to kill the player they suspect to belong to the mafia. You may want to refer to the phases section for more information.
+                </p>
+            </div>
+            <div ng-if="showLastPage()">
+                <p>
+                    A team wins when they are the only ones that are alive at any point in the game. Anytime a player is killed his role is revealed to the rest of the players. To make the game balanced, players are not distributed evenly among the two parties. The mafia always has fewer players than the town.
+                </p>
+                <p>
+                    Additionally, each role has a special ability that can be performed at night that may help steer the conversation to who belongs to the mafia. Each role is thoroughly described in the roles section.
+                </p>
+                <p>
+                    In order for a game to start there should be 7 players connected through either the Web App or Facebook Messenger. After the game starts, each player is assigned a temporal alias that is the name everyone else sees when one speaks.
+                </p>
+            </div>
+        </div>
+        <div flex="5" layout="row" layout-align="end center" ng-click="nextPage()" ng-if="showFirstPage()">
+            <md-button class="md-primary">
+                Next
+            </md-button>
+        </div>
+    </div>
 </div>

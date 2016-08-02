@@ -36,7 +36,8 @@ angular.module('mafiaApp', ['ui.router', 'ngResource', 'ngAnimate', 'ngMaterial'
             .state('mafia.gameplay.rules', {
                 views: {
                     'information@mafia.gameplay': {
-                        templateUrl: 'views/generalrules.html'
+                        templateUrl: 'views/generalrules.html',
+                        controller: 'RulesController'
                     }
                 }
             })
@@ -56,5 +57,5 @@ angular.module('mafiaApp', ['ui.router', 'ngResource', 'ngAnimate', 'ngMaterial'
                     }
                 }
             });
-        $urlRouterProvider.otherwise('/play');
+        $urlRouterProvider.otherwise('/gameplay');
     });
