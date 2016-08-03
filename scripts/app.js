@@ -48,6 +48,21 @@ angular.module('mafiaApp', ['ui.router', 'ngResource', 'ngAnimate', 'ngMaterial'
                     }
                 }
             })
+            .state('mafia.gameplay.webapp', {
+                views: {
+                    'information@mafia.gameplay': {
+                        templateUrl: 'views/webapp.html'
+                    }
+                }
+            })
+            .state('mafia.gameplay.fbapp', {
+                views: {
+                    'information@mafia.gameplay': {
+                        templateUrl: 'views/fbapp.html',
+                        controller: 'FbAppController'
+                    }
+                }
+            })
             .state('mafia.roles', {
                 url: 'roles',
                 views: {
