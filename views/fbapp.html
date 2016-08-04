@@ -1,8 +1,8 @@
 <div layout="row" class="full-height">
     <div flex="45" layout="column">
         <div flex="90" layout="column" layout-align="center center">
-            <img ng-src="../images/mafiaiphone2.png" style="border-radius: 5px" ng-if="showFirstPage()" />
-            <img ng-src="../images/mafialaptop1.png" style="border-radius: 5px" ng-if="showLastPage()" />
+            <img ng-src="../images/mafiaiphone2.png" class="image-radius" ng-if="showFirstPage()" />
+            <img ng-src="../images/mafialaptop1.png" class="image-radius" ng-if="showLastPage()" />
         </div>
         <div flex="10" layout="row" layout-align="start center" ng-click="prevPage()" ng-if="showLastPage()">
             <md-button class="md-primary">

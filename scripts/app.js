@@ -51,7 +51,8 @@ angular.module('mafiaApp', ['ui.router', 'ngResource', 'ngAnimate', 'ngMaterial'
             .state('mafia.gameplay.webapp', {
                 views: {
                     'information@mafia.gameplay': {
-                        templateUrl: 'views/webapp.html'
+                        templateUrl: 'views/webapp.html',
+                        controller: 'WebAppController'
                     }
                 }
             })

@@ -2,3 +2,11 @@
     font-size: 16px;
     line-height: 23px;
 }
+
+.image-radius {
+    border-radius: 5px;
+}
+
+.fixed-width {
+    width: 340px !important;
+}
