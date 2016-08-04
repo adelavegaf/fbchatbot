@@ -19,15 +19,15 @@ var gameDuration = 11;
 /**
  * Determines the duration of the day phase in a game.
  */
-var dayDuration = 15000; // 90000
+var dayDuration = 90000;
 /**
  * Determines the duration of the voting phase in a game.
  */
-var votingDuration = 15000; // 30000
+var votingDuration = 30000;
 /**
  * Determines the duration of the night phase in a game.
  */
-var nightDuration = 15000; // 30000
+var nightDuration = 30000;
 
 /**
  * Returns all users who have a given state.
