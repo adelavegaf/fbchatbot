@@ -36,10 +36,36 @@
 </head>
 
 <body>
-    <div class="full-height" layout="column">
+    <script>
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId: '496004080598108',
+                xfbml: true,
+                version: 'v2.6'
+            });
+        };
+
+        (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {
+                return;
+            }
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "//connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
+    </script>
+
+    <div class="full-height" layout="column" hide-xs hide-sm>
         <div ui-view="header" flex="15"></div>
         <div ui-view="content" flex></div>
         <div flex="5"></div>
+    </div>
+    <div hide-gt-sm layout="column" layout-align="center center">
+        <div class="fb-send-to-messenger" messenger_app_id="496004080598108" page_id="1691882611078540" data-ref="PASS_THROUGH_PARAM" color="blue" size="standard">
+        </div>
     </div>
 
     <!-- build:libjs scripts/libjs.js -->
@@ -55,7 +81,6 @@
 
     <!-- build:js scripts/main.js -->
     <script src="../scripts/app.js"></script>
-    <script src="../scripts/fbsetup.js"></script>
     <script src="../scripts/directives/chatscroll.js"></script>
     <script src="../scripts/controllers/headercontroller.js"></script>
     <script src="../scripts/controllers/gamecontroller.js"></script>
