@@ -36,39 +36,30 @@
 </head>
 
 <body>
-    <script>
-        window.fbAsyncInit = function() {
-            FB.init({
-                appId: '496004080598108',
-                xfbml: true,
-                version: 'v2.6'
-            });
-        };
-
-        (function(d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) {
-                return;
-            }
-            js = d.createElement(s);
-            js.id = id;
-            js.src = "//connect.facebook.net/en_US/sdk.js";
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
-
-    </script>
-
     <div class="full-height" layout="column" hide-xs hide-sm>
         <div ui-view="header" flex="15"></div>
         <div ui-view="content" flex></div>
         <div flex="5"></div>
     </div>
-    <div hide-gt-sm layout="column" layout-align="center center">
-        <div class="fb-send-to-messenger" messenger_app_id="496004080598108" page_id="1691882611078540" data-ref="PASS_THROUGH_PARAM" color="blue" size="standard">
-        </div>
+    <div class="full-height" layout="column" layout-align="center center" hide-gt-sm>
+        <md-card layout="column">
+            <md-card-header>
+                <md-card-avatar>
+                    <img class="md-user-avatar" ng-src="../images/night.svg" />
+                </md-card-avatar>
+                <md-card-header-text>
+                    <span class="md-headline">{{"Mafia Chat Game" | uppercase}}</span>
+                </md-card-header-text>
+            </md-card-header>
+            <md-card-content layout="column" layout-align="center center">
+                <div class="fb-messengermessageus" messenger_app_id="496004080598108" page_id="1691882611078540" color="blue" size="large">
+                </div>
+            </md-card-content>
+        </md-card>
     </div>
 
     <!-- build:libjs scripts/libjs.js -->
+    <script src="../scripts/fbsetup.js"></script>
     <script src="../bower_components/angular/angular.min.js"></script>
     <script src="../bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
     <script src="../bower_components/angular-resource/angular-resource.min.js"></script>

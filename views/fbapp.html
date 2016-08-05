@@ -13,12 +13,12 @@
     <div flex="5"></div>
     <div flex="50" layout="column">
         <div flex="90" layout="column" layout-align="center center">
-            <div ng-if="showFirstPage()" flex="90">
-                <div layout="row" layout-align="space-between center">
+
+            <div ng-if="showFirstPage()" flex="100">
+                <div layout="row">
                     <h3>Development</h3>
-                    <div class="fb-send-to-messenger" messenger_app_id="496004080598108" page_id="1691882611078540" data-ref="PASS_THROUGH_PARAM" color="blue" size="standard">
-                    </div>
                 </div>
+
                 <p>
                     The game was originally planned to be released as a stand-alone chatbot for Facebook Messenger. However, to be able to fully test the game without having multiple facebook accounts, a web-client was implemented.
                 </p>
@@ -30,11 +30,10 @@
                     However, some commands were implemented in order for users to be able to poll the server for information they might need. All commands are preceded by a '.' to distinguish them from messages that are meant to be sent to other users.
                 </p>
             </div>
-            <div ng-if="showLastPage()" flex="90">
-                <div layout="row" layout-align="space-between center">
+
+            <div ng-if="showLastPage()" flex="100">
+                <div layout="row">
                     <h3>Commands</h3>
-                    <div class="fb-send-to-messenger" messenger_app_id="496004080598108" page_id="1691882611078540" data-ref="PASS_THROUGH_PARAM" color="blue" size="standard">
-                    </div>
                 </div>
                 <ul>
                     <li>
