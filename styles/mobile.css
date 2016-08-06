@@ -5,5 +5,5 @@
 }
 
 .mobile-background {
-    background-image: url(../images/floor.png);
+    background-image: url("../images/floor.png");
 }
