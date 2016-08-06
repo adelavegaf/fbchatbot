@@ -22,6 +22,7 @@
     <link href="../styles/content.css" rel="stylesheet">
     <link href="../styles/roles.css" rel="stylesheet">
     <link href="../styles/phases.css" rel="stylesheet">
+    <link href="../styles/mobile.css" rel="stylesheet">
     <!-- endbuild -->
 
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
@@ -42,8 +43,8 @@
         <div flex="5"></div>
     </div>
 
-    <div class="full-height" layout="column" layout-align="center center" hide-gt-sm>
-        <div ng-include="'views/mobile.html'"></div>
+    <div class="full-height" layout="column" hide-gt-sm>
+        <div ng-include="'views/mobile.html'" flex="100"></div>
     </div>
 
     <!-- build:libjs scripts/libjs.js -->

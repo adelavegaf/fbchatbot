@@ -1,0 +1,9 @@
+.mobile-paragraph {
+    color: rgb(255, 255, 255);
+    font-size: 14px !important;
+    text-shadow: 4px 4px 5px black;
+}
+
+.mobile-background {
+    background-image: url(../images/floor.png);
+}

@@ -1,14 +1,22 @@
-<md-card layout="column">
-    <md-card-header>
-        <md-card-avatar>
-            <img class="md-user-avatar" ng-src="../images/alex.svg" />
-        </md-card-avatar>
-        <md-card-header-text>
-            <span class="md-headline">{{"Mafia Chat Game" | uppercase}}</span>
-        </md-card-header-text>
-    </md-card-header>
-    <md-card-content layout="column" layout-align="center center">
-        <div class="fb-messengermessageus" messenger_app_id="496004080598108" page_id="1691882611078540" color="blue" size="large">
+<div layout="column" class="full-height mobile-background" flex>
+    <md-toolbar class="primary-toolbar" flex="10">
+        <div class="md-toolbar-tools">
+            <md-button class="md-icon-button">
+                <md-icon class="material-icons icon-color">home</md-icon>
+            </md-button>
+            <span flex></span>
+            <h4 class="primary-text brand"><span>Mafia Chat Game</span></h4>
+            <span flex></span>
+            <md-button class="md-icon-button">
+                <md-icon class="material-icons icon-color">menu</md-icon>
+            </md-button>
         </div>
-    </md-card-content>
-</md-card>
+    </md-toolbar>
+    <div flex="90" layout="column" layout-align="center center">
+        <p class="mobile-paragraph" layout="column" layout-align="end center" flex>Start playing with your friends through Facebook Messenger!</p>
+        <div layout="column" layout-align="start center" flex>
+            <div class="fb-messengermessageus" messenger_app_id="496004080598108" page_id="1691882611078540" color="white" size="xlarge">
+            </div>
+        </div>
+    </div>
+</div>
