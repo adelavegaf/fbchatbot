@@ -7,7 +7,6 @@ var gulp = require('gulp'),
     imagemin = require('gulp-imagemin'),
     rename = require('gulp-rename'),
     concat = require('gulp-concat'),
-    notify = require('gulp-notify'),
     cache = require('gulp-cache'),
     changed = require('gulp-changed'),
     rev = require('gulp-rev'),
@@ -50,10 +49,7 @@ gulp.task('imagemin', function () {
             progressive: true,
             interlaced: true
         })))
-        .pipe(gulp.dest('dist/images'))
-        .pipe(notify({
-            message: 'Images task complete'
-        }));
+        .pipe(gulp.dest('dist/images'));
 });
 
 gulp.task('copyfonts', ['clean'], function () {
