@@ -1,4 +1,4 @@
-<div layout="row">
+<div layout="row" hide-xs hide-sm>
     <div flex="5"></div>
     <div flex="20" layout="column">
         <div class="fade" layout="column" ng-if="isGameActive()" flex="100">
@@ -155,4 +155,13 @@
 
     </div>
     <div flex="5"></div>
+</div>
+<div layout="column" class="full-height" hide-gt-sm flex>
+    <div flex="90" layout="column" layout-align="center center">
+        <p class="mobile-paragraph" layout="column" layout-align="end center" flex>Start playing with your friends through Facebook Messenger!</p>
+        <div layout="column" layout-align="start center" flex>
+            <div class="fb-messengermessageus" messenger_app_id="496004080598108" page_id="1691882611078540" color="white" size="xlarge">
+            </div>
+        </div>
+    </div>
 </div>

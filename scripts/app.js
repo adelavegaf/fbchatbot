@@ -73,5 +73,5 @@ angular.module('mafiaApp', ['ui.router', 'ngResource', 'ngAnimate', 'ngMaterial'
                     }
                 }
             });
-        $urlRouterProvider.otherwise('/gameplay');
+        $urlRouterProvider.otherwise('/play');
     });
