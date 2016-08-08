@@ -2,7 +2,7 @@
 
 ### Online multiplayer [Mafia](https://en.wikipedia.org/wiki/Mafia_(party_game)) game implementation.
 
-Can be played through Facebook Messenger or through the [web app](mafiachatgame.herokuapp.com). 
+Can be played through Facebook Messenger or through the [web app](https://mafiachatgame.herokuapp.com). 
 
 To start the server type at the command prompt:  
   
