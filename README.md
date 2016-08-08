@@ -1,8 +1,8 @@
 # Mafia Chat Game 
 
-### Cross-platform online [Mafia](https://en.wikipedia.org/wiki/Mafia_(party_game)) game implementation.
+### Online multiplayer [Mafia](https://en.wikipedia.org/wiki/Mafia_(party_game)) game implementation.
 
-Can be played through Facebook Messenger or through the [web app](mafiachatgame.heroku.com). 
+Can be played through Facebook Messenger or through the [web app](mafiachatgame.herokuapp.com). 
 
 To start the server type at the command prompt:  
   
