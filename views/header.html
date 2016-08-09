@@ -24,8 +24,32 @@
         <span flex="10"></span>
     </div>
     <div class="md-toolbar-tools" hide-gt-sm>
-        <span flex></span>
         <h4 class="primary-text brand"><span>Mafia Chat Game</span></h4>
         <span flex></span>
+        <md-menu>
+            <md-button class="md-icon-button" ng-click="openMenu($mdOpenMenu, $event)">
+                <md-icon class="material-icons icon-color">menu</md-icon>
+            </md-button>
+            <md-menu-content width="3">
+                <md-menu-item>
+                    <md-button class="primary-text" aria-label="gameplay" ui-sref="mafia.gameplay">
+                        <md-icon class="material-icons icon-color">games</md-icon>
+                        Gameplay
+                    </md-button>
+                </md-menu-item>
+                <md-menu-item>
+                    <md-button class="primary-text" aria-label="roles" ui-sref="mafia.roles">
+                        <md-icon class="material-icons icon-color">supervisor_account</md-icon>
+                        Roles
+                    </md-button>
+                </md-menu-item>
+                <md-menu-item>
+                    <md-button class="primary-text" aria-label="play" ui-sref="mafia.play">
+                        <md-icon class="material-icons icon-color">videogame_asset</md-icon>
+                        Play
+                    </md-button>
+                </md-menu-item>
+            </md-menu-content>
+        </md-menu>
     </div>
 </md-toolbar>

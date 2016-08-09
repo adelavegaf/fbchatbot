@@ -11,4 +11,8 @@ angular.module('mafiaApp').controller('HeaderController', ['$scope', '$state', f
     $scope.isActive = function (link) {
         return $scope.active === link;
     };
+
+    $scope.openMenu = function ($mdOpenMenu, $event) {
+        $mdOpenMenu($event);
+    };
 }]);
