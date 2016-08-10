@@ -1,64 +1,66 @@
-<div layout="row" class="full-height">
-    <div flex="45" layout="column">
-        <div flex="90" layout="column" layout-align="center center">
+<div layout="column" class="responsive-height" flex-gt-sm="100">
+    <div layout-gt-sm="row" layout-xs="column" layout-sm="column" flex-gt-sm="90">
+        <div flex-gt-sm="45" layout="column" layout-align="center center">
             <img ng-src="../images/development.png" class="image-radius" ng-if="showFirstPage()" />
             <img ng-src="../images/chat.png" class="image-radius" ng-if="showSecondPage()" />
             <img ng-src="../images/statusbar.png" class="image-radius fixed-width" ng-if="showThirdPage()" />
         </div>
-        <div flex="10" layout="row" layout-align="start center" ng-click="prevPage()" ng-if="!showFirstPage()">
-            <md-button class="md-primary">
+        <div flex-gt-sm="5"></div>
+        <div flex-gt-sm="50" layout="column">
+            <div layout="column" layout-align="center center">
+                <div ng-if="showFirstPage()">
+                    <h3>Development</h3>
+                    <p>
+                        The Web App was built using SocketIO since it provided an easy way to handle client – server communication.
+                    </p>
+                    <p>
+                        Additionally, AngularJS and Angular Material were also used to construct the front end.
+                    </p>
+                    <p>
+                        Currently, the website is not mobile friendly. Please use the Facebook Messenger App to play through your smartphone.
+                    </p>
+                    <p>
+                        Note that opening the page in several tabs in your browser will effectively register a different player for each tab. This way, if no users are connected, opening 7 tabs will allow you to play the game.
+                    </p>
+                </div>
+                <div ng-if="showSecondPage()">
+                    <h3>Chat</h3>
+                    <p>
+                        All messages that you have received in the game are shown in the chat. Each player has a predetermined color that appears when they speak. Your messages are displayed to the right of the chat panel.
+                    </p>
+                    <p>
+                        Game status messages are shown in red. They contain useful information about the different events that have happened during the game.
+                    </p>
+                    <p>
+                        For you to send a message, type in the box at the end of the chat panel and press enter.
+                    </p>
+                </div>
+                <div ng-if="showThirdPage()">
+                    <h3>Status Bar</h3>
+                    <p>
+                        It consists of two modes: users and roles. You can change between the two modes by clicking on the blue tabs.
+                    </p>
+                    <p>
+                        The leftmost image shows the users mode. During the voting phase and the night phase you can click on the alias of the player who you wish to target.
+                    </p>
+                    <p>
+                        The rightmost image shows the roles mode. This mode displays the name of each role that is in the game.
+                    </p>
+                    <p>
+                        Revealed roles show the alias and the avatar of the player that had the role. The roles that have not yet been revealed display an image of a masked avatar.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div layout="row" layout-align="space-between center" flex-gt-sm="10">
+        <div layout="row" layout-align="start center" ng-click="prevPage()">
+            <md-button class="md-primary" ng-disabled="showFirstPage()">
                 Previous
             </md-button>
         </div>
-    </div>
-    <div flex="5"></div>
-    <div flex="50" layout="column">
-        <div flex="90" layout="column" layout-align="center center">
-            <div ng-if="showFirstPage()" flex="90">
-                <h3>Development</h3>
-                <p>
-                    The Web App was built using SocketIO since it provided an easy way to handle client – server communication.
-                </p>
-                <p>
-                    Additionally, AngularJS and Angular Material were also used to construct the front end.
-                </p>
-                <p>
-                    Currently, the website is not mobile friendly. Please use the Facebook Messenger App to play through your smartphone.
-                </p>
-                <p>
-                    Note that opening the page in several tabs in your browser will effectively register a different player for each tab. This way, if no users are connected, opening 7 tabs will allow you to play the game.
-                </p>
-            </div>
-            <div ng-if="showSecondPage()" flex="90">
-                <h3>Chat</h3>
-                <p>
-                    All messages that you have received in the game are shown in the chat. Each player has a predetermined color that appears when they speak. Your messages are displayed to the right of the chat panel.
-                </p>
-                <p>
-                    Game status messages are shown in red. They contain useful information about the different events that have happened during the game.
-                </p>
-                <p>
-                    For you to send a message, type in the box at the end of the chat panel and press enter.
-                </p>
-            </div>
-            <div ng-if="showThirdPage()" flex="90">
-                <h3>Status Bar</h3>
-                <p>
-                    It consists of two modes: users and roles. You can change between the two modes by clicking on the blue tabs.
-                </p>
-                <p>
-                    The leftmost image shows the users mode. During the voting phase and the night phase you can click on the alias of the player who you wish to target.
-                </p>
-                <p>
-                    The rightmost image shows the roles mode. This mode displays the name of each role that is in the game.
-                </p>
-                <p>
-                    Revealed roles show the alias and the avatar of the player that had the role. The roles that have not yet been revealed display an image of a masked avatar.
-                </p>
-            </div>
-        </div>
-        <div flex="10" layout="row" layout-align="end center" ng-click="nextPage()" ng-if="!showThirdPage()">
-            <md-button class="md-primary">
+        <div layout="row" layout-align="end center" ng-click="nextPage()">
+            <md-button class="md-primary" ng-disabled="showThirdPage()">
                 Next
             </md-button>
         </div>

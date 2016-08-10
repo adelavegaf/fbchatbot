@@ -5,9 +5,9 @@
             <md-tab label="{{item}}" ng-repeat="item in tabItems" md-on-select="selectItem(item)"></md-tab>
         </md-tabs>
         <md-content flex layout="row" layout-padding>
-            <div flex="5"></div>
+            <div flex="5" hide-xs hide-sm></div>
             <div flex layout-padding ui-view="information" class="information"></div>
-            <div flex="5"></div>
+            <div flex="5" hide-xs hide-sm></div>
         </md-content>
     </div>
     <div flex="10" hide-xs hide-sm></div>

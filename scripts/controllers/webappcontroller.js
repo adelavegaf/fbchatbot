@@ -10,7 +10,7 @@ angular.module('mafiaApp').controller('WebAppController', ['$scope', function ($
     };
 
     $scope.prevPage = function () {
-        if ($scope.page > 0) {
+        if ($scope.page > 1) {
             $scope.page--;
         }
     };

@@ -1,64 +1,63 @@
-<div layout="row" class="full-height">
-    <div flex="45" layout="column">
-        <div flex="90" layout="column" layout-align="center center">
+<div layout="column" class="responsive-height" flex-gt-sm="100">
+    <div layout-gt-sm="row" layout-xs="column" layout-sm="column" flex-gt-sm="90">
+        <div flex-gt-sm="45" layout="column" layout-align="center center">
             <img ng-src="../images/mafiaiphone2.png" class="image-radius" ng-if="showFirstPage()" />
             <img ng-src="../images/mafialaptop1.png" class="image-radius" ng-if="showLastPage()" />
         </div>
-        <div flex="10" layout="row" layout-align="start center" ng-click="prevPage()" ng-if="showLastPage()">
-            <md-button class="md-primary">
+        <div flex-gt-sm="5"></div>
+        <div flex-gt-sm="50" layout="column">
+            <div layout="column" layout-align="center center">
+                <div ng-if="showFirstPage()">
+                    <div layout="row">
+                        <h3>Development</h3>
+                    </div>
+                    <p>
+                        The game was originally planned to be released as a stand-alone chatbot for Facebook Messenger. However, to be able to fully test the game without having multiple facebook accounts, a web-client was implemented.
+                    </p>
+                    <p>
+                        The server handles all client connections through the chat. Several structured messages have been implemented to minimize the number of commands the user needs to learn to interact with the game.
+                    </p>
+
+                    <p>
+                        However, some commands were implemented in order for users to be able to poll the server for information they might need. All commands are preceded by a '.' to distinguish them from messages that are meant to be sent to other users.
+                    </p>
+                </div>
+                <div ng-if="showLastPage()">
+                    <div layout="row">
+                        <h3>Commands</h3>
+                    </div>
+                    <ul>
+                        <li>
+                            .exit - Prompts the user if he wants to leave the current game. The user receives a simple structured message.
+                        </li>
+                        <li>
+                            .help - Sends the user a text message with each one of the game commands and their purpose.
+                        </li>
+                        <li>
+                            .role - Reminds the user what his current game role is.
+                        </li>
+                        <li>
+                            .roles - For each role that has been assigned in the current game, if the role has already been revealed, it shows the alias of the player who holds the role.
+                        </li>
+                        <li>
+                            .alive - Alias of all the players that are still alive in the current game.
+                        </li>
+                        <li>
+                            .dead - Alias of each player that has been killed in the current game.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div layout="row" layout-align="space-between center" flex-gt-sm="10">
+        <div layout="row" layout-align="start center" ng-click="prevPage()">
+            <md-button class="md-primary" ng-disabled="showFirstPage()">
                 Previous
             </md-button>
         </div>
-    </div>
-    <div flex="5"></div>
-    <div flex="50" layout="column">
-        <div flex="90" layout="column" layout-align="center center">
-
-            <div ng-if="showFirstPage()" flex="100">
-                <div layout="row">
-                    <h3>Development</h3>
-                </div>
-
-                <p>
-                    The game was originally planned to be released as a stand-alone chatbot for Facebook Messenger. However, to be able to fully test the game without having multiple facebook accounts, a web-client was implemented.
-                </p>
-                <p>
-                    The server handles all client connections through the chat. Several structured messages have been implemented to minimize the number of commands the user needs to learn to interact with the game.
-                </p>
-
-                <p>
-                    However, some commands were implemented in order for users to be able to poll the server for information they might need. All commands are preceded by a '.' to distinguish them from messages that are meant to be sent to other users.
-                </p>
-            </div>
-
-            <div ng-if="showLastPage()" flex="100">
-                <div layout="row">
-                    <h3>Commands</h3>
-                </div>
-                <ul>
-                    <li>
-                        .exit - Prompts the user if he wants to leave the current game. The user receives a simple structured message.
-                    </li>
-                    <li>
-                        .help - Sends the user a text message with each one of the game commands and their purpose.
-                    </li>
-                    <li>
-                        .role - Reminds the user what his current game role is.
-                    </li>
-                    <li>
-                        .roles - For each role that has been assigned in the current game, if the role has already been revealed, it shows the alias of the player who holds the role.
-                    </li>
-                    <li>
-                        .alive - Alias of all the players that are still alive in the current game.
-                    </li>
-                    <li>
-                        .dead - Alias of each player that has been killed in the current game.
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div flex="10" layout="row" layout-align="end center" ng-click="nextPage()" ng-if="showFirstPage()">
-            <md-button class="md-primary">
+        <div layout="row" layout-align="end center" ng-click="nextPage()">
+            <md-button class="md-primary" ng-disabled="showLastPage()">
                 Next
             </md-button>
         </div>
