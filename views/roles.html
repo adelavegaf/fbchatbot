@@ -14,24 +14,24 @@
                                 <span class="md-headline">{{selectedItem}}</span>
                             </md-card-title>
                             <md-card-content layout="column">
-                                <div layout="row" layout-align="center center" flex="70">
+                                <div layout="row" layout-align="center center" flex-gt-sm="70">
                                     <img class="md-media-xl" ng-src="../images/{{selectedItem.toLowerCase()}}.svg" flex/>
                                 </div>
-                                <div layout="row" layout-align="center center" flex="10">
-                                    <p flex="50" layout="row" layout-align="center center">
+                                <div layout="row" layout-align="center center" flex-gt-sm="10">
+                                    <p flex-gt-sm="50" layout="row" layout-align="center center">
                                         <span>
                                         <md-icon class="material-icons home">home</md-icon>
                                         Alliance: {{information[selectedItem].alliance}}
                                     </span>
                                     </p>
-                                    <p flex="50" layout="row" layout-align="center center">
+                                    <p flex-gt-sm="50" layout="row" layout-align="center center">
                                         <span>
                                         <md-icon class="material-icons star">star_rate</md-icon>
                                         Skill: {{information[selectedItem].skill}}
                                     </span>
                                     </p>
                                 </div>
-                                <p flex="20" layout="row" layout-align="center center">{{information[selectedItem].description}}</p>
+                                <p flex-gt-sm="20" layout="row" layout-align="center center">{{information[selectedItem].description}}</p>
                             </md-card-content>
                         </md-card>
                     </div>
