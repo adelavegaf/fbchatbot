@@ -1,4 +1,4 @@
-<div layout="row" class="responsive-height" flex>
+<div layout="row" class="full-height" flex>
     <div flex-gt-sm="10"></div>
     <div class="content-panel" layout="column" flex>
         <md-tabs md-swipe-content="true">
@@ -7,7 +7,7 @@
         <md-content flex layout-padding>
             <div flex layout-gt-sm="row" layout-xs="column" layout-sm="column" layout-padding class="information">
                 <div flex-gt-sm="50">
-                    <md-card layout="column" flex="100">
+                    <md-card layout="column" flex-gt-sm="100">
                         <md-card-title>
                             <span class="md-headline">{{selectedItem}}</span>
                         </md-card-title>
@@ -33,8 +33,8 @@
                         </md-card-content>
                     </md-card>
                 </div>
-                <div flex-gt-sm="10"></div>
-                <div layout="column" flex-gt-sm="40">
+                <div flex-gt-sm="5"></div>
+                <div layout="column" flex-gt-sm="45">
                     <div layout="column" flex="95">
                         <h3>Story</h3>
                         <p>
