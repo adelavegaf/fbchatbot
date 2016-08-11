@@ -1,53 +1,56 @@
-<div layout="row" class="full-height" flex>
-    <div flex-gt-sm="10"></div>
+<div layout-gt-sm="row" layout-xs="column" layout-sm="column" class="full-height" flex>
+    <div flex="10" hide-xs hide-sm></div>
     <div class="content-panel" layout="column" flex>
-        <md-tabs md-swipe-content="true">
+        <md-tabs md-swipe-content>
             <md-tab label="{{item}}" ng-repeat="item in tabItems" md-on-select="selectItem(item)"></md-tab>
         </md-tabs>
-        <md-content flex layout-padding>
-            <div flex layout-gt-sm="row" layout-xs="column" layout-sm="column" layout-padding class="information">
-                <div flex-gt-sm="50">
-                    <md-card layout="column" flex-gt-sm="100">
-                        <md-card-title>
-                            <span class="md-headline">{{selectedItem}}</span>
-                        </md-card-title>
-                        <md-card-content layout="column">
-                            <div layout="row" layout-align="center center" flex="70">
-                                <img class="md-media-xl" ng-src="../images/{{selectedItem.toLowerCase()}}.svg" flex/>
-                            </div>
-                            <div layout="row" layout-align="center center" flex="10">
-                                <p flex="50" layout="row" layout-align="center center">
-                                    <span>
+        <md-content flex layout="row" layout-padding>
+            <div flex="5" hide-xs hide-sm></div>
+            <div flex layout-padding class="information">
+                <div div layout-gt-sm="row" layout-xs="column" layout-sm="column" class="responsive-height" flex-gt-sm="100">
+                    <div flex-gt-sm="50">
+                        <md-card layout="column" flex-gt-sm="100">
+                            <md-card-title>
+                                <span class="md-headline">{{selectedItem}}</span>
+                            </md-card-title>
+                            <md-card-content layout="column">
+                                <div layout="row" layout-align="center center" flex="70">
+                                    <img class="md-media-xl" ng-src="../images/{{selectedItem.toLowerCase()}}.svg" flex/>
+                                </div>
+                                <div layout="row" layout-align="center center" flex="10">
+                                    <p flex="50" layout="row" layout-align="center center">
+                                        <span>
                                         <md-icon class="material-icons home">home</md-icon>
                                         Alliance: {{information[selectedItem].alliance}}
                                     </span>
-                                </p>
-                                <p flex="50" layout="row" layout-align="center center">
-                                    <span>
+                                    </p>
+                                    <p flex="50" layout="row" layout-align="center center">
+                                        <span>
                                         <md-icon class="material-icons star">star_rate</md-icon>
                                         Skill: {{information[selectedItem].skill}}
                                     </span>
-                                </p>
-                            </div>
-                            <p flex="20" layout="row" layout-align="center center">{{information[selectedItem].description}}</p>
-                        </md-card-content>
-                    </md-card>
-                </div>
-                <div flex-gt-sm="5"></div>
-                <div layout="column" flex-gt-sm="45">
-                    <div layout="column" flex="95">
-                        <h3>Story</h3>
-                        <p>
-                            {{information[selectedItem].story}}
-                        </p>
+                                    </p>
+                                </div>
+                                <p flex="20" layout="row" layout-align="center center">{{information[selectedItem].description}}</p>
+                            </md-card-content>
+                        </md-card>
                     </div>
-                    <div layout="row" layout-align="end center" flex="5">
-                        <a href="http://www.freepik.com" style="font-size: 12px">Role image selected with freepik</a>
+                    <div flex="5" hide-xs hide-sm></div>
+                    <div layout="column" flex-gt-sm="45">
+                        <div layout="column" flex-gt-sm="95">
+                            <h3>Story</h3>
+                            <p>
+                                {{information[selectedItem].story}}
+                            </p>
+                        </div>
+                        <div layout="row" layout-align="end center" flex-gt-sm="5">
+                            <a href="http://www.freepik.com" style="font-size: 12px">Role image selected with freepik</a>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div flex-gt-sm="5"></div>
+            <div flex="5" hide-xs hide-sm></div>
         </md-content>
     </div>
-    <div flex-gt-sm="10"></div>
+    <div flex="10" hide-xs hide-sm></div>
 </div>
