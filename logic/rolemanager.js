@@ -200,7 +200,7 @@ var roles = {
         'alliance': 'town',
         'description': "Learn another person's role each night.",
         'nightinfo': 'Choose who you want to investigate.',
-        'actionName': 'Investigate',
+        'actionName': 'Inspect',
         'action': function (from, to) {
             return function (messagemanager, users) {
                 if (!satisfiesConditions(from, to, messagemanager)) {
