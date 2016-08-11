@@ -1,5 +1,6 @@
 .special-subhead {
-    padding-top: 10px;
+    padding-top: 15px !important;
+    padding-bottom: 5px;
 }
 
 .voting {
