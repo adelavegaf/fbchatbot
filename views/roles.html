@@ -1,12 +1,12 @@
 <div layout="row" class="full-height" flex>
-    <div flex="10"></div>
+    <div flex-gt-sm="10"></div>
     <div class="content-panel" layout="column" flex>
-        <md-tabs>
+        <md-tabs md-swipe-content="true">
             <md-tab label="{{item}}" ng-repeat="item in tabItems" md-on-select="selectItem(item)"></md-tab>
         </md-tabs>
-        <md-content flex layout="row" layout-padding>
-            <div flex layout="row" layout-padding class="information">
-                <div flex="50">
+        <md-content flex layout-padding>
+            <div flex layout-gt-sm="row" layout-xs="column" layout-sm="column" layout-padding class="information">
+                <div flex-gt-sm="50">
                     <md-card layout="column" flex="100">
                         <md-card-title>
                             <span class="md-headline">{{selectedItem}}</span>
@@ -33,8 +33,8 @@
                         </md-card-content>
                     </md-card>
                 </div>
-                <div flex="10"></div>
-                <div layout="column" flex="40">
+                <div flex-gt-sm="10"></div>
+                <div layout="column" flex-gt-sm="40">
                     <div layout="column" flex="95">
                         <h3>Story</h3>
                         <p>
@@ -47,8 +47,8 @@
                 </div>
 
             </div>
-            <div flex=" 5 "></div>
+            <div flex-gt-sm="5"></div>
         </md-content>
     </div>
-    <div flex="10 "></div>
+    <div flex-gt-sm="10"></div>
 </div>

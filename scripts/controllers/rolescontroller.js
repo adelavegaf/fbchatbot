@@ -36,7 +36,7 @@ angular.module('mafiaApp').controller('RolesController', ['$scope', function ($s
 
     $scope.information['Detective'] = {
         alliance: 'Town',
-        skill: 'Investigate',
+        skill: 'Inspect',
         description: 'She is able to find out a player’s role at night.',
         story: 'The investigator has always been obsessed with finding out the truth. She is a very skeptical person. They sometimes attribute this behavior as the cause of her always having short relationships. This past week the police force assigned her the task of dismantling the mafia that had been growing in town. With her reputation at stake, she will do anything in her power to try and complete her task. Anyone is a suspect in her new case. However, she must be cautious, if not, the mafia may as well kill her.'
     };

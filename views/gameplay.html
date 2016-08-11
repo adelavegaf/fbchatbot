@@ -1,7 +1,7 @@
 <div layout-gt-sm="row" layout-xs="column" layout-sm="column" class="full-height" flex>
     <div flex="10" hide-xs hide-sm></div>
     <div class="content-panel" layout="column" flex>
-        <md-tabs>
+        <md-tabs md-swipe-content="true">
             <md-tab label="{{item}}" ng-repeat="item in tabItems" md-on-select="selectItem(item)"></md-tab>
         </md-tabs>
         <md-content flex layout="row" layout-padding>
