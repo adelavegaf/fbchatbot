@@ -1,7 +1,11 @@
 'use strict';
 
-angular.module('mafiaApp', ['ui.router', 'ngResource', 'ngAnimate', 'ngMaterial'])
-    .config(function ($stateProvider, $urlRouterProvider) {
+angular.module('mafiaApp', ['ui.router', 'ngResource', 'ngAnimate', 'ngMaterial', 'ezfb'])
+    .config(function ($stateProvider, $urlRouterProvider, ezfbProvider) {
+        ezfbProvider.setInitParams({
+            appId: '496004080598108',
+            version: 'v2.6'
+        });
         $stateProvider
             .state('mafia', {
                 url: '/',
