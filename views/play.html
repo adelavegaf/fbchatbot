@@ -1,15 +1,15 @@
-<div layout="row" hide-xs hide-sm>
+<div layout="row" class="full-height" flex hide-xs hide-sm>
     <div flex="5"></div>
-    <div flex="20" layout="column">
+
+    <div flex="20" layout="column" ng-if="!isDisconnected()">
         <div class="fade" layout="column" ng-if="isGameActive()" flex="100">
             <md-card flex>
                 <md-content flex>
-                    <md-tabs class="md-dynamic-height md-primary" md-stretch-tabs="always" md-no-pagination="true" md-center-tabs="true">
-
+                    <md-tabs class="full-height md-primary" md-stretch-tabs="always" md-no-pagination="true" md-center-tabs="true" flex>
                         <md-tab label="Users">
                             <md-content class="auto-overflow" flex>
                                 <md-list layout="column" flex>
-                                    <md-list-item class="md-2-line" ng-repeat="user in aliveUsers" ng-click="userClick(user)">
+                                    <md-list-item class="md-3-line" ng-repeat="user in aliveUsers" ng-click="userClick(user)">
                                         <img ng-src="../images/{{user.name.toLowerCase()}}.svg" class="md-avatar" alt="" />
                                         <div class="md-list-item-text" layout="row">
                                             <div flex="80" layout="column">
@@ -22,7 +22,7 @@
                                         </div>
                                     </md-list-item>
 
-                                    <md-list-item class="md-2-line" ng-repeat="user in deadUsers" ng-click="null">
+                                    <md-list-item class="md-3-line" ng-repeat="user in deadUsers" ng-click="null">
                                         <img ng-src="../images/{{user.name.toLowerCase()}}.svg" class="md-avatar" alt="" />
                                         <div class="md-list-item-text" layout="column">
                                             <h5>{{user.name}}</h5>
@@ -36,7 +36,7 @@
                         <md-tab label="Roles">
                             <md-content class="auto-overflow" flex>
                                 <md-list layout="column" flex>
-                                    <md-list-item class="md-2-line" ng-repeat="role in roles" ng-click="null">
+                                    <md-list-item class="md-3-line" ng-repeat="role in roles" ng-click="null">
                                         <img ng-src="../images/{{getRoleImage(role)}}.svg" class="md-avatar" alt="" />
                                         <div class="md-list-item-text" layout="row">
                                             <div flex="80" layout="column">
@@ -58,50 +58,55 @@
         </div>
     </div>
 
-    <div ng-if="isDisconnected()" flex="50">
-        <div class="vertical-l-container main" layout="column">
-            <md-button class="md-raised md-primary" md-no-ink ng-click="connect()" flex>Play</md-button>
+    <div flex="5" ng-if="isDisconnected()"></div>
+
+    <div class="content-panel" layout="column" layout-align="center center" ng-if="isDisconnected()" flex>
+        <h3>Start playing with the web app</h3>
+        <md-button class="md-primary md-raised" md-no-ink ng-click="connect()">Play</md-button>
+        <h3>or</h3>
+        <div class="fb-messengermessageus" messenger_app_id="496004080598108" page_id="1691882611078540" color="blue" size="xlarge">
         </div>
+        <h3>to play through Facebook Messenger!</h3>
     </div>
 
+    <div flex="5" ng-if="isDisconnected()"></div>
+
     <div ng-if="isConnecting() || isConnected()" flex="50">
-        <div class="vertical-l-container main" layout="column" layout-align="center stretch" flex>
+        <div class="full-height vertical-l-container main" layout="column" layout-align="center stretch" flex>
             <div flex="40"></div>
-            <div flex="5" layout="column" layout-align="center center">
+            <div flex="20" layout="column" layout-align="center center">
                 <md-progress-circular md-mode="indeterminate"></md-progress-circular>
                 <h6 class="fade" ng-if="loadingStatus() && (isConnecting() || isConnected())">{{loadingMsg}}</h6>
             </div>
-            <div flex="55"></div>
+            <div flex="40"></div>
         </div>
     </div>
 
     <div ng-if="isPlaying()" flex="50">
-        <div class="vertical-l-container main" layout="column" flex>
-            <container flex="90">
-                <section class="auto-overflow" chat-scroll="messages">
-                    <md-list layout="column" id="message-container" layout-align="start stretch" flex>
-                        <md-list-item class="md-2-line" ng-repeat="msg in messages track by $index" flex="10">
-                            <div ng-if="isOwnMessage(msg)" flex>
-                                <div flex="10"></div>
-                                <div class="md-list-item-text" layout="column" layout-align="start end" flex="90">
-                                    <h4>{{msg.alias}}</h4>
-                                    <p class="chat-msg" ng-style="chatColor(msg)">{{msg.text}}</p>
-                                </div>
+        <div class="full-height vertical-l-container main" layout="column" flex>
+            <container class="auto-overflow" chat-scroll="messages" flex="90">
+                <md-list layout="column" id="message-container" layout-align="start stretch" flex>
+                    <md-list-item class="md-2-line" ng-repeat="msg in messages track by $index" flex="10">
+                        <div ng-if="isOwnMessage(msg)" flex>
+                            <div flex="10"></div>
+                            <div class="md-list-item-text" layout="column" layout-align="start end" flex="90">
+                                <h4>{{msg.alias}}</h4>
+                                <p class="chat-msg" ng-style="chatColor(msg)">{{msg.text}}</p>
                             </div>
-                            <div ng-if="!isOwnMessage(msg)" flex>
-                                <div class="md-list-item-text" layout="column" layout-align="start start" flex="90">
-                                    <h4>{{msg.alias}}</h4>
-                                    <p class="chat-msg" ng-style="chatColor(msg)">{{msg.text}}</p>
-                                </div>
-                                <div flex="10"></div>
+                        </div>
+                        <div ng-if="!isOwnMessage(msg)" flex>
+                            <div class="md-list-item-text" layout="column" layout-align="start start" flex="90">
+                                <h4>{{msg.alias}}</h4>
+                                <p class="chat-msg" ng-style="chatColor(msg)">{{msg.text}}</p>
                             </div>
-                        </md-list-item>
-                    </md-list>
-                </section>
+                            <div flex="10"></div>
+                        </div>
+                    </md-list-item>
+                </md-list>
             </container>
-            <div class="message-form">
+            <div class="message-form" flex="10">
                 <form name="messageForm">
-                    <md-input-container layout="row" flex>
+                    <md-input-container class="min-margin" layout="row" flex>
                         <label flex>{{currentUser.alias}}: </label>
                         <input name="messaging" ng-model="message.text" ng-keypress="sendMessage($event)" maxlength="140" ng-disabled="!canChat()" flex>
                     </md-input-container>
@@ -110,7 +115,7 @@
         </div>
     </div>
 
-    <div flex="20" layout="column">
+    <div flex="20" layout="column" ng-if="!isDisconnected()">
 
         <div class="fade" flex="20" ng-if="isGameActive()">
             <md-card>
@@ -160,7 +165,7 @@
     <div flex="90" layout="column" layout-align="center center">
         <p class="mobile-paragraph" layout="column" layout-align="end center" flex>Start playing with your friends through Facebook Messenger!</p>
         <div layout="column" layout-align="start center" flex>
-            <div class="fb-messengermessageus" messenger_app_id="496004080598108" page_id="1691882611078540" color="white" size="xlarge">
+            <div class="fb-messengermessageus" messenger_app_id="496004080598108" page_id="1691882611078540" color="blue" size="xlarge">
             </div>
         </div>
     </div>

@@ -1,6 +1,4 @@
 .vertical-l-container {
-    min-height: 85%;
-    min-height: 85vh;
     background-color: white;
     border-width: 1px;
     border-style: solid;
@@ -96,6 +94,10 @@ md-card md-card-content {
     border-bottom-width: 2px;
 }
 
+.min-margin {
+    margin: 10px;
+}
+
 .glyphicon-ok {
     color: #00D9A3;
 }
@@ -122,6 +124,11 @@ md-list md-list-item.md-3-line .md-list-item-text p {
 md-list-item.md-2-line,
 md-list-item.md-2-line>.md-no-style {
     min-height: 70px !important;
+}
+
+md-list-item.md-3-line,
+md-list-item.md-3-line>.md-no-style {
+    min-height: 64px !important;
 }
 
 .chat-msg {
