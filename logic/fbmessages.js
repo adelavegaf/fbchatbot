@@ -199,7 +199,7 @@ var sendUserForm = function (userId, elements) {
  * to the user with userId.
  */
 var sendHelp = function (userId) {
-    var text = 'Commands:\n .help : shows you the list of available commands.\n .exit : prompts you to leave current game.';
+    var text = 'Commands:\n .help : shows you the list of available commands.\n .exit : prompts you to leave current game.\n .role : tells you your role.\n .roles : informs all the roles that are in the game.\n .alive : shows you the alias of all players that are still alive.\n .dead : shows you the alias of all players that are dead.';
     sendText(userId, text);
 };
 
