@@ -3,7 +3,7 @@
 var rolemanager = require('./rolemanager');
 var messagemanager = require('./messagemanager');
 /**
- * Predefined user alias.
+ * Predefined user aliases.
  */
 var names = ['Peyton', 'Sam', 'Alex', 'Morgan', 'Taylor', 'Carter', 'Jessie'];
 
@@ -76,6 +76,17 @@ var getUserFromId = function (session, userId) {
     return null;
 };
 
+/**
+ * Determines if a new Mafia Boss should be assigned.
+ */
+var checkNewMafiaBoss = function (user, session) {
+    if (user.role === 'Mafia Boss' && (user.state === 'dead' || user.state === 'disconnected')) {
+        var mafiosos = getUsersInMafia(session.users);
+        rolemanager.findNewMafiaBoss(mafiosos, messagemanager);
+        return true;
+    }
+    return false;
+};
 
 /**
  * Determines whether a user has already voted in the
@@ -114,10 +125,7 @@ var calculateQuorum = function (users) {
 var afterVotePhase = function (session) {
     if (typeof session.votedUser.name !== 'undefined') {
         messagemanager.voteAccepted(session.users, session.votedUser);
-        if (session.votedUser.role === 'Mafia Boss') {
-            var mafiosos = getUsersInMafia(session.users);
-            rolemanager.findNewMafiaBoss(mafiosos, messagemanager);
-        }
+        checkNewMafiaBoss(session.votedUser, session);
         return true;
     }
     messagemanager.voteDenied(session.users);
@@ -185,9 +193,8 @@ var afterNightPhase = function (session) {
     for (i = 0; i < users.length; i++) {
         if (users[i].state !== 'dead') {
             users[i].state = 'alive';
-        } else if (users[i].state === 'dead' && users[i].role === 'Mafia Boss') {
-            var mafiosos = getUsersInMafia(users);
-            rolemanager.findNewMafiaBoss(mafiosos, messagemanager);
+        } else {
+            checkNewMafiaBoss(users[i], session);
         }
     }
 };
@@ -461,6 +468,7 @@ var mafia = {
     getAliveUsers: getAliveUsers,
     getDeadUsers: getDeadUsers,
     getUserFromId: getUserFromId,
+    checkNewMafiaBoss: checkNewMafiaBoss,
     hasAlreadyVoted: hasAlreadyVoted,
     beforeVotePhase: beforeVotePhase,
     calculateQuorum: calculateQuorum,

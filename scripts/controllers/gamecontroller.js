@@ -54,6 +54,10 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
         };
     }
 
+    function resetGame() {
+        initVariables();
+    }
+
     function setCurrentUserState(text) {
         var deadAlias = text.match(/[a-z]+/i)[0];
         if (deadAlias === $scope.currentUser.alias) {
@@ -62,6 +66,9 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
     }
 
     function clearClicks(players) {
+        if (typeof players === 'undefined') {
+            return;
+        }
         for (var i = 0; i < players.length; i++) {
             players[i].clicked = false;
         }
@@ -74,6 +81,9 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
     }
 
     function setPlayersMessage(players, message) {
+        if (typeof players === 'undefined') {
+            return;
+        }
         for (var i = 0; i < players.length; i++) {
             players[i].message = message;
         }
@@ -325,14 +335,18 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
 
     socket.on('game:draw', function (data) {
         cancelCounterTimeout();
+        addMessage('Game', data.text);
+        addMessage('Game', 'The game will close in 10 seconds.');
         showAlert('Game', data.text);
-        initVariables();
+        $timeout(resetGame, 10000);
     });
 
     socket.on('game:win', function (data) {
         cancelCounterTimeout();
+        addMessage('Game', data.text);
+        addMessage('Game', 'The game will close in 10 seconds.');
         showAlert('Game', data.text);
-        initVariables();
+        $timeout(resetGame, 10000);
     });
 
     socket.on('game:night', function (data) {
@@ -342,12 +356,15 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
         counterTimeout = $timeout(onCounterTimeout, 1000);
         actionProperties = data;
         $scope.phase = 'Night';
+        setPlayersMessage($scope.aliveUsers, ' ');
         var targetUsers = matchTargetUsers(actionProperties.targets, $scope.aliveUsers);
         setPlayersMessage(targetUsers, $scope.currentUser.actionName);
         addMessage('Game', $scope.currentUser.nightinfo);
     });
 
     socket.on('game:day', function (data) {
+        setPlayersMessage($scope.aliveUsers, ' ');
+        clearClicks($scope.aliveUsers);
         actionProperties = {};
         cancelCounterTimeout();
         $scope.counter = durations.dayDuration / 1000;
@@ -358,6 +375,7 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
     });
 
     socket.on('game:voting', function (data) {
+        setPlayersMessage($scope.aliveUsers, ' ');
         clearClicks($scope.aliveUsers);
         cancelCounterTimeout();
         $scope.counter = durations.votingDuration / 1000;
@@ -369,11 +387,37 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
     });
 
     socket.on('game:alive', function (data) {
-        $scope.aliveUsers = data.users;
+        if ($scope.aliveUsers.length === 0) {
+            $scope.aliveUsers = data.users;
+            return;
+        }
+        for (var i = 0; i < $scope.aliveUsers.length; i++) {
+            var found = false;
+            for (var j = 0; j < data.users.length; j++) {
+                if ($scope.aliveUsers[i].name === data.users[j].name) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                $scope.aliveUsers.splice(i, 1);
+            }
+        }
     });
 
     socket.on('game:dead', function (data) {
-        $scope.deadUsers = data.users;
+        for (var i = 0; i < data.users.length; i++) {
+            var found = false;
+            for (var j = 0; j < $scope.deadUsers.length; j++) {
+                if (data.users[i].name === $scope.deadUsers[j].name) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                $scope.deadUsers.push(data.users[i]);
+            }
+        }
     });
 
     socket.on('game:roles', function (data) {

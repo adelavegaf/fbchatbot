@@ -199,11 +199,13 @@ var exit = function (id, type) {
     var id = String(id);
     var sessionId = String(activeUsers[id]);
     var session = sessions[sessionId];
-    var user = session.users.splice(findUserIndex(session, id), 1);
+    var user = session.users.splice(findUserIndex(session, id), 1)[0];
+    user.state = 'disconnected';
     delete activeUsers[id];
     messagemanager.notifyExit(session.users);
     if (session.state !== 'connecting') {
-        session.disconnected.push(user[0]);
+        session.disconnected.push(user);
+        mafia.checkNewMafiaBoss(user, session);
         mafia.revealRole(user, session);
     }
     return true;

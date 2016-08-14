@@ -118,12 +118,12 @@ module.exports = {
         personalMsg(id, type, title, text);
     },
     userNotFoundError: function (id, type) {
-        var text = 'The user is no longer online';
+        var text = 'The user is no longer online.';
         var title = 'error';
         personalMsg(id, type, title, text);
     },
     selfVoteError: function (id, type) {
-        var text = "You can't vote for yourself";
+        var text = "You can't vote for yourself!";
         var title = 'error';
         personalMsg(id, type, title, text);
     },
@@ -147,12 +147,12 @@ module.exports = {
     },
     notifyJoin: function (users) {
         var title = 'user:join';
-        var text = `A user has joined. Number of users in session: ${users.length}`;
+        var text = `A user has joined. Number of users in session: ${users.length}.`;
         broadcastMsg(users, title, text);
     },
     notifyExit: function (users) {
         var title = 'user:exit';
-        var text = `A user has left. Number of users in session: ${users.length}`;
+        var text = `A user has left. Number of users in session: ${users.length}.`;
         broadcastMsg(users, title, text);
     },
     notifyDraw: function (users) {
@@ -205,7 +205,7 @@ module.exports = {
     },
     notifyVote: function (users, from, to, quorum) {
         var title = 'user:vote';
-        var text = `${from.name} has voted for ${to.name}. ${to.vote}/${quorum}`;
+        var text = `${from.name} has voted for ${to.name}. ${to.name} has ${to.vote} votes, needs minimum of ${quorum}.`;
         broadcastMsg(users, title, text);
     },
     notifyNightPhase: function (alive, dead, sessionId, dayCount) {
@@ -248,7 +248,7 @@ module.exports = {
     },
     notifyDeath: function (user, users, cause) {
         var title = 'game:kill';
-        var text = `${user.name} has been killed by the ${cause}. His role was ${user.role}`
+        var text = `${user.name} has been killed by the ${cause}. His role was ${user.role}.`
         broadcastMsg(users, title, text);
     },
     broadcastText: function (id, users, text) {
@@ -263,7 +263,7 @@ module.exports = {
     },
     revealRole: function (user, users) {
         var title = 'game:reveal';
-        var text = `${user.name} role was ${user.role}`;
+        var text = `${user.name} role was ${user.role}.`;
         broadcastMsg(users, title, text);
     },
     updateRole: function (user, text) {
@@ -276,7 +276,7 @@ module.exports = {
     },
     voteAccepted: function (users, votedUser) {
         var title = 'vote:accept';
-        var text = `${votedUser.name} has been lynched. Role: ${votedUser.role}`;
+        var text = `${votedUser.name} has been lynched. Role: ${votedUser.role}.`;
         broadcastMsg(users, title, text);
     },
     voteDenied: function (users) {
