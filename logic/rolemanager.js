@@ -109,7 +109,7 @@ var roles = {
         'description': 'Prevent someone from dying each night.',
         'nightinfo': 'Choose who you want to save.',
         'init': function (user) {
-            user.selfHeal = 2;
+            user.selfHeal = 1;
         },
         'actionName': 'Save',
         'action': function (from, to) {
@@ -225,9 +225,12 @@ var roles = {
     'Vigilante': {
         'id': 5,
         'alliance': 'town',
-        'description': 'Kill someone each night in the name of justice.',
+        'description': 'You may only kill one player in the name of justice.',
         'nightinfo': 'Choose who you want to kill.',
         'actionName': 'Kill',
+        'init': function (user) {
+            user.kill = 1;
+        },
         'action': function (from, to) {
             return function (messagemanager, users) {
                 if (!satisfiesConditions(from, to, messagemanager)) {
@@ -235,7 +238,8 @@ var roles = {
                 } else if (to.state === 'healed') {
                     messagemanager.roleAction(from, `${to.name} was saved by the doctor.`);
                     messagemanager.roleAction(to, `The vigilante targeted you but you were saved by the doctor.`);
-                } else {
+                } else if (user.kill > 0) {
+                    user.kill--;
                     to.state = 'dead';
                     messagemanager.notifyDeath(to, users, 'vigilante');
                 }
