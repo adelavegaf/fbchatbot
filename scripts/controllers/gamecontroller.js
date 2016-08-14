@@ -22,6 +22,7 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
     $scope.loadingMsg;
     $scope.showDescription;
     $scope.roles;
+    $scope.aliases;
 
     function initVariables() {
         status = 'disconnected';
@@ -44,6 +45,7 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
         $scope.aliveUsers = [];
         $scope.deadUsers = [];
         $scope.roles = [];
+        $scope.aliases = {};
         $scope.currentUser = {};
         $scope.phase = '';
         $scope.loadingMsg = ' ';
@@ -110,6 +112,7 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
             alias: alias,
             text: text
         };
+        calculateAliases(alias);
         $scope.messages.push(listMessage);
     }
 
@@ -176,8 +179,28 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
         );
     }
 
-    $scope.sendMessage = function (keyEvent) {
+    function calculateAliases(alias) {
+        if (typeof $scope.aliases[alias] === 'undefined') {
+            $scope.aliases[alias] = true;
+        }
+    }
+
+    $scope.openMenu = function ($mdOpenMenu, ev) {
+        $mdOpenMenu(ev);
+    };
+
+    $scope.sendMessageKey = function (keyEvent) {
         if (keyEvent.which === 13 && $scope.message.text.length > 0) {
+            socket.emit('user:msg', {
+                alias: $scope.currentUser.alias,
+                text: $scope.message.text
+            });
+            $scope.message.text = '';
+        }
+    };
+
+    $scope.sendMessage = function () {
+        if ($scope.message.text.length > 0) {
             socket.emit('user:msg', {
                 alias: $scope.currentUser.alias,
                 text: $scope.message.text
@@ -262,6 +285,12 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
         } else {
             style['background-color'] = pickColor(alias);
         }
+        return style;
+    };
+
+    $scope.checkboxColor = function (alias) {
+        var style = {};
+        style['color'] = userColors[alias];
         return style;
     };
 

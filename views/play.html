@@ -89,7 +89,7 @@
         <div class="full-height vertical-l-container main" layout="column" flex>
             <container class="auto-overflow" chat-scroll="messages" flex="90">
                 <md-list layout="column" id="message-container" layout-align="start stretch" flex>
-                    <md-list-item class="md-2-line" ng-repeat="msg in messages track by $index" flex="10">
+                    <md-list-item class="md-2-line" ng-repeat="msg in messages | messageFilter:aliases track by $index" flex="10">
                         <div ng-if="isOwnMessage(msg)" flex>
                             <div flex="10"></div>
                             <div class="md-list-item-text" layout="column" layout-align="start end" flex="90">
@@ -108,11 +108,26 @@
                 </md-list>
             </container>
             <div class="message-form" flex="10">
-                <form name="messageForm">
+                <form name="messageForm" layout="row">
+                    <md-menu md-offset="5 5">
+                        <md-button class="md-accent md-hue-3 md-icon-button" ng-click="openMenu($mdOpenMenu, $event)">
+                            <md-icon md-menu-origin class="material-icon">filter_list</md-icon>
+                        </md-button>
+                        <md-menu-content layout-padding>
+                            <md-menu-item ng-repeat="(key, value) in aliases">
+                                <md-checkbox ng-model="aliases[key]" aria-label="Checkbox" class="md-primary">
+                                    {{key}}
+                                </md-checkbox>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
                     <md-input-container class="min-margin" layout="row" flex>
                         <label flex>{{currentUser.alias}}: </label>
-                        <input name="messaging" ng-model="message.text" ng-keypress="sendMessage($event)" maxlength="140" ng-disabled="!canChat()" flex>
+                        <input name="messaging" ng-model="message.text" ng-keypress="sendMessageKey($event)" maxlength="140" ng-disabled="!canChat()" flex>
                     </md-input-container>
+                    <md-button class="md-primary md-hue-3 md-icon-button" ng-click="sendMessage()">
+                        <md-icon class="material-icon">send</md-icon>
+                    </md-button>
                 </form>
             </div>
         </div>
