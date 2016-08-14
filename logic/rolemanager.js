@@ -238,8 +238,8 @@ var roles = {
                 } else if (to.state === 'healed') {
                     messagemanager.roleAction(from, `${to.name} was saved by the doctor.`);
                     messagemanager.roleAction(to, `The vigilante targeted you but you were saved by the doctor.`);
-                } else if (user.kill > 0) {
-                    user.kill--;
+                } else if (from.kill > 0) {
+                    from.kill--;
                     to.state = 'dead';
                     messagemanager.notifyDeath(to, users, 'vigilante');
                 }
