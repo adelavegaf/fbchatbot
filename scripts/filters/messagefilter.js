@@ -8,7 +8,7 @@ angular.module('mafiaApp').filter('messageFilter', [function () {
 
         angular.forEach(input, function (msg) {
             if (aliases[msg.alias]) {
-                out.push(msg)
+                out.push(msg);
             }
         });
         return out;

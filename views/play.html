@@ -60,16 +60,22 @@
 
     <div flex="5" ng-if="isDisconnected()"></div>
 
-    <div layout="column" layout-align="start center" ng-if="isDisconnected()" flex>
-        <h3>Start playing with the web app or with Facebook Messenger!</h3>
-        <div layout="row" layout-align="space-between center">
-            <md-button class="md-raised md-primary" md-no-ink ng-click="connect()" style="width: 128px !important;">
-                <md-icon class="material-icon">play_arrow</md-icon>
-                Web App
-            </md-button>
-            <div class="fb-messengermessageus" messenger_app_id="496004080598108" page_id="1691882611078540" color="blue" size="xlarge">
+    <div layout="column" layout-align="center center" ng-if="isDisconnected()" flex>
+        <div flex="30"></div>
+        <div class="start-card" layout="column" layout="center center" flex="40">
+            <div flex="30"></div>
+            <p class="start-font" flex="20">Start playing with the web app or with Facebook Messenger!</p>
+            <div layout="row" layout-align="center center" flex="20">
+                <md-button class="md-raised md-primary" md-no-ink ng-click="connect()" style="width: 128px !important;">
+                    <md-icon class="material-icon">play_arrow</md-icon>
+                    Web App
+                </md-button>
+                <div class="fb-messengermessageus" messenger_app_id="496004080598108" page_id="1691882611078540" color="blue" size="xlarge">
+                </div>
             </div>
+            <div flex="30"></div>
         </div>
+        <div flex="30"></div>
     </div>
 
     <div flex="5" ng-if="isDisconnected()"></div>
