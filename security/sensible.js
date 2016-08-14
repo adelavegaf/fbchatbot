@@ -1,6 +1,6 @@
 var sensible = {
-    token: "EAAHDHPMHZCFwBAFw6bo8JZAvsMZCs3UcuhHn1KOdF0SZCVmwK85Sn9E4IuZAdWr6ZA5e3dEZCaRQBD16eAeQmxsk75wBd8DgZAs4NQcyHCHvi1LeWx1QLOyx3xsYNSxudBsoXuUdY4ZAu8v2LOZCyBovhu6EzeCZBWPhLp65fH7uFjcxAZDZD",
-    verify_token: 'mafia_official_launch'
+    token: "<token_here>",
+    verify_token: '<verify_token_here>'
 };
 
 module.exports = sensible;
