@@ -33,3 +33,7 @@
     border-bottom-style: solid;
     border-bottom-width: 3px;
 }
+
+.no-margin {
+    margin: 0px;
+}
