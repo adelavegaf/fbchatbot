@@ -1,37 +1,37 @@
-<div layout-gt-sm="row" layout-xs="column" layout-sm="column" class="full-height" flex>
+<div layout="row" layout-xs="column" layout-sm="column" class="full-height" flex>
     <div flex="10" hide-xs hide-sm></div>
     <div class="content-panel" layout="column" flex>
         <md-tabs md-swipe-content="true">
             <md-tab label="{{item}}" ng-repeat="item in tabItems" md-on-select="selectItem(item)"></md-tab>
         </md-tabs>
-        <md-content flex layout="row" layout-padding>
+        <md-content flex="100" layout="row" layout-padding>
             <div flex="5" hide-xs hide-sm></div>
-            <div flex layout-padding class="information">
-                <div div layout-gt-sm="row" layout-xs="column" layout-sm="column" class="responsive-height" flex-gt-sm="100">
-                    <div flex-gt-sm="50">
+            <div flex layout-padding layout-gt-sm="row" class="information">
+                <div layout="row" layout-xs="column" layout-sm="column" class="responsive-height" flex-gt-sm="100">
+                    <div layout-gt-sm="row" flex-gt-sm="50">
                         <md-card layout="column" flex-gt-sm="100">
-                            <md-card-title>
+                            <md-card-content layout="column" flex-gt-sm="100">
                                 <span class="md-headline">{{selectedItem}}</span>
-                            </md-card-title>
-                            <md-card-content layout="column">
-                                <div layout="row" layout-align="center center" flex-gt-sm="70">
+                                <div layout="row" layout-align="center center" flex-gt-sm>
                                     <img class="md-media-xl" ng-src="../images/{{selectedItem.toLowerCase()}}.svg" flex/>
                                 </div>
-                                <div layout="row" layout-align="center center" flex-gt-sm="10">
-                                    <p flex-gt-sm="50" layout="row" layout-align="center center">
-                                        <span>
-                                        <md-icon class="material-icons home">home</md-icon>
-                                        Alliance: {{information[selectedItem].alliance}}
-                                    </span>
-                                    </p>
-                                    <p flex-gt-sm="50" layout="row" layout-align="center center">
-                                        <span>
-                                        <md-icon class="material-icons star">star_rate</md-icon>
-                                        Skill: {{information[selectedItem].skill}}
-                                    </span>
-                                    </p>
+                                <div layout="column">
+                                    <div layout="row" layout-align="center center" flex-gt-sm>
+                                        <p layout="row" layout-align="center center">
+                                            <span>
+                                            <md-icon class="material-icons home">home</md-icon>
+                                            Alliance: {{information[selectedItem].alliance}}
+                                            </span>
+                                        </p>
+                                        <p layout="row" layout-align="center center">
+                                            <span>
+                                            <md-icon class="material-icons star">star_rate</md-icon>
+                                            Skill: {{information[selectedItem].skill}}
+                                            </span>
+                                        </p>
+                                    </div>
+                                    <p layout="row" layout-align="center center">{{information[selectedItem].description}}</p>
                                 </div>
-                                <p flex-gt-sm="20" layout="row" layout-align="center center">{{information[selectedItem].description}}</p>
                             </md-card-content>
                         </md-card>
                     </div>

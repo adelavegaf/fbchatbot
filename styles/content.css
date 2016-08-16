@@ -16,3 +16,14 @@
         height: 100%;
     }
 }
+
+
+/* Safari 6.1+ (9.0 is the latest version of Safari at this time) */
+
+@media screen and (min-color-index:0) and(-webkit-min-device-pixel-ratio:0) and (min-device-width: 960px) {
+    @media {
+        .responsive-height {
+            height: auto !important;
+        }
+    }
+}

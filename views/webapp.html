@@ -1,5 +1,5 @@
-<div layout="column" class="responsive-height" flex-gt-sm="100">
-    <div layout-gt-sm="row" layout-xs="column" layout-sm="column" flex-gt-sm="90">
+<div layout="column" layout-align-gt-sm="space-between stretch" class="responsive-height" flex-gt-sm="100">
+    <div layout="row" layout-xs="column" layout-sm="column">
         <div flex-gt-sm="45" layout="column" layout-align="center center">
             <img ng-src="../images/development.png" class="image-radius" ng-if="showFirstPage()" />
             <img ng-src="../images/chat.png" class="image-radius" ng-if="showSecondPage()" />
@@ -53,7 +53,7 @@
             </div>
         </div>
     </div>
-    <div layout="row" layout-align="space-between center" flex-gt-sm="10">
+    <div layout="row" layout-align="space-between center">
         <div layout="row" layout-align="start center" ng-click="prevPage()">
             <md-button class="md-primary" ng-disabled="showFirstPage()">
                 Previous
