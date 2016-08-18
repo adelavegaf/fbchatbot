@@ -30,7 +30,19 @@ Tests the server implementation and the game logic. Note that the tests do not c
 
 ## Deployment
 
-In order for the app to work with Facebook Messenger, you must change the information in the file ./security/sensible.js. Also, you must change the value of the APP_ID attribute in the div element in the file ./views/play.html.
+
+In order for the app to work with Facebook Messenger, you must change the information in the file ./security/sensible.js.
+
+```javascript
+token: "<token_here>",
+verify_token: "<verify_token_here>"
+```
+
+Additionally, you must modify the value of the attribute messenger_app_id in the file ./views/play.html.
+
+```html
+<div class="fb-messengermessageus" messenger_app_id="496004080598108" page_id="1691882611078540" color="white" size="xlarge">
+```
 
 ## Built With
 
