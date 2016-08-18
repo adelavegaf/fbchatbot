@@ -49,6 +49,7 @@ Additionally, you must modify the value of the attribute messenger_app_id in the
 * NodeJS - Used for server and game logic implementation.
 * Express - RESTful API.
 * AngularJS - Used for web app Front End with Angular Material.
+* SocketIO - Used for web app - server communication.
 
 ## Authors
 
