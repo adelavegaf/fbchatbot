@@ -12,7 +12,7 @@ npm start
 ### Prerequisites
 
 You need to have installed [npm](https://www.npmjs.com/) in your system.  
-In order for the Facebook Chat Bot to work you must have an active facebook page.  
+In order for the Facebook Chat Bot to work, you must have an active facebook page.  
 
 ### Installing
 
@@ -30,7 +30,7 @@ Tests the server implementation and the game logic. Note that the tests do not c
 
 ## Deployment
 
-In order for the app to work with Facebook Messenger you must change the information in the file ./security/sensible.js. Also, you must change the value of the APP_ID attribute in the div element in the file ./views/play.html.
+In order for the app to work with Facebook Messenger, you must change the information in the file ./security/sensible.js. Also, you must change the value of the APP_ID attribute in the div element in the file ./views/play.html.
 
 ## Built With
 
