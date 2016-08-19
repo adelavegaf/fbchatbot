@@ -125,7 +125,7 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
 
     function setLoadingMessage(msg) {
         if (msg === loadingMsgs.init) {
-            $scope.loadingMsg = loadingMsgs.status + $scope.playersInGame;
+            $scope.loadingMsg = loadingMsgs.status + $scope.playersInGame + ' out of 7';
         } else {
             $scope.loadingMsg = loadingMsgs.init;
         }
