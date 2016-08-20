@@ -117,7 +117,7 @@ describe('Game logic: ', function () {
             type: 'facebook'
         }];
         session = {
-            dayCount: 1,
+            dayCount: 2,
             state: 'connecting',
             users: users,
             sessionId: 1
@@ -295,7 +295,7 @@ describe('Game logic: ', function () {
         var users = session.users;
         mafia.assignRoles(users);
         mafia.gameStates(session);
-        expect(session.dayCount).to.equal(0);
+        expect(session.dayCount).to.equal(1);
         expect(session.state).to.equal('day');
         setTimeout(function () {
             expect(session.state).to.equal('voting');
