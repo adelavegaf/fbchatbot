@@ -24,7 +24,7 @@ webhookRouter.route('/')
             var sender = event.sender.id;
             if (event.postback) {
                 var payload = event.postback.payload;
-                server.parsePayload(sender, payload);
+                server.parsePayload(sender, payload, 'facebook');
             } else if (event.message && event.message.text) {
                 var text = event.message.text;
                 server.parseFbMessage(sender, text);

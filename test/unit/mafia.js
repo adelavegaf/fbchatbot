@@ -10,49 +10,49 @@ describe('Mafia User Getters: ', function () {
             name: 'Peyton',
             role: 'Mafia Boss',
             state: 'alive',
-            type: 'facebook',
+            type: 'test',
             vote: 0
         }, {
             id: 2,
             name: 'Sam',
             role: 'Barman',
             state: 'alive',
-            type: 'facebook',
+            type: 'test',
             vote: 0
         }, {
             id: 3,
             name: 'Alex',
             role: 'Doctor',
             state: 'alive',
-            type: 'facebook',
+            type: 'test',
             vote: 0
         }, {
             id: 4,
             name: 'Morgan',
             role: 'Detective',
             state: 'dead',
-            type: 'facebook',
+            type: 'test',
             vote: 0
         }, {
             id: 5,
             name: 'Taylor',
             role: 'Mafioso',
             state: 'alive',
-            type: 'facebook',
+            type: 'test',
             vote: 0
         }, {
             id: 6,
             name: 'Carter',
             role: 'Vigilante',
             state: 'dead',
-            type: 'facebook',
+            type: 'test',
             vote: 0
         }, {
             id: 7,
             name: 'Jessie',
             role: 'Mafioso',
             state: 'dead',
-            type: 'facebook',
+            type: 'test',
             vote: 0
         }];
         session = {
@@ -96,25 +96,25 @@ describe('Game logic: ', function () {
     beforeEach(function () {
         var users = [{
             id: 1,
-            type: 'facebook'
+            type: 'test'
         }, {
             id: 2,
-            type: 'facebook'
+            type: 'test'
         }, {
             id: 3,
-            type: 'facebook'
+            type: 'test'
         }, {
             id: 4,
-            type: 'facebook'
+            type: 'test'
         }, {
             id: 5,
-            type: 'facebook'
+            type: 'test'
         }, {
             id: 6,
-            type: 'facebook'
+            type: 'test'
         }, {
             id: 7,
-            type: 'facebook'
+            type: 'test'
         }];
         session = {
             dayCount: 2,

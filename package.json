@@ -1,8 +1,8 @@
 {
-    "name": "mafia-chat-game",
+    "name": "mafiachatgame",
     "version": "1.0.0",
     "private": true,
-    "description": "Creates and manages Mafia game sessions using fb chat bot api and socketio.",
+    "description": "Creates and manages Mafia game sessions using Facebook Messenger API and SocketIO.",
     "scripts": {
         "postinstall": "./node_modules/bower/bin/bower install && gulp",
         "start": "node ./bin/www",
@@ -13,10 +13,11 @@
         "url": "git+https://github.com/adelavegaf/fbchatbot.git"
     },
     "keywords": [
-    "chatbot",
-    "fb",
-    "mafia"
-  ],
+        "chatbot",
+        "facebook messenger",
+        "mafia chat game",
+        "web application"
+    ],
     "author": "Antonio de la Vega",
     "bugs": {
         "url": "https://github.com/adelavegaf/fbchatbot/issues"

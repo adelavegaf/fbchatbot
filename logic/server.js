@@ -48,7 +48,9 @@ var getTotalNumPlayers = function () {
 };
 
 /**
- * Creates a new game.
+ * Creates a new game session.
+ * Before creating a new game session,
+ * it checks if a game with sessionId has already been created.
  */
 var createSession = function () {
     if (typeof sessions[sessionId] !== 'undefined') {
@@ -133,22 +135,12 @@ var beginSession = function () {
     sessionId++;
 };
 
-/**
- * Joins the waiting queue for a game given that the user is not
- * in a game already.
- * Returns true if the user could join the session. Otherwise, false.
- * Method triggered when joining through Facebook Messenger.
- */
-var facebookJoin = function (userId) {
-    return joinSession(userId, 'facebook');
-};
 
 /**
  * Joins a user that is using the web app to a
  * game session.
  */
 var webJoin = function (socket) {
-    socket.join(sessionId.toString());
     return joinSession(socket.id, 'web', socket);
 };
 
@@ -214,17 +206,17 @@ var exit = function (id, type) {
 /**
  * Send help information to user with id.
  */
-var help = function (id) {
-    messagemanager.help(id, 'facebook');
+var help = function (id, type) {
+    messagemanager.help(id, type);
 };
 
 /**
  * Sends role information to a user with id given that he is
  * in a game. Returns true if the user has a role. Otherwise, false.
  */
-var role = function (id) {
+var role = function (id, type) {
     if (!hasActiveSession(id)) {
-        messagemanager.noGameError(id, 'facebook');
+        messagemanager.noGameError(id, type);
         return false;
     }
     mafia.sendRoleInfo(sessions[activeUsers[id]], id);
@@ -234,9 +226,9 @@ var role = function (id) {
 /**
  * Sends to user with id all roles that are in current game session.
  */
-var roles = function (id) {
+var roles = function (id, type) {
     if (!hasActiveSession(id)) {
-        messagemanager.noGameError(id, 'facebook');
+        messagemanager.noGameError(id, type);
         return false;
     }
     mafia.sendRoles(sessions[activeUsers[id]], id);
@@ -244,8 +236,7 @@ var roles = function (id) {
 };
 
 /**
- * Sends a msg to user with id about
- * the people that are currently alive.
+ * Sends a list of all the players that are still alive to the user with id.
  */
 var alive = function (id, type) {
     if (!hasActiveSession(id)) {
@@ -316,13 +307,13 @@ var parseFbMessage = function (userId, text) {
             messagemanager.exitGame(userId, 'facebook');
             break;
         case '.help':
-            help(userId);
+            help(userId, 'facebook');
             break;
         case '.role':
-            role(userId);
+            role(userId, 'facebook');
             break;
         case '.roles':
-            roles(userId);
+            roles(userId, 'facebook');
             break;
         case '.alive':
             alive(userId, 'facebook');
@@ -405,22 +396,22 @@ var createProperties = function (id, array) {
  * further handling to appropiate function.
  * One of facebook's messenger points of entry.
  */
-var parsePayload = function (id, payload) {
+var parsePayload = function (id, payload, type) {
     var optionArray = payload.split(";");
     var properties;
     switch (optionArray[0]) {
         case 'join':
-            return facebookJoin(id);
+            return joinSession(id, type);
             break;
         case 'exit':
-            return exit(id, 'facebook');
+            return exit(id, type);
             break;
         case 'help':
             return help(id);
             break;
         default:
             properties = createProperties(id, optionArray);
-            return callGameAction(id, properties, 'facebook');
+            return callGameAction(id, properties, type);
             break;
     }
 };
@@ -432,7 +423,6 @@ var server = {
     getNumPlayersGame: getNumPlayersGame,
     getTotalNumPlayers: getTotalNumPlayers,
     webJoin: webJoin,
-    facebookJoin: facebookJoin,
     minNumPlayers: minNumPlayers,
     activeUsers: activeUsers,
     userQueue: userQueue,
@@ -444,6 +434,7 @@ var server = {
     getSessions: getSessions,
     getSessionId: getSessionId,
     findUserIndex: findUserIndex,
+    findUser: findUser,
     beginSession: beginSession,
     createSession: createSession,
     joinSession: joinSession,
