@@ -19,8 +19,18 @@ describe('Server operations', function () {
                 id: 2
             }]
         };
-        var index = server.getSessionId(session, 1);
+        var index = server.getSessionId();
         expect(index).to.equal(0);
+    });
+
+    it('There should be 2 players in the session', function () {
+        server.joinSession(1, 'facebook');
+        server.joinSession(2, 'facebook');
+        expect(server.getNumPlayersGame(0)).to.equal(2);
+    });
+
+    it('There should be 0 players in the session', function () {
+        expect(server.getNumPlayersGame(3)).to.equal(0);
     });
 
     it('The user should be allowed to join a session', function () {
