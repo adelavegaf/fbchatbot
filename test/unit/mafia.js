@@ -2,7 +2,7 @@ var chai = require('chai');
 var expect = chai.expect;
 var mafia = require('../../logic/mafia');
 
-describe('Mafia User Getters: ', function () {
+describe('Mafia Prefixed users test ', function () {
     var session = {};
     beforeEach(function () {
         var users = [{
@@ -85,6 +85,38 @@ describe('Mafia User Getters: ', function () {
     it('There should be 3 users in the mafia', function () {
         var mafiaUsers = mafia.getUsersInMafia(session.users);
         expect(mafiaUsers.length).to.equal(3);
+    });
+    it(`A new mafia boss should be assigned (mafia boss is dead)`, function () {
+        var users = session.users;
+        users[0].state = 'dead';
+        expect(mafia.checkNewMafiaBoss(users[0], session)).to.equal(true);
+    });
+
+    it(`A new mafia boss should be assigned (mafia boss disconnected)`, function () {
+        var users = session.users;
+        users[0].state = 'disconnected';
+        expect(mafia.checkNewMafiaBoss(users[0], session)).to.equal(true);
+    });
+
+    it(`A new mafia boss should NOT be assigned`, function () {
+        var users = session.users;
+        expect(mafia.checkNewMafiaBoss(users[0], session)).to.equal(false);
+    });
+
+    it(`Roles should be revealed to user`, function () {
+        var users = session.users;
+        expect(mafia.shouldRevealRole(users[0], users[6])).to.equal(true);
+        expect(mafia.shouldRevealRole(users[0], users[3])).to.equal(true);
+        expect(mafia.shouldRevealRole(users[0], users[4])).to.equal(true);
+        expect(mafia.shouldRevealRole(users[1], users[3])).to.equal(true);
+        expect(mafia.shouldRevealRole(users[1], users[5])).to.equal(true);
+        expect(mafia.shouldRevealRole(users[1], users[6])).to.equal(true);
+    });
+
+    it(`Roles should NOT be revealed to user`, function () {
+        var users = session.users;
+        expect(mafia.shouldRevealRole(users[1], users[0])).to.equal(false);
+        expect(mafia.shouldRevealRole(users[1], users[2])).to.equal(false);
     });
 });
 

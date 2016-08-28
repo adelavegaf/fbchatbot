@@ -355,7 +355,7 @@ var sendRoleInfo = function (session, userId) {
 /**
  * Determines if otherUser's role should be revealed to referenceUser.
  */
-function shouldRevealRole(referenceUser, otherUser) {
+var shouldRevealRole = function (referenceUser, otherUser) {
     var referenceAlliance = rolemanager.getRole(referenceUser.role).alliance;
     var otherAlliance = rolemanager.getRole(otherUser.role).alliance;
 
@@ -368,7 +368,7 @@ function shouldRevealRole(referenceUser, otherUser) {
     } else {
         return false;
     }
-}
+};
 
 /**
  * Sends a particular user with userId the information about all the roles
@@ -469,6 +469,7 @@ var mafia = {
     getDeadUsers: getDeadUsers,
     getUserFromId: getUserFromId,
     checkNewMafiaBoss: checkNewMafiaBoss,
+    shouldRevealRole: shouldRevealRole,
     hasAlreadyVoted: hasAlreadyVoted,
     beforeVotePhase: beforeVotePhase,
     calculateQuorum: calculateQuorum,
