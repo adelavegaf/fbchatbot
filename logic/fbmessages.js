@@ -314,6 +314,9 @@ var sendNightPhase = function (sessionId, dayCount, user, users) {
     sendUserForm(user.id, elements);
 };
 
+/**
+ * Sends the user all the availaable commands he can use in game.
+ */
 var sendStartHelp = function (userId, delay) {
     sendText(userId, `The game will start in ${delay/1000} seconds`);
     sendText(userId, 'Type .help for more commands.');
