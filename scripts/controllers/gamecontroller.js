@@ -35,7 +35,7 @@ angular.module('mafiaApp').controller('GameController', ['$scope', 'socket', '$m
             Game: '#FFB5B5'
         };
         loadingMsgs = {
-            init: 'waiting for players',
+            init: 'opening 7 tabs and pressing play will start a game for testing purposes.',
             status: 'players in lobby: '
         };
         chatColors = ['#d9ff66', '#cc99ff', '#ffcc66', '#cceeff', '#ffccff', '#ffff80', '#ccffcc'];
